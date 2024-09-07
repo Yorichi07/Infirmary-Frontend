@@ -1,0 +1,107 @@
+.profile-container {
+  height: 100svh;
+
+  &__header {
+    padding: 0.5rem;
+    display: flex;
+    border-bottom: 1px solid gray;
+    height: 9%;
+    img {
+      width: 50px;
+      height: 50px;
+    }
+
+    .title {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      justify-content: center;
+      font-size: 1.5rem;
+      gap: 1rem;
+
+      h1 {
+        font-weight: 500;
+      }
+    }
+  }
+
+  &__content {
+    height: 83%;
+    padding: 0 0.5rem 0.5rem 0.5rem;
+  }
+
+  &__body {
+    display: flex;
+    gap: 1rem;
+    padding: 1.5rem;
+    height: 92%;
+
+    .image-container {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 15%;
+
+      label {
+        background: linear-gradient(to right, #2061f5 0%, #13398f 100%);
+        color: white;
+        padding: 0.5rem;
+        border-radius: 0 0 0.5rem 0.5rem;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+      }
+    }
+
+    .patient-details {
+      overflow-y: scroll;
+      width: 85%;
+      padding: 0 1rem;
+
+      &__top {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        column-gap: 2rem;
+        row-gap: 1rem;
+        grid-template-areas: "left right";
+      }
+
+      &__left {
+        grid-area: left;
+        .trigger {
+          svg {
+            width: 5% !important;
+          }
+        }
+      }
+    }
+  }
+
+  &__footer {
+    height: 8%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 1rem;
+
+    .back-btn {
+      color: red;
+      border-color: red;
+      width: 6rem;
+    }
+    .save-btn {
+      background: linear-gradient(to right, #2061f5 0%, #13398f 100%);
+      width: 6rem;
+    }
+  }
+
+  .helpline {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 8%;
+    border-top: 1px solid gray;
+  }
+}

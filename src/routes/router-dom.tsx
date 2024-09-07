@@ -4,6 +4,10 @@ import DoctorCheckIn from "@/private/doctor-check-in-out/DoctorCheckIn";
 import DoctorCheckInLayout from "@/private/doctor-check-in-out/DoctorCheckInLayout";
 import DoctorDashboard from "@/private/doctor-dashboard/DoctorDashboard";
 import DoctorDashboardLayout from "@/private/doctor-dashboard/DoctorDashboardLayout";
+import UserAppointment from "@/private/UserAppointment";
+import UserProfile from "@/private/UserProfile";
+import UserRegister from "@/public/UserRegister";
+import UserSignIn from "@/public/UserSignIn";
 import MedicineStock from "@/private/medicine-stock/MedicineStock";
 import MedicineStockLayout from "@/private/medicine-stock/MedicineStockLayout";
 import PatientList from "@/private/patient-list/PatientList";
@@ -17,7 +21,19 @@ import { createBrowserRouter } from "react-router-dom";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <></>,
+    element: <UserSignIn />,
+  },
+  {
+    path: "/register",
+    element: <UserRegister />,
+  },
+  {
+    path: "/profile",
+    element: <UserProfile />,
+  },
+  {
+    path: "/appointment",
+    element: <UserAppointment />,
   },
   {
     path: "/student-dashboard",
