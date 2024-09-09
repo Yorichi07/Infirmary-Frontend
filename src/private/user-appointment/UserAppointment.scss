@@ -1,0 +1,36 @@
+.appointment-container {
+  height: 83%;
+
+
+  &__content {
+    height: 91%;
+    padding: 2rem;
+
+    .trigger {
+      svg {
+        width: 5% !important;
+      }
+    }
+  }
+
+  &__footer {
+    height: 8%;
+    display: flex;
+    justify-content: right;
+    align-items: center;
+    gap: 1rem;
+    padding: 0 2rem;
+
+    .back-btn {
+      color: red;
+      border-color: red;
+      width: 6rem;
+    }
+    .save-btn {
+      background: linear-gradient(to right, #2061f5 0%, #13398f 100%);
+      width: 6rem;
+    }
+  }
+
+
+}

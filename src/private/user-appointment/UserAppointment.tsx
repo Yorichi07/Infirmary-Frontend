@@ -20,13 +20,6 @@ const UserAppointment = () => {
 
   return (
     <div className="appointment-container">
-      <div className="appointment-container__header">
-        <img src='/upes-logo2.jpg' alt="UPES Logo" />
-        <div className="title">
-          {Shared.calendarCheck}
-          <h1>Appointment Form</h1>
-        </div>
-      </div>
       <div className="appointment-container__content">
         <Label htmlFor="allergies">Allergies</Label>
         <Textarea
@@ -95,7 +88,6 @@ const UserAppointment = () => {
         </Button>
         <Button className="save-btn text-white">Save</Button>
       </div>
-      <div className="helpline">Helpline: 1800-XXXX-XXXX</div>
     </div>
   );
 };

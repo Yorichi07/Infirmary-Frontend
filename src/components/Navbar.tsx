@@ -10,39 +10,41 @@ const Navbar = ({
 }: {
   props: {
     title: string;
-    titleLogo: undefined | string;
-    additionalLogo: undefined | string;
-    menu: undefined | boolean;
+    titleLogo: JSX.Element | false;
+    additionalLogo: JSX.Element | undefined;
+    menu: boolean | undefined;
   };
 }) => {
   return (
     <div className="bg-white shadow-md p-4 flex items-center justify-between h-[9%] border-b border border-[gray]">
-      <img src="/upes-logo.png" alt="" className="w-14" />
+      <img src="/upes-logo.png" alt="UPES Logo" className="w-14" />
       <div className="capitalize font-semibold text-2xl flex items-center gap-2">
-        <img src={props.titleLogo} alt="" className="w-8" />
+        {props.titleLogo &&
+          (typeof props.titleLogo === "string" ? (
+            <img src={props.titleLogo} alt="Title Logo" className="w-8" />
+          ) : (
+            props.titleLogo
+          ))}
         {props.title}
       </div>
       {props.additionalLogo && props.menu ? (
         <Popover>
-          <PopoverTrigger>
-            <img src={props.additionalLogo} alt="" className="w-6" />
+          <PopoverTrigger className="text-xl">
+            {props.additionalLogo}
           </PopoverTrigger>
           <PopoverContent className="space-y-4">
             <div className="flex items-center gap-2 hover:cursor-pointer">
-              {" "}
-              <img src="/user-icon.png" alt="" className="w-4" />
+              <img src="/user-icon.png" alt="User Icon" className="w-4" />
               Profile
             </div>
             <div className="flex items-center gap-2 hover:cursor-pointer">
-              <img src="/logout.png" alt="" className="w-5" />
+              <img src="/logout.png" alt="Logout Icon" className="w-5" />
               Logout
             </div>
           </PopoverContent>
         </Popover>
       ) : (
-        <Link to="">
-          <img src={props.additionalLogo} alt="" className="w-6" />
-        </Link>
+        <Link to="">{props.additionalLogo}</Link>
       )}
     </div>
   );

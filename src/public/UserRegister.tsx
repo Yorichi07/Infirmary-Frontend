@@ -171,8 +171,6 @@ const UserRegister = () => {
                   style={{
                     border: "1px solid black",
                     display: "flex",
-                    maxWidth: "200px",
-                    maxHeight: "200px",
                   }}
                 />
                 <input

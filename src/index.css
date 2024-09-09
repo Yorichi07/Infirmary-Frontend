@@ -66,10 +66,3 @@
     @apply bg-background text-foreground;
   }
 }
-
-@layer components {
-  * {
-    max-width: 100% !important;
-    max-height: 100% !important;
-  }
-}

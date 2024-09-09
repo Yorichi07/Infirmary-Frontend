@@ -1,6 +1,6 @@
 import React from "react";
 
-const StudentDashboard = () => {
+const UserDashboard = () => {
   const [userInfo, setUserInfo] = React.useState({
     name: "",
     sap: "",
@@ -17,7 +17,7 @@ const StudentDashboard = () => {
             <img
               src="/default-user.jpg"
               alt=""
-              className="w-64 object-contain"
+              className="w-64 object-contain border-2 border-black"
             />
           </div>
           <div className="text-center space-y-2 text-[#545555]">
@@ -34,7 +34,7 @@ const StudentDashboard = () => {
             <p className="text-white font-semibold text-lg text-center">
               Appointment Status
             </p>
-            <div className="bg-[#E0E0E0] flex items-center text-[#797979] font-semibold rounded-lg w-1/2">
+            <div className="bg-[#E0E0E0] flex items-center text-[#797979] font-semibold rounded-lg">
               <div
                 className={`px-8 py-3 w-full ${
                   userInfo.appointmentStatus === "pending"
@@ -59,7 +59,7 @@ const StudentDashboard = () => {
             <p className="text-white font-semibold text-lg text-center">
               Doctor Status
             </p>
-            <div className="bg-[#E0E0E0] flex items-center text-[#797979] font-semibold  rounded-lg w-1/2">
+            <div className="bg-[#E0E0E0] flex items-center text-[#797979] font-semibold  rounded-lg">
               <div
                 className={`px-8 py-3 w-full ${
                   userInfo.doctorStatus === "pending"
@@ -104,4 +104,4 @@ const StudentDashboard = () => {
   );
 };
 
-export default StudentDashboard;
+export default UserDashboard;

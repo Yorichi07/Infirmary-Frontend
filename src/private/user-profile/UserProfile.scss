@@ -1,30 +1,4 @@
 .profile-container {
-  height: 100svh;
-
-  &__header {
-    padding: 0.5rem;
-    display: flex;
-    border-bottom: 1px solid gray;
-    height: 9%;
-    img {
-      width: 50px;
-      height: 50px;
-    }
-
-    .title {
-      display: flex;
-      align-items: center;
-      width: 100%;
-      justify-content: center;
-      font-size: 1.5rem;
-      gap: 1rem;
-
-      h1 {
-        font-weight: 500;
-      }
-    }
-  }
-
   &__content {
     height: 83%;
     padding: 0 0.5rem 0.5rem 0.5rem;
@@ -95,13 +69,5 @@
       background: linear-gradient(to right, #2061f5 0%, #13398f 100%);
       width: 6rem;
     }
-  }
-
-  .helpline {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 8%;
-    border-top: 1px solid gray;
   }
 }
