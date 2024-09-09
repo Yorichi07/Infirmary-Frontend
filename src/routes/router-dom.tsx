@@ -1,5 +1,7 @@
 import AssistantDoctorDashboard from "@/private/assistant-dashboard/doctor-dashboard/AssistantDoctorDashboard";
 import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/doctor-dashboard/AssistantDoctorDashboardLayout";
+import DoctorCheckIn from "@/private/doctor-check-in-out/DoctorCheckIn";
+import DoctorCheckInLayout from "@/private/doctor-check-in-out/DoctorCheckInLayout";
 import DoctorDashboard from "@/private/doctor-dashboard/DoctorDashboard";
 import DoctorDashboardLayout from "@/private/doctor-dashboard/DoctorDashboardLayout";
 import StudentDasboardLayout from "@/private/student-dashboard/StudentDasboardLayout";
@@ -35,6 +37,14 @@ const router = createBrowserRouter([
       <AssistantDoctorDashboardLayout>
         <AssistantDoctorDashboard />
       </AssistantDoctorDashboardLayout>
+    ),
+  },
+  {
+    path: "/doctor-check-in-out",
+    element: (
+      <DoctorCheckInLayout>
+        <DoctorCheckIn />
+      </DoctorCheckInLayout>
     ),
   },
 ]);

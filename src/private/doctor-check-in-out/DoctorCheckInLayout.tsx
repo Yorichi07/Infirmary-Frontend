@@ -1,12 +1,12 @@
 import Navbar from "@/components/Navbar";
 import React from "react";
-import { Outlet } from "react-router-dom";
 
-const DoctorDashboardLayout = ({ children }: { children: React.ReactNode }) => {
+const DoctorCheckInLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
-    title: "doctor dashboard",
-    titleLogo: "/home-icon.png",
-    additionalLogo: "/user-icon.png",
+    title: "Doctor Check-In / Check-Out",
+    titleLogo: "/check.png",
+    additionalLogo: "/return.png",
+    menu: false,
   };
   return (
     <div className="h-screen">
@@ -20,4 +20,4 @@ const DoctorDashboardLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default DoctorDashboardLayout;
+export default DoctorCheckInLayout;

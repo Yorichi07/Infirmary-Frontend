@@ -4,6 +4,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { Link } from "react-router-dom";
 
 const Navbar = ({
   props,
@@ -12,6 +13,7 @@ const Navbar = ({
     title: string;
     titleLogo: undefined | string;
     additionalLogo: undefined | string;
+    menu: undefined | false;
   };
 }) => {
   return (
@@ -21,7 +23,7 @@ const Navbar = ({
         <img src={props.titleLogo} alt="" className="w-8" />
         {props.title}
       </div>
-      {props.additionalLogo ? (
+      {props.additionalLogo && props.menu ? (
         <Popover>
           <PopoverTrigger>
             <img src={props.additionalLogo} alt="" className="w-6" />
@@ -39,7 +41,9 @@ const Navbar = ({
           </PopoverContent>
         </Popover>
       ) : (
-        <></>
+        <Link to="">
+          <img src={props.additionalLogo} alt="" className="w-6" />
+        </Link>
       )}
     </div>
   );
