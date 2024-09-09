@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Popover,
   PopoverContent,
@@ -13,7 +12,7 @@ const Navbar = ({
     title: string;
     titleLogo: undefined | string;
     additionalLogo: undefined | string;
-    menu: undefined | false;
+    menu: undefined | boolean;
   };
 }) => {
   return (
