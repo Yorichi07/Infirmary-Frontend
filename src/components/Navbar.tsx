@@ -13,6 +13,7 @@ const Navbar = ({
     titleLogo: JSX.Element | false;
     additionalLogo: JSX.Element | undefined;
     menu: boolean | undefined;
+    role: string;
   };
 }) => {
   const navigate = useNavigate();
@@ -55,7 +56,7 @@ const Navbar = ({
           </PopoverContent>
         </Popover>
       ) : (
-        <Link to="/user-dashboard">{props.additionalLogo}</Link>
+        <Link to={`/${props.role}-dashboard`}>{props.additionalLogo}</Link>
       )}
     </div>
   );

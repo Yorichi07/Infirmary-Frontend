@@ -1,4 +1,5 @@
 import Navbar from "@/components/Navbar";
+import Shared from "@/Shared";
 import React from "react";
 
 const AssistantDoctorDashboardLayout = ({
@@ -8,16 +9,19 @@ const AssistantDoctorDashboardLayout = ({
 }) => {
   const navsetting = {
     title: "assistant doctor dashboard",
-    titleLogo: "/home-icon.png",
-    additionalLogo: "/user-icon.png",
+    titleLogo: Shared.DoctorHome,
+    additionalLogo: undefined,
+    menu: false,
+    role: "assistant",
   };
   return (
     <div className="h-screen">
       <Navbar props={navsetting} />
       {children}
-      {/* <Outlet /> */}
-      <div className="w-full bg-white h-[8%] flex items-center justify-center text-[#8F8F8F] border-t border border-[gray]">
-        Helpline: 1800-XXXX-XXXX
+      <div className="w-full bg-white h-[8%] flex items-center justify-center text-[#8F8F8F] border-t border border-[gray] font-semibold">
+        Bidholi Campus: Tel: +91-135-2770137, 2776053, 2776054, 2776091 &nbsp;
+        &nbsp; &nbsp; Kandoli Campus: Tel: +91-135-2770137, 2776053,
+        2776054, 2776091
       </div>
     </div>
   );

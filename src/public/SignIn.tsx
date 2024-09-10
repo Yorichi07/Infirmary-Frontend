@@ -2,11 +2,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 
-import "./UserSignIn.scss";
-import { Link } from "react-router-dom";
+import "./SignIn.scss";
 import { ChangeEventHandler, useState } from "react";
 
-const UserSignIn = () => {
+const SignIn = ({ role }: { role: string }) => {
   const [input, setInput] = useState({ username: "", password: "" });
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
@@ -18,7 +17,15 @@ const UserSignIn = () => {
   };
 
   const onsubmit = () => {
-    console.log(input);
+    if (role == "user") {
+      console.log("user");
+    }
+    if (role == "doctor") {
+      console.log("doc");
+    }
+    if (role == "assistant doctor") {
+      console.log("ass-doc");
+    }
   };
 
   return (
@@ -26,9 +33,11 @@ const UserSignIn = () => {
       <div className="sign-container__left"></div>
       <div className="sign-container__right">
         <div className="sign-container__right-content">
-          <img src='/upes-logo.jpg' alt="UPES Logo" />
+          <img src="/upes-logo.jpg" alt="UPES Logo" />
           <div className="sign-container__right-header">
-            <h1>Patient Sign in</h1>
+            <h1>
+              <span className="capitalize">{role}</span> Sign in
+            </h1>
             <p>Please login to continue to your account</p>
           </div>
           <form>
@@ -60,16 +69,9 @@ const UserSignIn = () => {
             Sign In
           </Button>
         </div>
-        <div className="sign-container__right-footer">
-          <p>Need an account?</p>
-          &nbsp;
-          <Link to="/register" className="createOne">
-            Create one
-          </Link>
-        </div>
       </div>
     </div>
   );
 };
 
-export default UserSignIn;
+export default SignIn;

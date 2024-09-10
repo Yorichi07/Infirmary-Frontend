@@ -86,26 +86,26 @@ const UserPrescription = () => {
   return (
     <div className="h-[83%] pt-5 pb-10 flex justify-center">
       <div className="w-[50%] overflow-y-scroll">
-        <Table>
+        <Table className="border">
           <TableCaption>A list of your recent reports</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[100px]">Report Id</TableHead>
-              <TableHead>Date</TableHead>
-              <TableHead className="text-right">Download Report</TableHead>
+              <TableHead className="w-[33%] text-center">Report Id</TableHead>
+              <TableHead className="w-[33%] text-center">Date</TableHead>
+              <TableHead className="text-center">Download Report</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {reports.map((report, index) => (
               <TableRow key={report.reportId}>
                 {/* Report Id */}
-                <TableCell className="font-medium">{report.reportId}</TableCell>
+                <TableCell className="font-medium text-center">{report.reportId}</TableCell>
 
                 {/* Date */}
-                <TableCell>{report.date}</TableCell>
+                <TableCell className="text-center">{report.date}</TableCell>
 
                 {/* Download Report */}
-                <TableCell className="text-right">
+                <TableCell className="text-center">
                   <a href={report.downloadLink} download>
                     {Shared.Download}
                   </a>

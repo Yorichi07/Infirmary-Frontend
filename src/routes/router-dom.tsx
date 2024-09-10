@@ -5,8 +5,7 @@ import DoctorCheckInLayout from "@/private/doctor-check-in-out/DoctorCheckInLayo
 import DoctorDashboard from "@/private/doctor-dashboard/DoctorDashboard";
 import DoctorDashboardLayout from "@/private/doctor-dashboard/DoctorDashboardLayout";
 import UserAppointment from "@/private/user-appointment/UserAppointment";
-import UserRegister from "@/public/UserRegister";
-import UserSignIn from "@/public/UserSignIn";
+import SignIn from "@/public/SignIn";
 import MedicineStock from "@/private/medicine-stock/MedicineStock";
 import MedicineStockLayout from "@/private/medicine-stock/MedicineStockLayout";
 import PatientList from "@/private/patient-list/PatientList";
@@ -25,12 +24,21 @@ import UserPrescriptionLayout from "@/private/user-prescription/UserPrescription
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <UserSignIn />,
+    element: <SignIn role="user" />,
   },
   {
-    path: "/register",
-    element: <UserRegister />,
+    path: "/doctor",
+    element: <SignIn role="doctor" />,
   },
+  {
+    path: "/assistant-doctor",
+    element: <SignIn role="assistant doctor" />,
+  },
+
+  // {
+  //   path: "/register",
+  //   element: <UserRegister />,
+  // },
   {
     path: "/user-profile",
     element: (
@@ -72,7 +80,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/assistant-doctor-dashboard",
+    path: "/assistant-dashboard",
     element: (
       <AssistantDoctorDashboardLayout>
         <AssistantDoctorDashboard />
