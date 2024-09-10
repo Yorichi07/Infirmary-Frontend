@@ -1,9 +1,7 @@
 .appointment-container {
   height: 83%;
-
-
   &__content {
-    height: 91%;
+    height: 100%;
     padding: 2rem;
 
     .trigger {
@@ -13,17 +11,23 @@
     }
   }
 
+  &__body {
+    .form-item{
+      margin-bottom: 1rem;
+    }
+  }
+
   &__footer {
     height: 8%;
     display: flex;
     justify-content: right;
     align-items: center;
     gap: 1rem;
-    padding: 0 2rem;
 
     .back-btn {
       color: red;
-      border-color: red;
+      background-color: white;
+      border: 1px solid red;
       width: 6rem;
     }
     .save-btn {
@@ -31,6 +35,4 @@
       width: 6rem;
     }
   }
-
-
 }

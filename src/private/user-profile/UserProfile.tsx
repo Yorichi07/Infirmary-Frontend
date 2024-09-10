@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import "./UserProfile.scss";
 import { Image } from "primereact/image";
 import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-
+import { z } from "zod";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
   SelectContent,
@@ -14,10 +15,108 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useNavigate } from "react-router-dom";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "@/components/ui/form";
+
+const formSchema = z.object({
+  name: z
+    .string()
+    .min(3, { message: "Name must be at least 3 characters long" })
+    .max(30, { message: "Name must be at most 30 characters long" })
+    .regex(/^[a-zA-Z0-9_ ]+$/, {
+      message:
+        "Name can only contain letters, numbers, underscores, and spaces",
+    }),
+  patientId: z
+    .string()
+    .min(1, { message: "Patient Id must be at least 1" })
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => val > 0, { message: "Patient Id must be positive" }),
+  school: z.string().min(1, { message: "School cannot be empty" }),
+  program: z.string().min(1, { message: "Program cannot be empty" }),
+  dateOfBirth: z
+    .date()
+    .max(new Date(), { message: "Date of birth cannot be in the future" }),
+  emergencyContact: z
+    .string()
+    .regex(/^\d+$/, {
+      message: "Emergency contact phone must contain only numbers",
+    })
+    .length(10, {
+      message: "Emergency contact phone must be 10 digits long",
+    }),
+  height: z
+    .string()
+    .transform((val) => parseInt(val, 10))
+    .refine((val) => val >= 30 && val <= 250, {
+      message: "Height must be between 30 cm and 250 cm",
+    }),
+  weight: z
+    .string()
+    .transform((val) => parseFloat(val))
+    .refine((val) => val >= 1 && val <= 300, {
+      message: "Weight must be between 1 kg and 300 kg",
+    }),
+  gender: z.enum(["Male", "Female", "Prefer not to say"], {
+    message: "Choose gender from given options",
+  }),
+  bloodGroup: z.string().min(1, { message: "Blood group cannot be empty" }),
+  medicalHistory: z.string().optional(),
+  familyMedicalHistory: z.string().optional(),
+  allergies: z.string().optional(),
+});
 
 const UserProfile = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const navigate = useNavigate();
+  const form = useForm({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      name: "",
+      patientId: undefined,
+      school: "",
+      program: "",
+      dateOfBirth: undefined,
+      emergencyContact: "",
+      height: undefined,
+      weight: undefined,
+      gender: "",
+      bloodGroup: "",
+      medicalHistory: "",
+      familyMedicalHistory: "",
+      allergies: "",
+    },
+  });
 
+  const { isValid } = form.formState;
+  const onSubmit = (data: unknown) => {
+    if (isValid) {
+      try {
+        console.log("Form Data Submitted: ", JSON.stringify(data, null, 2));
+        navigate("/user-dashboard");
+      } catch (error) {
+        console.error("Error submitting form:", error);
+      }
+    } else {
+      console.log("Form is not valid.");
+      console.error("Form Validation Errors:", form.formState.errors);
+
+      Object.entries(form.formState.errors).forEach(([field, error]) => {
+        console.error(`Error in ${field}: ${error.message}`);
+      });
+    }
+  };
+
+  const handleCancel = () => {
+    navigate("/user-dashboard");
+  };
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -28,132 +127,277 @@ const UserProfile = () => {
 
   return (
     <div className="profile-container__content">
-      <div className="profile-container__body">
-        <div className="image-container">
-          <Image
-            src={uploadedImage || "/default-user.jpg"}
-            alt="Profile Picture"
-            preview
-            style={{
-              border: "1px solid black",
-              display: "flex",
-            }}
-          />
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageUpload}
-            id="upload-image"
-            style={{ display: "none" }}
-          />
-          <label htmlFor="upload-image" className="upload-button">
-            Upload Image
-          </label>
-        </div>
-        <div className="patient-details">
-          <div className="patient-details__top">
-            <div className="patient-details__left">
-              <Label htmlFor="name">Name</Label>
-              <Input
-                type="text"
-                id="name"
-                placeholder="Name"
-                className="mb-3"
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="h-[100%]">
+          <div className="profile-container__body">
+            <div className="image-container">
+              <Image
+                src={uploadedImage || "/default-user.jpg"}
+                alt="Profile Picture"
+                preview
+                style={{
+                  border: "1px solid black",
+                  display: "flex",
+                }}
               />
-              <Label htmlFor="school">School</Label>
-              <Input
-                type="text"
-                id="school"
-                placeholder="School"
-                className="mb-3"
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                id="upload-image"
+                style={{ display: "none" }}
               />
-              <Label htmlFor="dob">Date of Birth</Label>
-              <Input type="date" id="dob" className="mb-3" />
-              <Label htmlFor="height">Height (cm)</Label>
-              <Input
-                type="number"
-                id="height"
-                placeholder="Height"
-                className="mb-3"
-              />
-              <Label htmlFor="gender">Gender</Label>
-              <Select>
-                <SelectTrigger id="gender" className="w-full trigger">
-                  <SelectValue placeholder="Select a gender" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="male">Male</SelectItem>
-                    <SelectItem value="female">Female</SelectItem>
-                    <SelectItem value="other">Other</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
+              <label htmlFor="upload-image" className="upload-button">
+                Upload Image
+              </label>
             </div>
-            <div className="patient-details__right">
-              <Label htmlFor="number">Patient Id</Label>
-              <Input
-                type="number"
-                id="patientId"
-                placeholder="Patient Id"
-                className="mb-3"
-              />
-              <Label htmlFor="program">Program</Label>
-              <Input
-                type="text"
-                id="program"
-                placeholder="Program"
-                className="mb-3"
-              />
-              <Label htmlFor="eContact">Emergency Contact</Label>
-              <Input
-                type="number"
-                id="eContact"
-                placeholder="Emergency Contact"
-                className="mb-3"
-              />
-              <Label htmlFor="weight">Weight (kg)</Label>
-              <Input
-                type="number"
-                id="weight"
-                placeholder="Weight"
-                className="mb-3"
-              />
-              <Label htmlFor="bloogGroup">Blood Group</Label>
-              <Input
-                type="text"
-                id="bloodGroup"
-                placeholder="Blood Group"
-                className="mb-3"
-              />
+            <div className="patient-details">
+              <div className="patient-details__top">
+                <div className="patient-details__left">
+                  <FormField
+                    control={form.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter name" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="school"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>School</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter school" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="dateOfBirth"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Date of Birth</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="date"
+                            placeholder="Select date of birth"
+                            value={
+                              field.value
+                                ? new Date(field.value)
+                                    .toISOString()
+                                    .substring(0, 10)
+                                : ""
+                            }
+                            onChange={(e) =>
+                              field.onChange(new Date(e.target.value))
+                            }
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="height"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Height (cm)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter height"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Gender</FormLabel>
+                        <Select
+                          {...field}
+                          onValueChange={(value) => field.onChange(value)}
+                          value={field.value}
+                        >
+                          <SelectTrigger className="dropdown">
+                            <SelectValue placeholder="Select gender" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              <SelectItem value="Male">Male</SelectItem>
+                              <SelectItem value="Female">Female</SelectItem>
+                              <SelectItem value="Prefer not to say">
+                                Prefer not to say
+                              </SelectItem>
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="medicalHistory"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Medical History</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Enter medical history"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="allergies"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Allergies</FormLabel>
+                        <FormControl>
+                          <Textarea placeholder="Enter allergies" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="patient-details__right">
+                  <FormField
+                    control={form.control}
+                    name="patientId"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Patient Id</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter your Id"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="program"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Program</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter your program" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="emergencyContact"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Emergency Contact</FormLabel>
+                        <FormControl>
+                          <Input
+                            placeholder="Enter emergency contact"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="weight"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Weight (kg)</FormLabel>
+                        <FormControl>
+                          <Input
+                            type="number"
+                            placeholder="Enter weight"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+
+                  <FormField
+                    control={form.control}
+                    name="bloodGroup"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Blood Group</FormLabel>
+                        <FormControl>
+                          <Input placeholder="Enter blood group" {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="familyMedicalHistory"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Family Medical History</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Enter family medical history"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+              </div>
             </div>
           </div>
-          <Label htmlFor="medH">Medical History</Label>
-          <Textarea
-            placeholder="Enter your medical history"
-            id="medH"
-            className="w-full mb-3"
-          />
-          <Label htmlFor="fMedH">Family Medical History</Label>
-          <Textarea
-            placeholder="Enter your family medical history"
-            id="fMedH"
-            className="w-full mb-3"
-          />
-          <Label htmlFor="allergies">Allergies</Label>
-          <Textarea
-            placeholder="Enter allergies (if any)"
-            id="allergies"
-            className="w-full mb-3"
-          />
-        </div>
-      </div>
-      <div className="profile-container__footer">
-        <Button variant="outline" className="back-btn">
-          Back
-        </Button>
-        <Button className="save-btn text-white">Save</Button>
-      </div>
+          <div className="profile-container__footer">
+            <Button
+              type="button"
+              onClick={handleCancel}
+              variant="secondary"
+              className="back-btn"
+            >
+              Cancel
+            </Button>
+            <Button
+              type="submit"
+              className="save-btn text-white"
+              onClick={onSubmit}
+            >
+              Submit
+            </Button>
+          </div>
+        </form>
+      </Form>
     </div>
   );
 };
