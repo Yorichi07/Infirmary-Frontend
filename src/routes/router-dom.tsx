@@ -19,6 +19,8 @@ import UserProfile from "@/private/user-profile/UserProfile";
 import UserAppointmentLayout from "@/private/user-appointment/UserAppointmentLayout";
 import UserDasboardLayout from "@/private/user-dashboard/UserDasboardLayout";
 import UserDashboard from "@/private/user-dashboard/UserDashboard";
+import UserPrescription from "@/private/user-prescription/UserPrescription";
+import UserPrescriptionLayout from "@/private/user-prescription/UserPrescriptionLayout";
 
 const router = createBrowserRouter([
   {
@@ -49,8 +51,16 @@ const router = createBrowserRouter([
     path: "/user-dashboard",
     element: (
       <UserDasboardLayout>
-        <UserDashboard/>
+        <UserDashboard />
       </UserDasboardLayout>
+    ),
+  },
+  {
+    path: "/user-prescription",
+    element: (
+      <UserPrescriptionLayout>
+        <UserPrescription />
+      </UserPrescriptionLayout>
     ),
   },
   {

@@ -1,6 +1,8 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
+  const navigate = useNavigate();
   const [userInfo, setUserInfo] = React.useState({
     name: "",
     sap: "",
@@ -9,6 +11,9 @@ const UserDashboard = () => {
     appointmentStatus: "appointed",
     doctorStatus: "appointed",
   });
+  const navigateTo = (path: string) => {
+    navigate(path);
+  };
   return (
     <div className="flex justify-center items-center bg-[#ECECEC] h-[83%]">
       <div className="w-full px-14 py-10 flex justify-center items-center">
@@ -82,13 +87,16 @@ const UserDashboard = () => {
           </div>
           <div className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
             <img src="/calander.png" alt="" />
-            <button className="text-white font-semibold text-lg text-center flex-1">
+            <button className="text-white font-semibold text-lg text-center flex-1" onClick={() => navigateTo("/user-appointment")}>
               Schedule an Appointment
             </button>
           </div>
           <div className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
             <img src="/prescription.png" alt="" />
-            <button className="text-white font-semibold text-lg text-center flex-1">
+            <button
+              className="text-white font-semibold text-lg text-center flex-1"
+              onClick={() => navigateTo("/user-prescription")}
+            >
               Prescription History
             </button>
           </div>

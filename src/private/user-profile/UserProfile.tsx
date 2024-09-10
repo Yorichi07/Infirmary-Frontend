@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./UserProfile.scss";
 import { Image } from "primereact/image";
-import Shared from "@/Shared";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
