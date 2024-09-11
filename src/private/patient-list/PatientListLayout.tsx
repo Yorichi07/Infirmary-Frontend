@@ -1,12 +1,14 @@
 import Navbar from "@/components/Navbar";
+import Shared from "@/Shared";
 import React from "react";
 
 const PatientListLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
     title: "Patient List",
-    titleLogo: "/list.png",
-    additionalLogo: "/return.png",
+    titleLogo: Shared.List,
+    additionalLogo: Shared.ArrowLeft,
     menu: false,
+    role: "doctor",
   };
   return (
     <div className="h-screen">

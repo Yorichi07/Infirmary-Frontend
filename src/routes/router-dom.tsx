@@ -1,5 +1,3 @@
-import AssistantDoctorDashboard from "@/private/assistant-dashboard/doctor-dashboard/AssistantDoctorDashboard";
-import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/doctor-dashboard/AssistantDoctorDashboardLayout";
 import DoctorCheckIn from "@/private/doctor-check-in-out/DoctorCheckIn";
 import DoctorCheckInLayout from "@/private/doctor-check-in-out/DoctorCheckInLayout";
 import DoctorDashboard from "@/private/doctor-dashboard/DoctorDashboard";
@@ -20,6 +18,8 @@ import UserDasboardLayout from "@/private/user-dashboard/UserDasboardLayout";
 import UserDashboard from "@/private/user-dashboard/UserDashboard";
 import UserPrescription from "@/private/user-prescription/UserPrescription";
 import UserPrescriptionLayout from "@/private/user-prescription/UserPrescriptionLayout";
+import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/AssistantDoctorDashboardLayout";
+import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoctorDashboard";
 
 const router = createBrowserRouter([
   {

@@ -10,6 +10,8 @@ import {
   faUserDoctor,
   faArrowRightFromBracket,
   faUserCheck,
+  faPills,
+  faList,
 } from "@fortawesome/free-solid-svg-icons";
 
 const Shared = {
@@ -22,7 +24,9 @@ const Shared = {
   Download: <FontAwesomeIcon icon={faDownload} />,
   DoctorHome: <FontAwesomeIcon icon={faUserDoctor} />,
   LogOut: <FontAwesomeIcon icon={faArrowRightFromBracket} />,
-  DoctorCheckin: <FontAwesomeIcon icon={faUserCheck} />
+  DoctorCheckin: <FontAwesomeIcon icon={faUserCheck} />,
+  Pills: <FontAwesomeIcon icon={faPills} />,
+  List: <FontAwesomeIcon icon={faList} />
 };
 
 export default Shared;

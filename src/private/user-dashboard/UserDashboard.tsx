@@ -1,19 +1,57 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = React.useState({
+  // const [userDetails, setUserInfo] = useState({
+  //   name: "",
+  //   sap: "",
+  //   course: "",
+  //   contact: "",
+  //   appointmentStatus: "appointed",
+  //   doctorName: "Dr. Aditya Sharma",
+  // });
+  const [userDetails, setUserDetails] = useState({
+    email: "",
     name: "",
-    sap: "",
-    course: "",
-    contact: "",
-    appointmentStatus: "appointed",
-    doctorName: "Dr. Aditya Sharma",
+    school: "",
+    dateOfBirth: "",
+    program: "",
+    phoneNumber: "",
+    emergencyContact: "",
+    bloodGroup: "",
+    imageUrl: "",
+    password: "",
   });
+
   const navigateTo = (path: string) => {
     navigate(path);
   };
+
+  useEffect(() => {
+    console.log("hello");
+    const getUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/");
+      }
+      try {
+        const res = await axios.get("http://localhost:8081/api/patient/", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        const data = await res.data;
+        setUserDetails(JSON.parse(data));
+      } catch (e) {
+        console.log(e);
+      }
+    };
+
+    getUser();
+  }, []);
   return (
     <div className="flex justify-center items-center bg-[#ECECEC] h-[83%]">
       <div className="w-full px-14 py-10 flex justify-center items-center">
@@ -26,10 +64,10 @@ const UserDashboard = () => {
             />
           </div>
           <div className="text-center space-y-2 text-[#545555]">
-            <p>Name - {userInfo.name}</p>
-            <p>Patient Id - {userInfo.sap}</p>
-            <p className="line-clamp-1">Course - {userInfo.course}</p>
-            <p>Contact - {userInfo.contact}</p>
+            <p>Name - {userDetails.name}</p>
+            {/* <p>Patient Id - {userDetails.sap}</p> */}
+            <p className="line-clamp-1">Course - {userDetails.school}</p>
+            <p>Contact - {userDetails.phoneNumber}</p>
           </div>
         </div>
       </div>
@@ -42,7 +80,7 @@ const UserDashboard = () => {
             <div className="bg-[#E0E0E0] flex items-center text-[#797979] font-semibold rounded-lg">
               <div
                 className={`px-8 py-3 w-full ${
-                  userInfo.appointmentStatus === "pending"
+                  userDetails.appointmentStatus === "pending"
                     ? "bg-[#1F60C0] text-white shadow-lg rounded-md"
                     : ""
                 }`}
@@ -51,7 +89,7 @@ const UserDashboard = () => {
               </div>
               <div
                 className={`px-8 py-3 w-full ${
-                  userInfo.appointmentStatus === "appointed"
+                  userDetails.appointmentStatus === "appointed"
                     ? "bg-[#1F60C0] text-white shadow-lg rounded-md"
                     : ""
                 }`}
@@ -65,9 +103,9 @@ const UserDashboard = () => {
               Doctor Status
             </p>
             <div className="bg-[#E0E0E0] flex justify-center items-center text-[#797979] font-semibold  rounded-lg w-1/2">
-              {userInfo.appointmentStatus === "appointed" ? (
+              {userDetails.appointmentStatus === "appointed" ? (
                 <div className="p-4 bg-gray text-[#797979] w-full rounded-md justify-center flex shadow-md">
-                  {userInfo.doctorName}
+                  {userDetails.doctorName}
                 </div>
               ) : (
                 <div className="p-4">Not Appointed</div>

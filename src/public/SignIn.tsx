@@ -1,12 +1,15 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import axios from "axios";
 
 import "./SignIn.scss";
 import { ChangeEventHandler, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const SignIn = ({ role }: { role: string }) => {
-  const [input, setInput] = useState({ username: "", password: "" });
+  const navigate = useNavigate();
+  const [input, setInput] = useState({ email: "", password: "" });
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
@@ -16,15 +19,48 @@ const SignIn = ({ role }: { role: string }) => {
     }));
   };
 
-  const onsubmit = () => {
+  const onsubmit = async () => {
     if (role == "user") {
-      console.log("user");
+      try {
+        const res = await axios.post(
+          "http://localhost:8081/api/auth/patient/signin",
+          input
+        );
+        const token = res.data.token;
+        localStorage.setItem("token", token);
+  
+        return navigate("/user-dashboard");
+      } catch (error) {
+        console.log(error);
+      }
     }
     if (role == "doctor") {
-      console.log("doc");
+      try {
+        const res = await axios.post(
+          "http://192.168.0.109:8081/api/auth/patient/signin",
+          input
+        );
+        const token = res.data.token;
+        localStorage.setItem("token", token);
+  
+        return navigate("/user-dashboard");
+      } catch (error) {
+        console.log(error);
+      }
     }
     if (role == "assistant doctor") {
-      console.log("ass-doc");
+      try {
+        const res = await axios.post(
+          "http://localhost:8081/api/auth/patient/signin",
+          input
+        );
+        const token = res.data.token;
+        localStorage.setItem("token", token);
+  
+        return navigate("/user-dashboard");
+      } catch (error) {
+        console.log(error);
+      }
     }
   };
 
@@ -42,12 +78,12 @@ const SignIn = ({ role }: { role: string }) => {
           </div>
           <form>
             <div className="input">
-              <Label htmlFor="username">Username</Label>
+              <Label htmlFor="email">Username</Label>
               <Input
                 type="email"
-                id="username"
+                id="email"
                 placeholder="Email"
-                value={input.username}
+                value={input.email}
                 onChange={onInputChange}
                 className="bg-white text-black"
               />
