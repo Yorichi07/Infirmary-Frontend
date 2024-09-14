@@ -30,7 +30,6 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
-    console.log("hello");
     const getUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -44,7 +43,7 @@ const UserDashboard = () => {
         });
 
         const data = await res.data;
-        setUserDetails(JSON.parse(data));
+        setUserDetails(data);
       } catch (e) {
         console.log(e);
       }
@@ -55,7 +54,7 @@ const UserDashboard = () => {
   return (
     <div className="flex justify-center items-center bg-[#ECECEC] h-[83%]">
       <div className="w-full px-14 py-10 flex justify-center items-center">
-        <div className="w-full bg-[#000000] space-y-4 p-12 bg-opacity-10 rounded-lg flex items-center justify-center flex-col">
+        <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col">
           <div className="bg-white border border-spacing-1 min-w-64">
             <img
               src="/default-user.jpg"
@@ -63,11 +62,12 @@ const UserDashboard = () => {
               className="w-64 object-contain border-2 border-black"
             />
           </div>
-          <div className="text-center space-y-2 text-[#545555]">
-            <p>Name - {userDetails.name}</p>
-            {/* <p>Patient Id - {userDetails.sap}</p> */}
-            <p className="line-clamp-1">Course - {userDetails.school}</p>
+          <div className="text-center space-y-2 text-[#545555] font-medium">
+            <p>{userDetails.name}</p>
+            <p>{userDetails.email}</p>
+            <p>DOB - {userDetails.dateOfBirth}</p>
             <p>Contact - {userDetails.phoneNumber}</p>
+            <p>Blood Group - {userDetails.bloodGroup}</p>
           </div>
         </div>
       </div>

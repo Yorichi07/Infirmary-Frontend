@@ -4,7 +4,7 @@ import React from "react";
 
 const UserDasboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
-    title: "student dashboard",
+    title: "patient dashboard",
     titleLogo: Shared.HomeUser,
     additionalLogo: Shared.User,
     menu: true,
@@ -15,8 +15,7 @@ const UserDasboardLayout = ({ children }: { children: React.ReactNode }) => {
       <Navbar props={navsetting} />
       {children}
       <div className="w-full bg-white h-[8%] flex items-center justify-center text-[#8F8F8F] border-t border border-[gray] font-semibold">
-        Bidholi Campus: Tel: +91-135-2770137, 2776053, 2776054, 2776091 &nbsp;
-        &nbsp; &nbsp; Kandoli Campus: Tel: +91-135-2770137, 2776053, 2776054,
+        Energy Acres, Bidholi: Tel: +91-135-2770137, 2776053, 2776054, 2776091 &nbsp; | &nbsp; Knowledge Acres, Kandoli: Tel: +91-135-2770137, 2776053, 2776054,
         2776091
       </div>
     </div>

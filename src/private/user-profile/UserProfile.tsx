@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import "./UserProfile.scss";
 import { Image } from "primereact/image";
 import { Button } from "@/components/ui/button";
@@ -7,14 +6,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import {
   Form,
@@ -24,26 +15,15 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
+import { useEffect } from "react";
+import axios from "axios";
 
 const formSchema = z.object({
-  name: z
-    .string()
-    .min(3, { message: "Name must be at least 3 characters long" })
-    .max(30, { message: "Name must be at most 30 characters long" })
-    .regex(/^[a-zA-Z0-9_ ]+$/, {
-      message:
-        "Name can only contain letters, numbers, underscores, and spaces",
-    }),
-  patientId: z
-    .string()
-    .min(1, { message: "Patient Id must be at least 1" })
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => val > 0, { message: "Patient Id must be positive" }),
-  school: z.string().min(1, { message: "School cannot be empty" }),
-  program: z.string().min(1, { message: "Program cannot be empty" }),
-  dateOfBirth: z
-    .date()
-    .max(new Date(), { message: "Date of birth cannot be in the future" }),
+  name: z.string(),
+  patientId: z.string(),
+  school: z.string(),
+  program: z.string(),
+  dateOfBirth: z.string(),
   emergencyContact: z
     .string()
     .regex(/^\d+$/, {
@@ -67,33 +47,114 @@ const formSchema = z.object({
   gender: z.enum(["Male", "Female", "Prefer not to say"], {
     message: "Choose gender from given options",
   }),
-  bloodGroup: z.string().min(1, { message: "Blood group cannot be empty" }),
+  bloodGroup: z.string(),
   medicalHistory: z.string().optional(),
   familyMedicalHistory: z.string().optional(),
   allergies: z.string().optional(),
+  imageUrl: z.string(),
 });
 
 const UserProfile = () => {
-  const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const navigate = useNavigate();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      patientId: undefined,
+      patientId: "",
       school: "",
       program: "",
-      dateOfBirth: undefined,
+      dateOfBirth: "",
       emergencyContact: "",
-      height: undefined,
-      weight: undefined,
+      height: 0,
+      weight: 0,
       gender: "",
       bloodGroup: "",
       medicalHistory: "",
       familyMedicalHistory: "",
       allergies: "",
+      imageUrl: "",
     },
   });
+
+  useEffect(() => {
+    const getUserDetails = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/");
+        return;
+      }
+      try {
+        const res = await axios.get(
+          "http://localhost:8081/api/patient/getAllDetails",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+
+        const data = await res.data;
+        form.setValue("name", data.name || "");
+        form.setValue("patientId", data.email || "");
+        form.setValue("school", data.school || "");
+        form.setValue("program", data.program || "");
+        form.setValue("dateOfBirth", data.dateOfBirth || "");
+        form.setValue("emergencyContact", data.emergencyContact || "");
+        form.setValue("height", data.height || 0);
+        form.setValue("weight", data.weight || 0);
+        form.setValue("gender", data.gender || "");
+        form.setValue("bloodGroup", data.bloodGroup || "");
+        form.setValue("medicalHistory", data.medicalHistory || "");
+        form.setValue("familyMedicalHistory", data.familyMedicalHistory || "");
+        form.setValue("allergies", data.allergies || "");
+        form.setValue("imageUrl", data.imageUrl || "/default-user.jpg");
+      } catch (error: any) {
+        if (error.response && error.response.status === 404) {
+          try {
+            const resBackup = await axios.get(
+              "http://localhost:8081/api/patient/",
+              {
+                headers: {
+                  Authorization: "Bearer " + token,
+                },
+              }
+            );
+
+            const dataBackup = await resBackup.data;
+            form.setValue("name", dataBackup.name || "");
+            form.setValue("patientId", dataBackup.email || "");
+            form.setValue("school", dataBackup.school || "");
+            form.setValue("program", dataBackup.program || "");
+            form.setValue("dateOfBirth", dataBackup.dateOfBirth || "");
+            form.setValue(
+              "emergencyContact",
+              dataBackup.emergencyContact || ""
+            );
+            form.setValue("height", dataBackup.height || 0);
+            form.setValue("weight", dataBackup.weight || 0);
+            form.setValue("gender", dataBackup.gender || "Male");
+            form.setValue("bloodGroup", dataBackup.bloodGroup || "");
+            form.setValue("medicalHistory", dataBackup.medicalHistory || "");
+            form.setValue(
+              "familyMedicalHistory",
+              dataBackup.familyMedicalHistory || ""
+            );
+            form.setValue("allergies", dataBackup.allergies || "");
+            form.setValue(
+              "imageUrl",
+              dataBackup.imageUrl || "/default-user.jpg"
+            );
+          } catch (backupError) {
+            console.log("Error during backup request:", backupError);
+          }
+        } else {
+          console.log("Error:", error);
+        }
+      }
+    };
+
+    getUserDetails();
+  }, []);
 
   const { isValid } = form.formState;
   const onSubmit = (data: unknown) => {
@@ -117,13 +178,6 @@ const UserProfile = () => {
   const handleCancel = () => {
     navigate("/user-dashboard");
   };
-  const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setUploadedImage(url);
-    }
-  };
 
   return (
     <div className="profile-container__content">
@@ -132,24 +186,17 @@ const UserProfile = () => {
           <div className="profile-container__body">
             <div className="image-container">
               <Image
-                src={uploadedImage || "/default-user.jpg"}
+                // src={form.watch("imageUrl")}
+                src="/default-user.jpg"
                 alt="Profile Picture"
                 preview
                 style={{
                   border: "1px solid black",
                   display: "flex",
+                  justifyContent:"center",
+                  alignItems:"center",
                 }}
               />
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                id="upload-image"
-                style={{ display: "none" }}
-              />
-              <label htmlFor="upload-image" className="upload-button">
-                Upload Image
-              </label>
             </div>
             <div className="patient-details">
               <div className="patient-details__top">
@@ -161,7 +208,7 @@ const UserProfile = () => {
                       <FormItem>
                         <FormLabel>Name</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter name" {...field} />
+                          <Input placeholder="Name" {...field} disabled />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -174,7 +221,7 @@ const UserProfile = () => {
                       <FormItem className="mt-3">
                         <FormLabel>School</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter school" {...field} />
+                          <Input placeholder="School" {...field} disabled />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -188,18 +235,9 @@ const UserProfile = () => {
                         <FormLabel>Date of Birth</FormLabel>
                         <FormControl>
                           <Input
-                            type="date"
-                            placeholder="Select date of birth"
-                            value={
-                              field.value
-                                ? new Date(field.value)
-                                    .toISOString()
-                                    .substring(0, 10)
-                                : ""
-                            }
-                            onChange={(e) =>
-                              field.onChange(new Date(e.target.value))
-                            }
+                            placeholder="Date of Birth"
+                            {...field}
+                            disabled
                           />
                         </FormControl>
                         <FormMessage />
@@ -229,24 +267,9 @@ const UserProfile = () => {
                     render={({ field }) => (
                       <FormItem className="mt-3">
                         <FormLabel>Gender</FormLabel>
-                        <Select
-                          {...field}
-                          onValueChange={(value) => field.onChange(value)}
-                          value={field.value}
-                        >
-                          <SelectTrigger className="dropdown">
-                            <SelectValue placeholder="Select gender" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectGroup>
-                              <SelectItem value="Male">Male</SelectItem>
-                              <SelectItem value="Female">Female</SelectItem>
-                              <SelectItem value="Prefer not to say">
-                                Prefer not to say
-                              </SelectItem>
-                            </SelectGroup>
-                          </SelectContent>
-                        </Select>
+                        <FormControl>
+                          <Input placeholder="Gender" {...field} disabled />
+                        </FormControl>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -289,11 +312,7 @@ const UserProfile = () => {
                       <FormItem>
                         <FormLabel>Patient Id</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Enter your Id"
-                            {...field}
-                          />
+                          <Input placeholder="Patient Id" {...field} disabled />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -306,7 +325,7 @@ const UserProfile = () => {
                       <FormItem className="mt-3">
                         <FormLabel>Program</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your program" {...field} />
+                          <Input placeholder="Program" {...field} disabled />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -353,7 +372,11 @@ const UserProfile = () => {
                       <FormItem className="mt-3">
                         <FormLabel>Blood Group</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter blood group" {...field} />
+                          <Input
+                            placeholder="Blood group"
+                            {...field}
+                            disabled
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>

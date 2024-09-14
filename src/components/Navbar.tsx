@@ -21,6 +21,12 @@ const Navbar = ({
   const navigateTo = (path: string) => {
     navigate(path);
   };
+
+  const handleLogout = () => {
+    localStorage.clear();
+    navigateTo("/");
+  };
+
   return (
     <div className="bg-white shadow-md p-4 pr-5 flex items-center justify-between h-[9%] border-b border border-[gray]">
       <img src="/upes-logo.png" alt="UPES Logo" className="w-14" />
@@ -48,7 +54,7 @@ const Navbar = ({
             </div>
             <div
               className="flex items-center gap-2 hover:cursor-pointer"
-              onClick={() => navigateTo("/")}
+              onClick={handleLogout}
             >
               <img src="/logout.png" alt="Logout Icon" className="w-5" />
               Logout

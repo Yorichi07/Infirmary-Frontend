@@ -24,21 +24,16 @@ import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoc
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SignIn role="user" />,
+    element: <SignIn role="patient" />,
   },
   {
     path: "/doctor",
     element: <SignIn role="doctor" />,
   },
   {
-    path: "/assistant-doctor",
-    element: <SignIn role="assistant doctor" />,
+    path: "/assistant_doctor",
+    element: <SignIn role="assistant_doctor" />,
   },
-
-  // {
-  //   path: "/register",
-  //   element: <UserRegister />,
-  // },
   {
     path: "/user-profile",
     element: (
