@@ -3,13 +3,13 @@ import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { ChangeEventHandler, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
   patient: "http://localhost:8081/api/auth/patient/signin",
-  doctor: "http://localhost:8081/api/auth/doctor/signin",
-  assistant_doctor: "http://localhost:8081/api/auth/assistant/signin",
+  doctor: "http://localhost:8081/api/auth/doc/signin",
+  assistant_doctor: "http://localhost:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -38,11 +38,10 @@ const SignIn = ({ role }: { role: string }) => {
 
     try {
       const res = await axios.post(apiUrl, input);
-      const token =
-        role === "assistant_doctor"
-          ? JSON.parse(res.data).token
-          : res.data.token;
+      const { token, email } = res.data;
+
       localStorage.setItem("token", token);
+      localStorage.setItem("email", email);
       navigate(dashboardRoute);
     } catch (error: any) {
       if (error.response && error.response.status === 401) {
@@ -99,6 +98,19 @@ const SignIn = ({ role }: { role: string }) => {
             <Button className="sign-in-btn" onClick={handleSignIn}>
               Sign In
             </Button>
+
+            <hr className="mt-4 mb-2 w-full" />
+            <div className="flex w-full">
+              <Link to={"/doctor"} className="text-blue-500 text-left w-full">
+                Login as Doctor
+              </Link>
+              <Link
+                to={"/assistant_doctor"}
+                className="text-blue-500 text-right w-full"
+              >
+                Login as Assistant Doctor
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -22,33 +22,89 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { RadioButton } from "primereact/radiobutton"; // Assuming you're using PrimeReact for RadioButton
+import { RadioButton } from "primereact/radiobutton";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
-// Define form schema using Zod for validation
 const formSchema = z.object({
-  allergies: z.string().optional(),
-  followUp: z.enum(["Yes", "No"]).optional(),
-  lastAppointmentDate: z
-    .date()
-    .max(new Date(), { message: "Last appointment cannot be in the future" }),
+  reason: z.string(),
+  followUp: z.enum(["Yes", "No"]),
+  lastAppointmentDate: z.string().optional(),
   preferredDoctor: z.string().optional(),
   reasonForPreference: z.string().optional(),
 });
 
 const UserAppointment = () => {
   const navigate = useNavigate();
+  const [doctors, setDoctors] = useState<{ id: string; name: string }[]>([]);
+  const [lastAppointmentDate, setLastAppointmentDate] = useState<string | null>(
+    null
+  );
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       lastAppointmentDate: "",
-      followUp: "",
-      preferredDoctor: "",
+      followUp: "No",
+      preferredDoctor: undefined,
       reasonForPreference: "",
-      allergies: "",
+      reason: undefined,
     },
   });
 
+  useEffect(() => {
+    const fetchDoctors = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
+          navigate("/");
+          return;
+        }
+        const response = await axios.get(
+          "http://localhost:8081/api/AD/getAvailableDoctor",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
+        const doctorList = response.data.map((doctor: any) => ({
+          id: doctor.id.toString(),
+          name: doctor.name,
+        }));
+        setDoctors(doctorList);
+      } catch (error) {
+        console.error("Error fetching doctors: ", error);
+      }
+    };
+    fetchDoctors();
+  }, []);
+
+  const fetchLastAppointmentDate = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await axios.get(
+        "http://localhost:8081/api/appointment/lastAppointmentDate",
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setLastAppointmentDate(response.data || null);
+      form.setValue("lastAppointmentDate", response.data);
+    } catch (error) {
+      if (axios.isAxiosError(error) && error.response?.status === 404) {
+        setLastAppointmentDate("No Last Appointment Date");
+        form.setValue("lastAppointmentDate", "No Last Appointment Date");
+      } else {
+        console.error("Error fetching last appointment date:", error);
+      }
+    }
+  };
+
   const { isValid } = form.formState;
+
   const onSubmit = (data: unknown) => {
     if (isValid) {
       try {
@@ -75,18 +131,21 @@ const UserAppointment = () => {
     <div className="appointment-container">
       <div className="appointment-container__content">
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="h-[100%] flex flex-col justify-between">
+          <form
+            onSubmit={form.handleSubmit(onSubmit)}
+            className="h-[100%] flex flex-col justify-between"
+          >
             <div className="appointment-container__body">
-              {/* Allergies */}
+              {/* Reason for Appointment */}
               <FormField
                 control={form.control}
-                name="allergies"
+                name="reason"
                 render={({ field }) => (
                   <FormItem className="form-item">
-                    <FormLabel>Allergies</FormLabel>
+                    <FormLabel>Reason for Appointment</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="Enter Allergies ( if any )"
+                        placeholder="Enter reason for appointment"
                         {...field}
                       />
                     </FormControl>
@@ -108,7 +167,10 @@ const UserAppointment = () => {
                             inputId="followUpYes"
                             name="followUp"
                             value="Yes"
-                            onChange={(e) => field.onChange(e.value)}
+                            onChange={(e) => {
+                              field.onChange(e.value);
+                              fetchLastAppointmentDate();
+                            }}
                             checked={field.value === "Yes"}
                           />
                           <label htmlFor="followUpYes" className="ml-2">
@@ -120,7 +182,10 @@ const UserAppointment = () => {
                             inputId="followUpNo"
                             name="followUp"
                             value="No"
-                            onChange={(e) => field.onChange(e.value)}
+                            onChange={(e) => {
+                              field.onChange(e.value);
+                              setLastAppointmentDate(null);
+                            }}
                             checked={field.value === "No"}
                           />
                           <label htmlFor="followUpNo" className="ml-2">
@@ -141,7 +206,13 @@ const UserAppointment = () => {
                   <FormItem className="form-item">
                     <FormLabel>Last appointment date?</FormLabel>
                     <FormControl>
-                      <Input type="date" id="aDate" {...field} />
+                      <Input
+                        id="aDate"
+                        {...field}
+                        value={lastAppointmentDate || ""}
+                        disabled
+                        placeholder="Last appointment date"
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -158,17 +229,24 @@ const UserAppointment = () => {
                       <Select
                         {...field}
                         onValueChange={(value) => field.onChange(value)}
+                        disabled={doctors.length === 0}
                       >
                         <SelectTrigger id="doctor" className="mb-5">
-                          <SelectValue placeholder="Select a doctor" />
+                          <SelectValue
+                            placeholder={
+                              doctors.length === 0
+                                ? "No doctors available"
+                                : "Select a doctor"
+                            }
+                          />
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
-                            <SelectItem value="saluke">Mr. Saluke</SelectItem>
-                            <SelectItem value="tarika">Ms. Tarika</SelectItem>
-                            <SelectItem value="virender">
-                              Mr.Virender
-                            </SelectItem>
+                            {doctors.map((doctor: any) => (
+                              <SelectItem key={doctor.id} value={doctor.id}>
+                                {doctor.name}
+                              </SelectItem>
+                            ))}
                           </SelectGroup>
                         </SelectContent>
                       </Select>

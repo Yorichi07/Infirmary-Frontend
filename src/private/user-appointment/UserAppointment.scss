@@ -3,6 +3,7 @@
   &__content {
     height: 100%;
     padding: 2rem;
+    overflow-y: scroll;
 
     .trigger {
       svg {

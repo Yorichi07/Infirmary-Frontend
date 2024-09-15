@@ -6,8 +6,8 @@ const DoctorDashboardLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
     title: "doctor dashboard",
     titleLogo: Shared.DoctorHome,
-    additionalLogo: undefined,
-    menu: false,
+    additionalLogo: Shared.User,
+    menu: true,
     role: "doctor",
   };
   return (

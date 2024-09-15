@@ -28,7 +28,7 @@ const Navbar = ({
   };
 
   return (
-    <div className="bg-white shadow-md p-4 pr-5 flex items-center justify-between h-[9%] border-b border border-[gray]">
+    <div className="bg-white shadow-md p-4 pr-8 flex items-center justify-between h-[9%] border-b border border-[gray]">
       <img src="/upes-logo.png" alt="UPES Logo" className="w-14" />
       <div className="capitalize font-semibold text-2xl flex items-center gap-2">
         {props.titleLogo &&
@@ -45,13 +45,15 @@ const Navbar = ({
             {props.additionalLogo}
           </PopoverTrigger>
           <PopoverContent className="space-y-4">
-            <div
-              className="flex items-center gap-2 hover:cursor-pointer"
-              onClick={() => navigateTo("/user-profile")}
-            >
-              <img src="/user-icon.png" alt="User Icon" className="w-4" />
-              Profile
-            </div>
+            {props.role !== "doctor" && props.role !== "assistant" && (
+              <div
+                className="flex items-center gap-2 hover:cursor-pointer"
+                onClick={() => navigateTo("/user-profile")}
+              >
+                <img src="/user-icon.png" alt="User Icon" className="w-4" />
+                Profile
+              </div>
+            )}
             <div
               className="flex items-center gap-2 hover:cursor-pointer"
               onClick={handleLogout}

@@ -10,8 +10,8 @@ const AssistantDoctorDashboardLayout = ({
   const navsetting = {
     title: "assistant doctor dashboard",
     titleLogo: Shared.DoctorHome,
-    additionalLogo: undefined,
-    menu: false,
+    additionalLogo: Shared.User,
+    menu: true,
     role: "assistant",
   };
   return (

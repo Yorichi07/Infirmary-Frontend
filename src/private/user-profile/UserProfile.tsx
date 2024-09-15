@@ -24,34 +24,27 @@ const formSchema = z.object({
   school: z.string(),
   program: z.string(),
   dateOfBirth: z.string(),
-  emergencyContact: z
-    .string()
-    .regex(/^\d+$/, {
-      message: "Emergency contact phone must contain only numbers",
-    })
-    .length(10, {
-      message: "Emergency contact phone must be 10 digits long",
-    }),
+  emergencyContact: z.string(),
   height: z
     .string()
-    .transform((val) => parseInt(val, 10))
-    .refine((val) => val >= 30 && val <= 250, {
-      message: "Height must be between 30 cm and 250 cm",
+    .regex(/^\d+$/, "Height must be a numeric value")
+    .refine((value) => parseInt(value) >= 100 && parseInt(value) <= 300, {
+      message: "Height must be between 100 and 300 cm",
     }),
+
   weight: z
     .string()
-    .transform((val) => parseFloat(val))
-    .refine((val) => val >= 1 && val <= 300, {
-      message: "Weight must be between 1 kg and 300 kg",
+    .regex(/^\d+$/, "Weight must be a numeric value")
+    .refine((value) => parseInt(value) >= 1 && parseInt(value) <= 500, {
+      message: "Weight must be between 1 and 500 kg",
     }),
-  gender: z.enum(["Male", "Female", "Prefer not to say"], {
-    message: "Choose gender from given options",
-  }),
+  gender: z.string(),
   bloodGroup: z.string(),
   medicalHistory: z.string().optional(),
   familyMedicalHistory: z.string().optional(),
   allergies: z.string().optional(),
   imageUrl: z.string(),
+  currentAddress: z.string(),
 });
 
 const UserProfile = () => {
@@ -65,14 +58,15 @@ const UserProfile = () => {
       program: "",
       dateOfBirth: "",
       emergencyContact: "",
-      height: 0,
-      weight: 0,
+      height: "",
+      weight: "",
       gender: "",
       bloodGroup: "",
       medicalHistory: "",
       familyMedicalHistory: "",
       allergies: "",
       imageUrl: "",
+      currentAddress: "",
     },
   });
 
@@ -100,14 +94,15 @@ const UserProfile = () => {
         form.setValue("program", data.program || "");
         form.setValue("dateOfBirth", data.dateOfBirth || "");
         form.setValue("emergencyContact", data.emergencyContact || "");
-        form.setValue("height", data.height || 0);
-        form.setValue("weight", data.weight || 0);
+        form.setValue("height", data.height.toString() || "");
+        form.setValue("weight", data.weight.toString() || "");
         form.setValue("gender", data.gender || "");
         form.setValue("bloodGroup", data.bloodGroup || "");
         form.setValue("medicalHistory", data.medicalHistory || "");
         form.setValue("familyMedicalHistory", data.familyMedicalHistory || "");
         form.setValue("allergies", data.allergies || "");
         form.setValue("imageUrl", data.imageUrl || "/default-user.jpg");
+        form.setValue("currentAddress", data.currentAddress || "");
       } catch (error: any) {
         if (error.response && error.response.status === 404) {
           try {
@@ -130,9 +125,9 @@ const UserProfile = () => {
               "emergencyContact",
               dataBackup.emergencyContact || ""
             );
-            form.setValue("height", dataBackup.height || 0);
-            form.setValue("weight", dataBackup.weight || 0);
-            form.setValue("gender", dataBackup.gender || "Male");
+            form.setValue("height", dataBackup.height.toString() || "");
+            form.setValue("weight", dataBackup.toString() || "");
+            form.setValue("gender", dataBackup.gender || "");
             form.setValue("bloodGroup", dataBackup.bloodGroup || "");
             form.setValue("medicalHistory", dataBackup.medicalHistory || "");
             form.setValue(
@@ -144,6 +139,7 @@ const UserProfile = () => {
               "imageUrl",
               dataBackup.imageUrl || "/default-user.jpg"
             );
+            form.setValue("currentAddress", dataBackup.currentAddress || "");
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
           }
@@ -157,10 +153,27 @@ const UserProfile = () => {
   }, []);
 
   const { isValid } = form.formState;
-  const onSubmit = (data: unknown) => {
+  const onSubmit = async (data: any) => {
     if (isValid) {
       try {
-        console.log("Form Data Submitted: ", JSON.stringify(data, null, 2));
+        const token = localStorage.getItem("token");
+        const response = await axios.put(
+          "http://localhost:8081/api/patient/update",
+          {
+            currentAddress: data.currentAddress,
+            medicalHistory: data.medicalHistory,
+            familyMedicalHistory: data.familyMedicalHistory,
+            allergies: data.allergies,
+            height: data.height,
+            weight: data.weight,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log("Form Data Submitted: ", response.data);
         navigate("/user-dashboard");
       } catch (error) {
         console.error("Error submitting form:", error);
@@ -193,8 +206,8 @@ const UserProfile = () => {
                 style={{
                   border: "1px solid black",
                   display: "flex",
-                  justifyContent:"center",
-                  alignItems:"center",
+                  justifyContent: "center",
+                  alignItems: "center",
                 }}
               />
             </div>
@@ -251,11 +264,7 @@ const UserProfile = () => {
                       <FormItem className="mt-3">
                         <FormLabel>Height (cm)</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Enter height"
-                            {...field}
-                          />
+                          <Input placeholder="Enter height" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -341,6 +350,7 @@ const UserProfile = () => {
                           <Input
                             placeholder="Enter emergency contact"
                             {...field}
+                            disabled
                           />
                         </FormControl>
                         <FormMessage />
@@ -354,11 +364,7 @@ const UserProfile = () => {
                       <FormItem className="mt-3">
                         <FormLabel>Weight (kg)</FormLabel>
                         <FormControl>
-                          <Input
-                            type="number"
-                            placeholder="Enter weight"
-                            {...field}
-                          />
+                          <Input placeholder="Enter weight" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -391,6 +397,22 @@ const UserProfile = () => {
                         <FormControl>
                           <Textarea
                             placeholder="Enter family medical history"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="currentAddress"
+                    render={({ field }) => (
+                      <FormItem className="mt-3">
+                        <FormLabel>Current Address</FormLabel>
+                        <FormControl>
+                          <Textarea
+                            placeholder="Enter your current address"
                             {...field}
                           />
                         </FormControl>

@@ -6,8 +6,6 @@ import UserAppointment from "@/private/user-appointment/UserAppointment";
 import SignIn from "@/public/SignIn";
 import MedicineStock from "@/private/medicine-stock/MedicineStock";
 import MedicineStockLayout from "@/private/medicine-stock/MedicineStockLayout";
-import PatientList from "@/private/patient-list/PatientList";
-import PatientListLayout from "@/private/patient-list/PatientListLayout";
 import Reports from "@/private/reports/Reports";
 import ReportsLayout from "@/private/reports/ReportsLayout";
 import { createBrowserRouter } from "react-router-dom";
@@ -20,6 +18,8 @@ import UserPrescription from "@/private/user-prescription/UserPrescription";
 import UserPrescriptionLayout from "@/private/user-prescription/UserPrescriptionLayout";
 import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/AssistantDoctorDashboardLayout";
 import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoctorDashboard";
+import DocPatientList from "@/private/doc-patient-list/DocPatientList";
+import DocPatientListLayout from "@/private/doc-patient-list/DocPatientListLayout";
 
 const router = createBrowserRouter([
   {
@@ -99,11 +99,11 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/patient-list",
+    path: "/doc-patient-list",
     element: (
-      <PatientListLayout>
-        <PatientList />
-      </PatientListLayout>
+      <DocPatientListLayout>
+        <DocPatientList />
+      </DocPatientListLayout>
     ),
   },
   {
