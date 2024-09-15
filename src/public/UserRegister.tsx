@@ -123,13 +123,15 @@ const UserRegister = () => {
     if (isValid) {
       try {
         console.log("Form Data Submitted: ", JSON.stringify(data, null, 2));
+        alert("Form Data Submitted: ")
         navigate("/");
       } catch (error) {
         console.error("Error submitting form:", error);
+        alert("Error submitting form. Please try again.");
       }
     } else {
-      console.log("Form is not valid.");
       console.error("Form Validation Errors:", form.formState.errors);
+      alert("Form not valid. Check details and try again.");
 
       Object.entries(form.formState.errors).forEach(([field, error]) => {
         console.error(`Error in ${field}: ${error.message}`);

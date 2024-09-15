@@ -44,6 +44,7 @@ const UserDashboard = () => {
         setUserDetails(data);
       } catch (e) {
         console.log(e);
+        alert("Error fetching patient details, please try again later.")
       }
     };
 
@@ -74,6 +75,7 @@ const UserDashboard = () => {
         });
       } catch (error) {
         console.log("Error fetching status: ", error);
+        alert("Couldn't fetch appointment details")
       }
     };
 

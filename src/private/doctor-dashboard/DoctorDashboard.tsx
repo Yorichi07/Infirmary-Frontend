@@ -43,9 +43,11 @@ const DoctorDashboard = () => {
         setInQueue(data.In_Queue);
       } else {
         console.error("Failed to fetch patient data.");
+        alert("Failed to fetch patient data")
       }
     } catch (error) {
       console.error("Error fetching patient data:", error);
+      alert("Failed to fetch patient data")
     }
   };
 

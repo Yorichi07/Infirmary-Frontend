@@ -75,6 +75,7 @@ const UserAppointment = () => {
         setDoctors(doctorList);
       } catch (error) {
         console.error("Error fetching doctors: ", error);
+        alert("Could not fetch available doctors")
       }
     };
     fetchDoctors();
@@ -99,6 +100,7 @@ const UserAppointment = () => {
         form.setValue("lastAppointmentDate", "No Last Appointment Date");
       } else {
         console.error("Error fetching last appointment date:", error);
+        alert("Could'nt get last appointment date")
       }
     }
   };
@@ -136,17 +138,19 @@ const UserAppointment = () => {
           navigate("/user-dashboard");
         } else {
           console.error("Failed to submit appointment");
+          alert("Failed to submit appointment");
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response?.status === 400) {
           alert("Appointment already in queue");
         } else {
           console.error("Error submitting appointment:", error);
+          alert("Failed to submit appointment");
         }
       }
     } else {
-      console.log("Form is not valid.");
       console.error("Form Validation Errors:", form.formState.errors);
+      alert("Form is not valid");
     }
   };
 

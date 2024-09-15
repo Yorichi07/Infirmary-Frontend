@@ -142,9 +142,11 @@ const UserProfile = () => {
             form.setValue("currentAddress", dataBackup.currentAddress || "");
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
+            alert("Couldn't retrieve patient details")
           }
         } else {
           console.log("Error:", error);
+          alert("Failed to get user information")
         }
       }
     };
@@ -174,13 +176,15 @@ const UserProfile = () => {
           }
         );
         console.log("Form Data Submitted: ", response.data);
+        alert("Profile updated successfully")
         navigate("/user-dashboard");
       } catch (error) {
         console.error("Error submitting form:", error);
+        alert("No details updated!")
       }
     } else {
-      console.log("Form is not valid.");
       console.error("Form Validation Errors:", form.formState.errors);
+      alert("Form Details not Valid");
 
       Object.entries(form.formState.errors).forEach(([field, error]) => {
         console.error(`Error in ${field}: ${error.message}`);
