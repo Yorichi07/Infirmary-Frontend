@@ -67,7 +67,7 @@ const UserDashboard = () => {
         const statusData = response.data;
         // Set appointmentStatus and doctorName based on the response
         setStatus({
-          appointmentStatus: statusData.Appointment ? "Done" : "NA",
+          appointmentStatus: statusData.Appointment ? "Queued" : "NA",
           doctorName: statusData.Doctor
             ? statusData.Doctor.name
             : "Not Appointed",
@@ -126,12 +126,12 @@ const UserDashboard = () => {
               </div>
               <div
                 className={`px-8 py-3 w-full ${
-                  status.appointmentStatus === "Done"
+                  status.appointmentStatus === "Queued"
                     ? "bg-[#1F60C0] text-white shadow-lg rounded-md"
                     : ""
                 }`}
               >
-                Done
+                Queued
               </div>
             </div>
           </div>

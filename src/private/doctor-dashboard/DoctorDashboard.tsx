@@ -195,7 +195,8 @@ const DoctorDashboard = () => {
                 Patient Queue
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
+            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+            onClick={() => navigate("/medicine-stock")}>
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Medical Stock
               </p>

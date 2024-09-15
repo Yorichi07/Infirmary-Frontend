@@ -105,21 +105,48 @@ const UserAppointment = () => {
 
   const { isValid } = form.formState;
 
-  const onSubmit = (data: unknown) => {
+  const onSubmit = async (data: any) => {
     if (isValid) {
       try {
-        console.log("Form Data Submitted: ", JSON.stringify(data, null, 2));
-        navigate("/user-dashboard");
+        const token = localStorage.getItem("token");
+
+        // Map form data to API request DTO
+        const appointmentData = {
+          reason: data.reason,
+          isFollowUp: data.followUp === "Yes", // Convert "Yes"/"No" to boolean
+          preferredDoctor: data.preferredDoctor
+            ? Number(data.preferredDoctor)
+            : null, // Convert string to number
+          reasonPrefDoctor: data.reasonForPreference || "",
+        };
+
+        // Make POST request
+        const response = await axios.post(
+          "http://localhost:8081/api/patient/submitAppointment",
+          appointmentData,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          alert("Appointment submitted successfully");
+          navigate("/user-dashboard");
+        } else {
+          console.error("Failed to submit appointment");
+        }
       } catch (error) {
-        console.error("Error submitting form:", error);
+        if (axios.isAxiosError(error) && error.response?.status === 400) {
+          alert("Appointment already in queue");
+        } else {
+          console.error("Error submitting appointment:", error);
+        }
       }
     } else {
       console.log("Form is not valid.");
       console.error("Form Validation Errors:", form.formState.errors);
-
-      Object.entries(form.formState.errors).forEach(([field, error]) => {
-        console.error(`Error in ${field}: ${error.message}`);
-      });
     }
   };
 
