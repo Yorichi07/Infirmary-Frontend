@@ -38,10 +38,20 @@ const SignIn = ({ role }: { role: string }) => {
 
     try {
       const res = await axios.post(apiUrl, input);
-      const { token, email } = res.data;
+      const { token, email, roles } = res.data;
 
+      // Store token, email, and roles in local storage
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
+      localStorage.setItem(
+        "roles",
+        roles[0] == "ROLE_PATIENT"
+          ? "user"
+          : roles[0] == "ROLE_AD"
+          ? "assistant"
+          : "doctor"
+      ); // Store roles as JSON string
+
       navigate(dashboardRoute);
     } catch (error: any) {
       if (error.response && error.response.status === 401) {

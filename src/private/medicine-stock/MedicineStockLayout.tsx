@@ -8,7 +8,7 @@ const MedicineStockLayout = ({ children }: { children: React.ReactNode }) => {
     titleLogo: Shared.Pills,
     additionalLogo: Shared.ArrowLeft,
     menu: false,
-    role: "doctor",
+    role: localStorage.getItem("roles"),
   };
   return (
     <div className="h-screen">

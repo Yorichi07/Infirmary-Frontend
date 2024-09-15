@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import Shared from "@/Shared";
 import React from "react";
 
-const DocPatientListLayout = ({ children }: { children: React.ReactNode }) => {
+const PatientListLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
     title: "Patient List",
     titleLogo: Shared.List,
@@ -23,4 +23,4 @@ const DocPatientListLayout = ({ children }: { children: React.ReactNode }) => {
   );
 };
 
-export default DocPatientListLayout;
+export default PatientListLayout;

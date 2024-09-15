@@ -18,8 +18,8 @@ import UserPrescription from "@/private/user-prescription/UserPrescription";
 import UserPrescriptionLayout from "@/private/user-prescription/UserPrescriptionLayout";
 import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/AssistantDoctorDashboardLayout";
 import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoctorDashboard";
-import DocPatientList from "@/private/doc-patient-list/DocPatientList";
-import DocPatientListLayout from "@/private/doc-patient-list/DocPatientListLayout";
+import PatientList from "@/private/patient-list/PatientList";
+import PatientListLayout from "@/private/patient-list/PatientListLayout";
 
 const router = createBrowserRouter([
   {
@@ -99,11 +99,11 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/doc-patient-list",
+    path: "/patient-list",
     element: (
-      <DocPatientListLayout>
-        <DocPatientList />
-      </DocPatientListLayout>
+      <PatientListLayout>
+        <PatientList />
+      </PatientListLayout>
     ),
   },
   {

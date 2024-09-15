@@ -142,7 +142,6 @@ const UserProfile = () => {
             form.setValue("currentAddress", dataBackup.currentAddress || "");
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
-            alert("Couldn't retrieve patient details")
           }
         } else {
           console.log("Error:", error);

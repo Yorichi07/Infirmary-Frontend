@@ -4,7 +4,7 @@ import React from "react";
 
 const DoctorCheckInLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
-    title: "Doctor Check-In / Check-Out",
+    title: "Doctors Availability",
     titleLogo: Shared.DoctorCheckin,
     additionalLogo: Shared.ArrowLeft,
     menu: false,
