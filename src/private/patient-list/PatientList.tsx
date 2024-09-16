@@ -8,10 +8,40 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Shared from "@/Shared";
-import { useState } from "react";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PatientList = () => {
-  const [patient,setPatient] = useState<Array<{email:string,}>>([]);
+  const navigate = useNavigate();
+  const [patient,setPatient] = useState<Array<{email:string,name:String,reason:string}>>([]);
+
+  useEffect(()=>{
+    const fetchList = async () => {
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.get(
+          "http://localhost:8081/api/AD/getPatientQueue",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+          );
+        const fetchd = response.data;
+        const ffetchd = fetchd.map((pat:any)=>({
+          id:pat.sapEmail,
+          name:pat.name,
+          reason:pat.reason
+        }))
+        setPatient(ffetchd);
+      }catch(error){
+        console.log(error);
+      }
+    }
+    fetchList();
+  }, []);
+
   return (
     <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col">
       <div className="flex space-x-2 items-center">
@@ -40,34 +70,19 @@ const PatientList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-
-            <TableRow className="text-center">
-              <TableCell className="border">1</TableCell>
-              <TableCell className="border">Bhavya Jain</TableCell>
-              <TableCell className="border">500XXXXXX</TableCell>
-              <TableCell className="border">Fever</TableCell>
+            {
+              patient.map((pat,index)=>(
+                <TableRow className="text-center">
+              <TableCell className="border">{index+1}</TableCell>
+              <TableCell className="border">{pat.name}</TableCell>
+              <TableCell className="border">{pat.email}</TableCell>
+              <TableCell className="border">{pat.reason}</TableCell>
               <TableCell className="border flex items-center justify-center">
-                <button className="text-3xl">{Shared.Report}</button>
+                <button className="text-3xl" key={pat.email} onClick={()=>{navigate(`/`)}}>{Shared.Report}</button>
               </TableCell>
             </TableRow>
-            <TableRow className="text-center">
-              <TableCell className="border">2</TableCell>
-              <TableCell className="border">Bhavya Jain</TableCell>
-              <TableCell className="border">500XXXXXX</TableCell>
-              <TableCell className="border">Fever</TableCell>
-              <TableCell className="border flex items-center justify-center">
-                <button className="text-3xl">{Shared.Report}</button>
-              </TableCell>
-            </TableRow>
-            <TableRow className="text-center">
-              <TableCell className="border">2</TableCell>
-              <TableCell className="border">Bhavya Jain</TableCell>
-              <TableCell className="border">500XXXXXX</TableCell>
-              <TableCell className="border">Fever</TableCell>
-              <TableCell className="border flex items-center justify-center">
-                <button className="text-3xl">{Shared.Report}</button>
-              </TableCell>
-            </TableRow>
+              ))
+            }
           </TableBody>
         </Table>
       </div>

@@ -119,7 +119,7 @@ const UserAppointment = () => {
           preferredDoctor: data.preferredDoctor
             ? Number(data.preferredDoctor)
             : null, // Convert string to number
-          reasonPrefDoctor: data.reasonForPreference || "",
+          reasonPrefDoctor: data.reasonForPreference || null,
         };
 
         // Make POST request
@@ -259,7 +259,7 @@ const UserAppointment = () => {
                     <FormControl>
                       <Select
                         {...field}
-                        onValueChange={(value) => field.onChange(value)}
+                        onValueChange={(value: any) => field.onChange(value)}
                         disabled={doctors.length === 0}
                       >
                         <SelectTrigger id="doctor" className="mb-5">
