@@ -20,6 +20,8 @@ import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/Assist
 import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoctorDashboard";
 import PatientList from "@/private/patient-list/PatientList";
 import PatientListLayout from "@/private/patient-list/PatientListLayout";
+import Prescription from "@/private/patient-details-prescription/Prescription";
+import PrescriptionLayout from "@/private/patient-details-prescription/PrescriptionLayout";
 
 const router = createBrowserRouter([
   {
@@ -112,6 +114,14 @@ const router = createBrowserRouter([
       <ReportsLayout>
         <Reports />
       </ReportsLayout>
+    ),
+  },
+  {
+    path: "/patient-details",
+    element: (
+      <PrescriptionLayout>
+        <Prescription />
+      </PrescriptionLayout>
     ),
   },
 ]);
