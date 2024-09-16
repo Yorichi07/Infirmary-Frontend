@@ -1,0 +1,337 @@
+.patient-details-container {
+	padding: 20px;
+	background-color: #f5f5f5;
+	border-radius: 10px;
+    overflow-y: scroll;
+}
+
+.patient-details-content {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.details-section {
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.input-field {
+	display: flex;
+	align-items: center;
+    width: 100%;
+    gap: 30px;
+
+    label{
+        width: 100%;
+    }
+
+    input{
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        padding: 5px;
+        background-color: white;
+    }
+}
+
+.options-section {
+	display: flex;
+	flex-direction: column;
+    justify-content: center;
+    gap: 15px;
+    align-items: center;
+}
+
+.history-btn{
+	width: 200px;
+	padding: 10px;
+	background-color: #008080;
+	color: white;
+	border: none;
+	border-radius: 5px;
+	cursor: pointer;
+}
+
+.history-btn:hover{
+	background-color: #005f5f;
+}
+
+/* Prescription Section */
+.prescription-section {
+	background-color: #fdfdfd;
+	padding: 20px;
+	border-radius: 10px;
+}
+
+.prescription-heading-container {
+	text-align: center;
+}
+
+.prescription-heading {
+	font-size: 18px;
+	font-weight: bold;
+	margin-bottom: 10px;
+}
+
+.prescription-box {
+	background-color: #fdfdfd;
+	padding: 20px;
+	border-radius: 10px;
+	width: 750px; /* Control the width */
+	margin: 0 auto; /* Center the form */
+	border: 1px solid black;
+}
+
+/* Prescription Box Header */
+.prescription-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 10px;
+}
+
+.logo-placeholder {
+	display: flex;
+	align-items: center;
+}
+
+.logo-image {
+	width: 50px; /* Adjust size as needed */
+	height: auto;
+}
+
+.prescription-title {
+	text-align: center;
+	font-size: 24px;
+	flex-grow: 1;
+	margin: 0;
+}
+
+.prescription-date {
+	font-size: 16px;
+	color: #333;
+}
+
+.header-divider {
+	border: 1px solid black;
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+/* Patient Details Section */
+.patient-details-section {
+	margin: 20px 0;
+}
+
+.patient-info,
+.additional-info {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 50px;
+}
+
+.info-field {
+	display: flex;
+	align-items: center;
+}
+
+.info-field label {
+	margin-right: 10px;
+	font-weight: bold;
+}
+
+.additional-info {
+	margin-top: 10px;
+}
+
+.section-divider {
+	border: 0;
+	border-top: 2px solid black;
+	margin: 20px 0;
+}
+
+/* Ensure that patient-info is displayed in a single line */
+.patient-info {
+	display: flex;
+	gap: 20px; /* Adjust space between fields as needed */
+}
+
+/* Adjust widths for Name, Age, and Sex fields */
+.name-field {
+	flex: 2;
+	gap: 10px;
+}
+
+.age-field,
+.sex-field {
+	flex: 1;
+}
+
+/* Style the input fields */
+.info-input {
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
+	background-color: #e0f7fa; /* Light blue shade */
+}
+
+/* Specific adjustments for age and sex inputs */
+.age-input,
+.sex-input {
+	width: 100%; /* Make them smaller relative to the name input */
+}
+
+/* Diagnosis Section */
+.diagnosis-section {
+	margin-top: 20px;
+	padding: 0 20px;
+}
+
+.diagnosis-input {
+	width: 100%;
+	max-width: 1000px; /* Increased width */
+	height: 150px;
+	padding: 15px;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	background-color: #e0f7fa;
+	margin-top: 5px;
+	box-sizing: border-box;
+	resize: none;
+}
+
+/* Medicine Section */
+.medicine-section {
+	margin-top: 20px;
+	padding: 0 20px; /* Padding to match other sections */
+}
+
+.medicine-heading {
+	font-size: 1.4em;
+	margin-bottom: 10px;
+}
+
+.medicine-table {
+	width: calc(100% - 40px);
+	margin: 0 auto;
+	border-collapse: collapse;
+}
+
+.medicine-table th,
+.medicine-table td {
+	border: 1px solid #ddd;
+	padding: 8px;
+	text-align: left;
+}
+
+.search-box {
+	display: flex;
+	align-items: center;
+}
+
+.search-box input {
+	flex: 1;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
+	background-color: #e0f7fa;
+}
+
+.small-input {
+	width: 80px;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
+	background-color: #e0f7fa;
+}
+
+.suggestions-input {
+	width: 200px;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	padding: 8px;
+	background-color: #e0f7fa;
+}
+
+.table-actions {
+	display: flex;
+	justify-content: space-between;
+	margin-top: 20px; /* Increased margin-top for spacing */
+	padding: 0 20px;
+}
+
+.add-btn,
+.remove-btn {
+	border-radius: 8px;
+	border: none;
+	padding: 10px 20px;
+	color: white;
+	cursor: pointer;
+}
+
+.add-btn {
+	background-color: #4caf50; /* Green */
+}
+
+.remove-btn {
+	background-color: #f44336; /* Red */
+}
+
+/* Dietary & Remarks Section */
+.dietary-section,
+.tests-section {
+	margin-top: 20px;
+	padding: 0 20px;
+}
+
+.dietary-input,
+.tests-input {
+	width: 100%;
+	max-width: 1000px;
+	height: 100px; /* Smaller height */
+	padding: 15px;
+	border-radius: 8px;
+	border: 1px solid #ddd;
+	background-color: #e0f7fa;
+	margin-top: 5px;
+	box-sizing: border-box;
+	resize: none;
+}
+
+/* Signature Section */
+.signature-section {
+	display: flex;
+	align-items: flex-end;
+	justify-content: flex-end;
+	margin-top: 40px; /* Adjust spacing between input box and signature */
+	padding-right: 20px; /* Ensure padding is consistent */
+}
+
+.signature-wrapper {
+	text-align: center; /* Center text below the image */
+}
+
+.signature-image {
+	width: 100px; /* Adjust size as needed */
+	height: auto;
+	margin-right: 0; /* Remove space between image and text */
+}
+
+.signature-text {
+	font-size: 1em;
+	font-weight: bold;
+	color: #333;
+	margin-top: 5px; /* Space between image and text */
+}
+
+/* Footer */
+.footer {
+	text-align: center;
+	font-size: 1em;
+	color: #333;
+	margin-top: 20px;
+	padding: 10px;
+	background-color: #f5f5f5;
+	border-top: 2px solid black; /* Black line above the footer */
+}
