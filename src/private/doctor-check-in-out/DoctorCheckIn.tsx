@@ -5,29 +5,6 @@ const DoctorCheckIn = () => {
   const [time, setTime] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | undefined>(new Date());
 
-  const doctors = [
-    {
-      name: "Dr. R.P Salunkhe",
-      status: "checked-in",
-    },
-    {
-      name: "Dr. R.P Salunkhe",
-      status: "checked-out",
-    },
-    {
-      name: "Dr. R.P Salunkhe",
-      status: "checked-in",
-    },
-    {
-      name: "Dr. R.P Salunkhe",
-      status: "checked-in",
-    },
-    {
-      name: "Dr. R.P Salunkhe",
-      status: "checked-in",
-    },
-  ];
-
   useEffect(() => {
     const timer = setInterval(() => {
       setTime(new Date());
