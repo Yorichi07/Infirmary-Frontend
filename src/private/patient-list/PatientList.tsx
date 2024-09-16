@@ -8,8 +8,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Shared from "@/Shared";
+import { useState } from "react";
 
 const PatientList = () => {
+  const [patient,setPatient] = useState<Array<{email:string,}>>([]);
   return (
     <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col">
       <div className="flex space-x-2 items-center">
@@ -38,6 +40,7 @@ const PatientList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
+
             <TableRow className="text-center">
               <TableCell className="border">1</TableCell>
               <TableCell className="border">Bhavya Jain</TableCell>

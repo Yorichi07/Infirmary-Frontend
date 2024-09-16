@@ -8,7 +8,7 @@ const DoctorCheckInLayout = ({ children }: { children: React.ReactNode }) => {
     titleLogo: Shared.DoctorCheckin,
     additionalLogo: Shared.ArrowLeft,
     menu: false,
-    role: "doctor",
+    role: `${localStorage.getItem("roles")}`,
   };
   return (
     <div className="h-screen">

@@ -8,7 +8,7 @@ const DoctorCheckIn = () => {
   const [time, setTime] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [doctors, setDoctors] = useState<
-    Array<{ name: string; status: string, email: string }>
+    Array<{id:number,name: string; status: string, email: string }>
   >([]);
 
   useEffect(() => {
@@ -28,6 +28,7 @@ const DoctorCheckIn = () => {
 
         // Map the API response to the required format
         const formattedDoctors = doctorsData.map((doctor: any) => ({
+          id: doctor.doctorId,
           name: doctor.name,
           status: doctor.status ? "checked-in" : "checked-out",
           email: doctor.doctorEmail,
@@ -51,7 +52,7 @@ const DoctorCheckIn = () => {
     };
   }, []);
 
-  const handleCheckIn = async () => {
+  const handleCheckIn = async (event:any) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -59,19 +60,20 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=true",
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
             Authorization: "Bearer " + token,
           },
         }
       );
+      location.reload();
     } catch (error) {
       console.error("Error during check-in:", error);
     }
   };
 
-  const handleCheckOut = async () => {
+  const handleCheckOut = async (event:any) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -79,13 +81,14 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/doctor/setStatus/?isDoctorCheckIn=false",
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {
             Authorization: "Bearer " + token,
           },
         }
       );
+      location.reload();
     } catch (error) {
       console.error("Error during check-out:", error);
     }
@@ -127,21 +130,22 @@ const DoctorCheckIn = () => {
                 </p>
                 <div className="flex w-full justify-between">
                   <button
-                  key={doctor.email}
+                  data-key={`${doctor.id}`}
                     className={`px-8 py-2 ${
                       doctor.status !== "checked-in"
                         ? "bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
                         : "bg-[#8F8F8F]"
-                    } rounded-md text-white`} onClick={handleCheckIn}
+                    } rounded-md text-white`} onClick={(event:any) => {handleCheckIn(event)}}
                   >
                     Check-In
                   </button>
-                  <button key={doctor.email}
+                  <button 
+                  data-key={`${doctor.id}`}
                     className={`px-8 py-2 ${
                       doctor.status !== "checked-out"
                         ? "bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
                         : "bg-[#8F8F8F]"
-                    } rounded-md text-white`} onClick={handleCheckOut}
+                    } rounded-md text-white`} onClick={(event:any)=>handleCheckOut(event)}
                   >
                     Check-Out
                   </button>
