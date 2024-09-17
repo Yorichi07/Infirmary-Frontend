@@ -1,30 +1,71 @@
-import AssistantDoctorDashboard from "@/private/assistant-dashboard/doctor-dashboard/AssistantDoctorDashboard";
-import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/doctor-dashboard/AssistantDoctorDashboardLayout";
 import DoctorCheckIn from "@/private/doctor-check-in-out/DoctorCheckIn";
 import DoctorCheckInLayout from "@/private/doctor-check-in-out/DoctorCheckInLayout";
 import DoctorDashboard from "@/private/doctor-dashboard/DoctorDashboard";
 import DoctorDashboardLayout from "@/private/doctor-dashboard/DoctorDashboardLayout";
+import UserAppointment from "@/private/user-appointment/UserAppointment";
+import SignIn from "@/public/SignIn";
 import MedicineStock from "@/private/medicine-stock/MedicineStock";
 import MedicineStockLayout from "@/private/medicine-stock/MedicineStockLayout";
-import PatientList from "@/private/patient-list/PatientList";
-import PatientListLayout from "@/private/patient-list/PatientListLayout";
 import Reports from "@/private/reports/Reports";
 import ReportsLayout from "@/private/reports/ReportsLayout";
-import StudentDasboardLayout from "@/private/student-dashboard/StudentDasboardLayout";
-import StudentDashboard from "@/private/student-dashboard/StudentDashboard";
 import { createBrowserRouter } from "react-router-dom";
+import UserProfileLayout from "@/private/user-profile/UserProfileLayout";
+import UserProfile from "@/private/user-profile/UserProfile";
+import UserAppointmentLayout from "@/private/user-appointment/UserAppointmentLayout";
+import UserDasboardLayout from "@/private/user-dashboard/UserDasboardLayout";
+import UserDashboard from "@/private/user-dashboard/UserDashboard";
+import UserPrescription from "@/private/user-prescription/UserPrescription";
+import UserPrescriptionLayout from "@/private/user-prescription/UserPrescriptionLayout";
+import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/AssistantDoctorDashboardLayout";
+import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoctorDashboard";
+import PatientList from "@/private/patient-list/PatientList";
+import PatientListLayout from "@/private/patient-list/PatientListLayout";
+import Prescription from "@/private/patient-details-prescription/Prescription";
+import PrescriptionLayout from "@/private/patient-details-prescription/PrescriptionLayout";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <></>,
+    element: <SignIn role="patient" />,
   },
   {
-    path: "/student-dashboard",
+    path: "/doctor",
+    element: <SignIn role="doctor" />,
+  },
+  {
+    path: "/assistant_doctor",
+    element: <SignIn role="assistant_doctor" />,
+  },
+  {
+    path: "/user-profile",
     element: (
-      <StudentDasboardLayout>
-        <StudentDashboard />
-      </StudentDasboardLayout>
+      <UserProfileLayout>
+        <UserProfile />
+      </UserProfileLayout>
+    ),
+  },
+  {
+    path: "/user-appointment",
+    element: (
+      <UserAppointmentLayout>
+        <UserAppointment />
+      </UserAppointmentLayout>
+    ),
+  },
+  {
+    path: "/user-dashboard",
+    element: (
+      <UserDasboardLayout>
+        <UserDashboard />
+      </UserDasboardLayout>
+    ),
+  },
+  {
+    path: "/user-prescription",
+    element: (
+      <UserPrescriptionLayout>
+        <UserPrescription />
+      </UserPrescriptionLayout>
     ),
   },
   {
@@ -36,7 +77,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/assistant-doctor-dashboard",
+    path: "/assistant-dashboard",
     element: (
       <AssistantDoctorDashboardLayout>
         <AssistantDoctorDashboard />
@@ -73,6 +114,14 @@ const router = createBrowserRouter([
       <ReportsLayout>
         <Reports />
       </ReportsLayout>
+    ),
+  },
+  {
+    path: "/patient-details",
+    element: (
+      <PrescriptionLayout>
+        <Prescription />
+      </PrescriptionLayout>
     ),
   },
 ]);
