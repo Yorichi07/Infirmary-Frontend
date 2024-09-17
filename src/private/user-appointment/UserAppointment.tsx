@@ -61,7 +61,7 @@ const UserAppointment = () => {
           return;
         }
         const response = await axios.get(
-          "http://localhost:8081/api/AD/getAvailableDoctor",
+          "http://localhost:8081/api/AD/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -69,10 +69,11 @@ const UserAppointment = () => {
           }
         );
         const doctorList = response.data.map((doctor: any) => ({
-          id: doctor.id.toString(),
+          id: doctor.doctorId.toString(),
           name: doctor.name,
         }));
         setDoctors(doctorList);
+        console.log(doctorList);
       } catch (error) {
         console.error("Error fetching doctors: ", error);
         alert("Could not fetch available doctors")
