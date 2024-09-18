@@ -8,7 +8,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Shared from "@/Shared";
-import { Popover } from "@radix-ui/react-popover";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import {
@@ -20,8 +19,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import "./PatientList.css";
+import { useNavigate } from "react-router-dom";
 
 const PatientList = () => {
+  const navigate = useNavigate();
   const [patient, setPatient] = useState<
     Array<{ email: string; name: string; reason: string }>
   >([]);
@@ -33,33 +34,77 @@ const PatientList = () => {
     temperature: "",
     weight: "",
   });
-  const [docData, setDocData] = useState<{pref_doc:string,doc_reason:string}>();
+  const [docData, setDocData] = useState<{
+    pref_doc: string;
+    doc_reason: string;
+  }>();
   const [doctors, setDoctors] = useState<{ id: string; name: string }[]>([]);
   const [currentPatientEmail, setCurrentPatientEmail] = useState("");
+
+  // useEffect(() => {
+  //   const fetchList = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       const apiUrl =
+  //         selectedButton === "Pending"
+  //           ? "http://localhost:8081/api/AD/getPatientQueue"
+  //           : "http://localhost:8081/api/AD/getCompletedQueue";
+
+  //       const response = await axios.get(apiUrl, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       const fetchedData = response.data;
+  //       const formattedData = fetchedData.map((pat: any) => ({
+  //         email: pat.sapEmail,
+  //         name: pat.name,
+  //         reason: pat.reason,
+  //       }));
+
+  //       setPatient(formattedData);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchList();
+  // }, [selectedButton]);
 
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const apiUrl =
-          selectedButton === "Pending"
-            ? "http://localhost:8081/api/AD/getPatientQueue"
-            : "http://localhost:8081/api/AD/getCompletedQueue";
+        if (selectedButton === "Pending") {
+          const token = localStorage.getItem("token");
+          const response = await axios.get(
+            "http://localhost:8081/api/AD/getPatientQueue",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
-        const response = await axios.get(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+          const fetchedData = response.data;
+          const formattedData = fetchedData.map((pat: any) => ({
+            email: pat.sapEmail,
+            name: pat.name,
+            reason: pat.reason,
+          }));
 
-        const fetchedData = response.data;
-        const formattedData = fetchedData.map((pat: any) => ({
-          email: pat.sapEmail,
-          name: pat.name,
-          reason: pat.reason,
-        }));
-
-        setPatient(formattedData);
+          setPatient(formattedData);
+        } else if (selectedButton === "Appointed") {
+          // Hardcoded example for the "Appointed" list
+          const appointedPatients = [
+            {
+              email: "test.patient@example.com",
+              name: "John Doe",
+              reason: "Routine Checkup",
+            },
+          ];
+          setPatient(appointedPatients);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -82,10 +127,10 @@ const PatientList = () => {
       );
 
       const formatData = response.data;
-      console.log(formatData)
+      console.log(formatData);
       setDocData({
-        pref_doc:formatData.pref_doc || "No Preffered Doctor",
-        doc_reason:formatData.doc_reason|| ""
+        pref_doc: formatData.pref_doc || "No Preffered Doctor",
+        doc_reason: formatData.doc_reason || "",
       });
 
       // Fetch available doctors when dialog opens
@@ -204,122 +249,142 @@ const PatientList = () => {
                 <TableCell className="border">{pat.email}</TableCell>
                 <TableCell className="border">{pat.reason}</TableCell>
                 <TableCell className="border flex items-center justify-center">
-                  <Dialog
-                    onOpenChange={(open) => {
-                      if (open) {
-                        getAppointmentDetails(pat.email); // Fetch appointment details when dialog opens
-                      }
-                    }}
-                  >
-                    <DialogTrigger className="text-2xl">
-                      {Shared.Report}
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogHeader>
-                        <DialogTitle className="font-medium text-center pb-3">
-                          Enter following details
-                        </DialogTitle>
-                        <DialogDescription>
-                          <form onSubmit={handleSubmit}>
-                            <div className="form-group">
-                              <label htmlFor="preferredDoctor">
-                                Preferred Doctor
-                              </label>
-                              <input
-                                type="text"
-                                id="preferredDoctor"
-                                name="preferredDoctor"
-                                className="form-input"
-                                placeholder="Enter preferred doctor's name"
-                                value={docData?.pref_doc}
-                                readOnly
-                              />
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="reason">Reason</label>
-                              <input
-                                id="reason"
-                                name="reason"
-                                className="form-input"
-                                placeholder="Enter reason"
-                                value={docData?.doc_reason}
-                                readOnly
-                              ></input>
-                            </div>
-                            <div className="form-group">
-                              <label htmlFor="appointment">
-                                Doctor Assigned
-                              </label>
-                              <select
-                                id="appointment"
-                                name="appointment"
-                                className="form-input"
-                                value={dialogData.pref_doc}
-                                onChange={(e) =>
-                                  setDialogData({
-                                    ...dialogData,
-                                    pref_doc: e.target.value,
-                                  })
-                                }
-                              >
-                                <option value="">Select a doctor</option>
-                                {doctors.map((doctor) => (
-                                  <option key={doctor.id} value={doctor.id}>
-                                    {doctor.name}
-                                  </option>
-                                ))}
-                              </select>
-                            </div>
-
-                            <div className="flex justify-between">
+                  {selectedButton === "Pending" ? (
+                    <Dialog
+                      onOpenChange={(open) => {
+                        if (open) {
+                          getAppointmentDetails(pat.email); // Fetch appointment details when dialog opens
+                        }
+                      }}
+                    >
+                      <DialogTrigger className="text-2xl">
+                        {Shared.Report}
+                      </DialogTrigger>
+                      <DialogContent>
+                        <DialogHeader>
+                          <DialogTitle className="font-medium text-center pb-3">
+                            Enter following details
+                          </DialogTitle>
+                          <DialogDescription>
+                            <form onSubmit={handleSubmit}>
                               <div className="form-group">
-                                <label htmlFor="temperature">
-                                  Temperature (in °C)
+                                <label htmlFor="preferredDoctor">
+                                  Preferred Doctor
                                 </label>
                                 <input
-                                  type="number"
-                                  id="temperature"
-                                  name="temperature"
+                                  type="text"
+                                  id="preferredDoctor"
+                                  name="preferredDoctor"
                                   className="form-input"
-                                  placeholder="Enter temperature"
-                                  value={dialogData.temperature}
-                                  onChange={(e) =>
-                                    setDialogData({
-                                      ...dialogData,
-                                      temperature: e.target.value,
-                                    })
-                                  }
+                                  placeholder="Enter preferred doctor's name"
+                                  value={docData?.pref_doc}
+                                  readOnly
                                 />
                               </div>
                               <div className="form-group">
-                                <label htmlFor="weight">Weight (in Kg)</label>
+                                <label htmlFor="reason">Reason</label>
                                 <input
-                                  type="number"
-                                  id="weight"
-                                  name="weight"
+                                  id="reason"
+                                  name="reason"
                                   className="form-input"
-                                  placeholder="Enter weight"
-                                  value={dialogData.weight}
+                                  placeholder="Enter reason"
+                                  value={docData?.doc_reason}
+                                  readOnly
+                                ></input>
+                              </div>
+                              <div className="form-group">
+                                <label htmlFor="appointment">
+                                  Doctor Assigned
+                                </label>
+                                <select
+                                  id="appointment"
+                                  name="appointment"
+                                  className="form-input"
+                                  value={dialogData.pref_doc}
                                   onChange={(e) =>
                                     setDialogData({
                                       ...dialogData,
-                                      weight: e.target.value,
+                                      pref_doc: e.target.value,
                                     })
                                   }
-                                />
+                                >
+                                  <option value="">Select a doctor</option>
+                                  {doctors.map((doctor) => (
+                                    <option key={doctor.id} value={doctor.id}>
+                                      {doctor.name}
+                                    </option>
+                                  ))}
+                                </select>
                               </div>
-                            </div>
 
-                            <div className="flex justify-end items-center">
-                              <button type="submit" className="submit-button" onClick={()=>console.log(dialogData)}>
-                                Submit
-                              </button>
-                            </div>
-                          </form>
-                        </DialogDescription>
-                      </DialogHeader>
-                    </DialogContent>
-                  </Dialog>
+                              <div className="flex justify-between">
+                                <div className="form-group">
+                                  <label htmlFor="temperature">
+                                    Temperature (in °C)
+                                  </label>
+                                  <input
+                                    type="number"
+                                    id="temperature"
+                                    name="temperature"
+                                    className="form-input"
+                                    placeholder="Enter temperature"
+                                    value={dialogData.temperature}
+                                    onChange={(e) =>
+                                      setDialogData({
+                                        ...dialogData,
+                                        temperature: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                                <div className="form-group">
+                                  <label htmlFor="weight">Weight (in Kg)</label>
+                                  <input
+                                    type="number"
+                                    id="weight"
+                                    name="weight"
+                                    className="form-input"
+                                    placeholder="Enter weight"
+                                    value={dialogData.weight}
+                                    onChange={(e) =>
+                                      setDialogData({
+                                        ...dialogData,
+                                        weight: e.target.value,
+                                      })
+                                    }
+                                  />
+                                </div>
+                              </div>
+
+                              <div className="flex justify-end items-center">
+                                <button
+                                  type="submit"
+                                  className="submit-button"
+                                  onClick={() => console.log(dialogData)}
+                                >
+                                  Submit
+                                </button>
+                              </div>
+                            </form>
+                          </DialogDescription>
+                        </DialogHeader>
+                      </DialogContent>
+                    </Dialog>
+                  ) : (
+                    <div className="flex items-center gap-5 text-2xl">
+                      <button onClick={() => navigate("/prescription")}>
+                        {Shared.Prescription}
+                      </button>
+
+                      <button onClick={() => console.log("Check clicked")}>
+                        {Shared.SquareCheck}
+                      </button>
+
+                      <button onClick={() => console.log("Cross clicked")}>
+                        {Shared.SquareCross}
+                      </button>
+                    </div>
+                  )}
                 </TableCell>
               </TableRow>
             ))}

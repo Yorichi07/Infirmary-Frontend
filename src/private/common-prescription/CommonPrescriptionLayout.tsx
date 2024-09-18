@@ -2,13 +2,13 @@ import Navbar from "@/components/Navbar";
 import Shared from "@/Shared";
 import React from "react";
 
-const UserPrescriptionLayout = ({
+const CommonPrescriptionLayout = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
   const navsetting = {
-    title: "Prescription History",
+    title: "Prescription",
     titleLogo: Shared.Prescription,
     additionalLogo: Shared.ArrowLeft,
     menu: false,
@@ -32,4 +32,4 @@ const UserPrescriptionLayout = ({
   );
 };
 
-export default UserPrescriptionLayout;
+export default CommonPrescriptionLayout;

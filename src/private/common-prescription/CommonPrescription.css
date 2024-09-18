@@ -1,0 +1,35 @@
+.info-input {
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 8px;
+  background-color: #d5d4df;
+}
+
+.medicine-table {
+  width: calc(100% - 40px);
+  margin: 0 auto;
+  border-collapse: collapse;
+}
+
+.medicine-table th,
+.medicine-table td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: left;
+}
+
+.small-input {
+  width: 80px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 8px;
+  background-color: #d5d4df;
+}
+
+.suggestions-input {
+  width: 200px;
+  border-radius: 8px;
+  border: 1px solid #ddd;
+  padding: 8px;
+  background-color: #d5d4df;
+}

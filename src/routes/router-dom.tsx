@@ -20,13 +20,15 @@ import AssistantDoctorDashboardLayout from "@/private/assistant-dashboard/Assist
 import AssistantDoctorDashboard from "@/private/assistant-dashboard/AssistantDoctorDashboard";
 import PatientList from "@/private/patient-list/PatientList";
 import PatientListLayout from "@/private/patient-list/PatientListLayout";
-import Prescription from "@/private/patient-details-prescription/Prescription";
-import PrescriptionLayout from "@/private/patient-details-prescription/PrescriptionLayout";
 import UserRegister from "@/public/UserRegister";
 import EmergencyLayout from "@/private/emergency/EmergencyLayout";
 import Emergency from "@/private/emergency/Emergency";
 import Ambulance from "@/private/ambulance/Ambulance";
 import AmbulanceLayout from "@/private/ambulance/AmbulanceLayout";
+import PatientDetailsLayout from "@/private/patient-details/PatientDetailsLayout";
+import PatientDetails from "@/private/patient-details/PatientDetails";
+import CommonPrescriptionLayout from "@/private/common-prescription/CommonPrescriptionLayout";
+import CommonPrescription from "@/private/common-prescription/CommonPrescription";
 
 const router = createBrowserRouter([
   {
@@ -120,9 +122,9 @@ const router = createBrowserRouter([
   {
     path: "/patient-details",
     element: (
-      <PrescriptionLayout>
-        <Prescription />
-      </PrescriptionLayout>
+      <PatientDetailsLayout>
+        <PatientDetails />
+      </PatientDetailsLayout>
     ),
   },
 
@@ -141,6 +143,14 @@ const router = createBrowserRouter([
       <AmbulanceLayout>
         <Ambulance />
       </AmbulanceLayout>
+    ),
+  },
+  {
+    path: "/prescription",
+    element: (
+      <CommonPrescriptionLayout>
+        <CommonPrescription />
+      </CommonPrescriptionLayout>
     ),
   },
 ]);
