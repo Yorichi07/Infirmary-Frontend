@@ -22,7 +22,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-  const [role, setRole] = useState<string>("patient"); // Default role is patient
+  const [role, setRole] = useState<string>("patient");
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;

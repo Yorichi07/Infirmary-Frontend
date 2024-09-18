@@ -31,15 +31,7 @@ import AmbulanceLayout from "@/private/ambulance/AmbulanceLayout";
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <SignIn role="patient" />,
-  },
-  {
-    path: "/doctor",
-    element: <SignIn role="doctor" />,
-  },
-  {
-    path: "/assistant_doctor",
-    element: <SignIn role="assistant_doctor" />,
+    element: <SignIn />,
   },
   {
     path: "/register",

@@ -321,7 +321,11 @@ const UserAppointment = () => {
           >
             Back
           </Button>
-          <Button type="submit" className="save-btn">
+          <Button
+            type="submit"
+            className="save-btn"
+            onClick={form.handleSubmit(onSubmit)}
+          >
             Save
           </Button>
         </div>

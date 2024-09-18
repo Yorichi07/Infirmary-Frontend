@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import "./UserRegister.scss";
 import { Image } from "primereact/image";
 import Shared from "@/Shared";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -36,7 +36,7 @@ const formSchema = z
         message:
           "Name can only contain letters, numbers, underscores, and spaces",
       }),
-    patientId: z
+    sapID: z
       .string()
       .min(1, { message: "Patient Id must be at least 1" })
       .transform((val) => parseInt(val, 10))
@@ -57,6 +57,7 @@ const formSchema = z
           "Password must contain at least one special character (@, $, !, %, *, ?, &, or #)",
       }),
     confirmPassword: z.string(),
+    email: z.string(),
     school: z.string().min(1, { message: "School cannot be empty" }),
     program: z.string().min(1, { message: "Program cannot be empty" }),
     dateOfBirth: z
@@ -70,25 +71,18 @@ const formSchema = z
       .length(10, {
         message: "Emergency contact phone must be 10 digits long",
       }),
-    height: z
+    phoneNumber: z
       .string()
-      .transform((val) => parseInt(val, 10))
-      .refine((val) => val >= 30 && val <= 250, {
-        message: "Height must be between 30 cm and 250 cm",
+      .regex(/^\d+$/, {
+        message: "Emergency contact phone must contain only numbers",
+      })
+      .length(10, {
+        message: "Emergency contact phone must be 10 digits long",
       }),
-    weight: z
-      .string()
-      .transform((val) => parseFloat(val))
-      .refine((val) => val >= 1 && val <= 300, {
-        message: "Weight must be between 1 kg and 300 kg",
-      }),
-    gender: z.enum(["Male", "Female", "Prefer not to say"], {
+    gender: z.enum(["Male", "Female", "Other"], {
       message: "Choose gender from given options",
     }),
     bloodGroup: z.string().min(1, { message: "Blood group cannot be empty" }),
-    medicalHistory: z.string().optional(),
-    familyMedicalHistory: z.string().optional(),
-    allergies: z.string().optional(),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -102,32 +96,47 @@ const UserRegister = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
-      patientId: undefined,
+      sapID: undefined,
       password: undefined,
       confirmPassword: undefined,
+      email: "",
       school: "",
       program: "",
       dateOfBirth: undefined,
       emergencyContact: "",
-      height: undefined,
-      weight: undefined,
+      phoneNumber: "",
       gender: "",
       bloodGroup: "",
-      medicalHistory: "",
-      familyMedicalHistory: "",
-      allergies: "",
     },
   });
   const { isValid } = form.formState;
-  const onSubmit = (data: unknown) => {
+
+  const onSubmit = async (data: any) => {
     if (isValid) {
       try {
-        console.log("Form Data Submitted: ", JSON.stringify(data, null, 2));
-        alert("Form Data Submitted: ")
+        // Convert dateOfBirth to yyyy-MM-dd format
+        const formattedData = {
+          ...data,
+          dateOfBirth: data.dateOfBirth
+            ? new Date(data.dateOfBirth).toISOString().split("T")[0] // yyyy-MM-dd format
+            : undefined,
+        };
+
+        // Send the data to the backend
+        console.log(
+          "Formatted Form Data Submitted: ",
+          JSON.stringify(formattedData, null, 2)
+        );
+
+        await axios.post(
+          "http://localhost:8081/api/auth/patient/signup",
+          formattedData
+        );
+
+        alert("Registration successful");
         navigate("/");
       } catch (error) {
         console.error("Error submitting form:", error);
-        alert("Error submitting form. Please try again.");
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
@@ -221,12 +230,16 @@ const UserRegister = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="school"
+                      name="confirmPassword"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>School</FormLabel>
+                          <FormLabel>Confirm Password</FormLabel>
                           <FormControl>
-                            <Input placeholder="Enter school" {...field} />
+                            <Input
+                              type="password"
+                              placeholder="Confirm password"
+                              {...field}
+                            />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -260,23 +273,6 @@ const UserRegister = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="height"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Height (cm)</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              placeholder="Enter height"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
                       name="gender"
                       render={({ field }) => (
                         <FormItem className="mt-3">
@@ -293,9 +289,7 @@ const UserRegister = () => {
                               <SelectGroup>
                                 <SelectItem value="Male">Male</SelectItem>
                                 <SelectItem value="Female">Female</SelectItem>
-                                <SelectItem value="Prefer not to say">
-                                  Prefer not to say
-                                </SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
                               </SelectGroup>
                             </SelectContent>
                           </Select>
@@ -305,31 +299,12 @@ const UserRegister = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="medicalHistory"
+                      name="bloodGroup"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Medical History</FormLabel>
+                          <FormLabel>Blood Group</FormLabel>
                           <FormControl>
-                            <Textarea
-                              placeholder="Enter medical history"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="allergies"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Allergies</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter allergies"
-                              {...field}
-                            />
+                            <Input placeholder="Enter blood group" {...field} />
                           </FormControl>
                           <FormMessage />
                         </FormItem>
@@ -339,7 +314,7 @@ const UserRegister = () => {
                   <div className="patient-details__right">
                     <FormField
                       control={form.control}
-                      name="patientId"
+                      name="sapID"
                       render={({ field }) => (
                         <FormItem>
                           <FormLabel>Patient Id</FormLabel>
@@ -356,14 +331,14 @@ const UserRegister = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="confirmPassword"
+                      name="email"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Confirm Password</FormLabel>
+                          <FormLabel>Email</FormLabel>
                           <FormControl>
                             <Input
-                              type="password"
-                              placeholder="Confirm password"
+                              type="email"
+                              placeholder="Enter your email"
                               {...field}
                             />
                           </FormControl>
@@ -371,7 +346,19 @@ const UserRegister = () => {
                         </FormItem>
                       )}
                     />
-
+                    <FormField
+                      control={form.control}
+                      name="school"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>School</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter school" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                     <FormField
                       control={form.control}
                       name="program"
@@ -406,44 +393,13 @@ const UserRegister = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="weight"
+                      name="phoneNumber"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Weight (kg)</FormLabel>
+                          <FormLabel>Phone Number</FormLabel>
                           <FormControl>
                             <Input
-                              type="number"
-                              placeholder="Enter weight"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="bloodGroup"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Blood Group</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter blood group" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="familyMedicalHistory"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Family Medical History</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter family medical history"
+                              placeholder="Enter your phone number"
                               {...field}
                             />
                           </FormControl>
