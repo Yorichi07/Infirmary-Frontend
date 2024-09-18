@@ -22,6 +22,11 @@ import PatientList from "@/private/patient-list/PatientList";
 import PatientListLayout from "@/private/patient-list/PatientListLayout";
 import Prescription from "@/private/patient-details-prescription/Prescription";
 import PrescriptionLayout from "@/private/patient-details-prescription/PrescriptionLayout";
+import UserRegister from "@/public/UserRegister";
+import EmergencyLayout from "@/private/emergency/EmergencyLayout";
+import Emergency from "@/private/emergency/Emergency";
+import Ambulance from "@/private/ambulance/Ambulance";
+import AmbulanceLayout from "@/private/ambulance/AmbulanceLayout";
 
 const router = createBrowserRouter([
   {
@@ -35,6 +40,10 @@ const router = createBrowserRouter([
   {
     path: "/assistant_doctor",
     element: <SignIn role="assistant_doctor" />,
+  },
+  {
+    path: "/register",
+    element: <UserRegister></UserRegister>,
   },
   {
     path: "/user-profile",
@@ -122,6 +131,24 @@ const router = createBrowserRouter([
       <PrescriptionLayout>
         <Prescription />
       </PrescriptionLayout>
+    ),
+  },
+
+  {
+    path: "/emergency",
+    element: (
+      <EmergencyLayout>
+        <Emergency />
+      </EmergencyLayout>
+    ),
+  },
+
+  {
+    path: "/ambulance",
+    element: (
+      <AmbulanceLayout>
+        <Ambulance />
+      </AmbulanceLayout>
     ),
   },
 ]);

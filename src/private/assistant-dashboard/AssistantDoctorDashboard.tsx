@@ -115,8 +115,10 @@ const AssistantDoctorDashboard = () => {
                 Doctors Availability
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md" 
-            onClick={() => navigate("/patient-list")}>
+            <button
+              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              onClick={() => navigate("/patient-list")}
+            >
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Patient Queue
               </p>
@@ -129,18 +131,18 @@ const AssistantDoctorDashboard = () => {
                 Medical Stock
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
-              <p className="text-white font-semibold text-lg text-center flex-1">
-                Reports
-              </p>
-            </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
+            <button
+              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              onClick={() => navigate("/Ambulance")}
+            >
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Ambulance Tracker
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md">
-              <img src="/emergency.png" alt="" />
+            <button
+              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
+              onClick={() => navigate("/Emergency")}
+            >
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Emergengy
               </p>

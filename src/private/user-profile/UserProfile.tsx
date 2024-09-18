@@ -27,22 +27,30 @@ const formSchema = z.object({
   emergencyContact: z.string(),
   height: z
     .string()
-    .regex(/^\d+$/, "Height must be a numeric value")
-    .refine((value) => parseInt(value) >= 100 && parseInt(value) <= 300, {
-      message: "Height must be between 100 and 300 cm",
-    }),
+    .regex(/^\d*$/, "Height must be a numeric value")
+    .refine(
+      (value) =>
+        value === "" || (parseInt(value) >= 100 && parseInt(value) <= 300),
+      {
+        message: "Height must be between 100 and 300 cm",
+      }
+    ),
 
   weight: z
     .string()
-    .regex(/^\d+$/, "Weight must be a numeric value")
-    .refine((value) => parseInt(value) >= 1 && parseInt(value) <= 500, {
-      message: "Weight must be between 1 and 500 kg",
-    }),
+    .regex(/^\d*$/, "Weight must be a numeric value")
+    .refine(
+      (value) =>
+        value === "" || (parseInt(value) >= 1 && parseInt(value) <= 500),
+      {
+        message: "Weight must be between 1 and 500 kg",
+      }
+    ),
   gender: z.string(),
   bloodGroup: z.string(),
-  medicalHistory: z.string().optional(),
-  familyMedicalHistory: z.string().optional(),
-  allergies: z.string().optional(),
+  medicalHistory: z.string().optional().nullable(),
+  familyMedicalHistory: z.string().optional().nullable(),
+  allergies: z.string().optional().nullable(),
   imageUrl: z.string(),
   currentAddress: z.string(),
 });
@@ -145,7 +153,7 @@ const UserProfile = () => {
           }
         } else {
           console.log("Error:", error);
-          alert("Failed to get user information")
+          alert("Failed to get user information");
         }
       }
     };
@@ -155,6 +163,9 @@ const UserProfile = () => {
 
   const { isValid } = form.formState;
   const onSubmit = async (data: any) => {
+    const height = data.height === "" ? null : data.height;
+    const weight = data.weight === "" ? null : data.weight;
+
     if (isValid) {
       try {
         const token = localStorage.getItem("token");
@@ -162,11 +173,11 @@ const UserProfile = () => {
           "http://localhost:8081/api/patient/update",
           {
             currentAddress: data.currentAddress,
-            medicalHistory: data.medicalHistory,
-            familyMedicalHistory: data.familyMedicalHistory,
-            allergies: data.allergies,
-            height: data.height,
-            weight: data.weight,
+            medicalHistory: data.medicalHistory || null,
+            familyMedicalHistory: data.familyMedicalHistory || null,
+            allergies: data.allergies || null,
+            height: height,
+            weight: weight,
           },
           {
             headers: {
@@ -175,18 +186,16 @@ const UserProfile = () => {
           }
         );
         console.log("Form Data Submitted: ", response.data);
-        alert("Profile updated successfully")
+        alert("Profile updated successfully");
         navigate("/user-dashboard");
       } catch (error) {
         console.error("Error submitting form:", error);
-        alert("No details updated!")
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
-      alert("Form Details not Valid");
 
       Object.entries(form.formState.errors).forEach(([field, error]) => {
-        console.error(`Error in ${field}: ${error.message}`);
+        console.error(`Error in ${field}: ${error?.message}`);
       });
     }
   };

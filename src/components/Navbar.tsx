@@ -13,7 +13,7 @@ const Navbar = ({
     titleLogo: JSX.Element | false;
     additionalLogo: JSX.Element | undefined;
     menu: boolean | undefined;
-    role: string;
+    role: string|null;
   };
 }) => {
   const navigate = useNavigate();

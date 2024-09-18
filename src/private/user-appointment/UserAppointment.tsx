@@ -76,7 +76,7 @@ const UserAppointment = () => {
         console.log(doctorList);
       } catch (error) {
         console.error("Error fetching doctors: ", error);
-        alert("Could not fetch available doctors")
+        alert("Could not fetch available doctors");
       }
     };
     fetchDoctors();
@@ -101,7 +101,7 @@ const UserAppointment = () => {
         form.setValue("lastAppointmentDate", "No Last Appointment Date");
       } else {
         console.error("Error fetching last appointment date:", error);
-        alert("Could'nt get last appointment date")
+        alert("Could'nt get last appointment date");
       }
     }
   };
@@ -160,169 +160,171 @@ const UserAppointment = () => {
   };
 
   return (
-    <div className="appointment-container">
-      <div className="appointment-container__content">
-        <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="h-[100%] flex flex-col justify-between"
-          >
-            <div className="appointment-container__body">
-              {/* Reason for Appointment */}
-              <FormField
-                control={form.control}
-                name="reason"
-                render={({ field }) => (
-                  <FormItem className="form-item">
-                    <FormLabel>Reason for Appointment</FormLabel>
-                    <FormControl>
-                      <Input
-                        placeholder="Enter reason for appointment"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Follow-up Radio */}
-              <FormField
-                control={form.control}
-                name="followUp"
-                render={({ field }) => (
-                  <FormItem className="form-item">
-                    <FormLabel>Is this a follow-up?</FormLabel>
-                    <div className="flex mb-5">
-                      <div className="flex gap-2 flex-col w-[15%]">
-                        <div className="flex align-items-center">
-                          <RadioButton
-                            inputId="followUpYes"
-                            name="followUp"
-                            value="Yes"
-                            onChange={(e) => {
-                              field.onChange(e.value);
-                              fetchLastAppointmentDate();
-                            }}
-                            checked={field.value === "Yes"}
-                          />
-                          <label htmlFor="followUpYes" className="ml-2">
-                            Yes
-                          </label>
-                        </div>
-                        <div className="flex align-items-center">
-                          <RadioButton
-                            inputId="followUpNo"
-                            name="followUp"
-                            value="No"
-                            onChange={(e) => {
-                              field.onChange(e.value);
-                              setLastAppointmentDate(null);
-                            }}
-                            checked={field.value === "No"}
-                          />
-                          <label htmlFor="followUpNo" className="ml-2">
-                            No
-                          </label>
+    <div className="h-[83%] pr-4 w-full flex gap-8">
+      <img src="/public/appointment.jpg" alt="" />
+      <div className="appointment-container justify-between flex flex-col pt-5 pb-5">
+        <div className="appointment-container__content">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="h-[100%] flex flex-col justify-between"
+            >
+              <div className="appointment-container__body">
+                {/* Reason for Appointment */}
+                <FormField
+                  control={form.control}
+                  name="reason"
+                  render={({ field }) => (
+                    <FormItem className="form-item">
+                      <FormLabel>Reason for Appointment</FormLabel>
+                      <FormControl>
+                        <Input
+                          placeholder="Enter reason for appointment"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Follow-up Radio */}
+                <FormField
+                  control={form.control}
+                  name="followUp"
+                  render={({ field }) => (
+                    <FormItem className="form-item">
+                      <FormLabel>Is this a follow-up?</FormLabel>
+                      <div className="flex mb-5">
+                        <div className="flex gap-2 flex-col w-[15%]">
+                          <div className="flex align-items-center">
+                            <RadioButton
+                              inputId="followUpYes"
+                              name="followUp"
+                              value="Yes"
+                              onChange={(e) => {
+                                field.onChange(e.value);
+                                fetchLastAppointmentDate();
+                              }}
+                              checked={field.value === "Yes"}
+                            />
+                            <label htmlFor="followUpYes" className="ml-2">
+                              Yes
+                            </label>
+                          </div>
+                          <div className="flex align-items-center">
+                            <RadioButton
+                              inputId="followUpNo"
+                              name="followUp"
+                              value="No"
+                              onChange={(e) => {
+                                field.onChange(e.value);
+                                setLastAppointmentDate(null);
+                              }}
+                              checked={field.value === "No"}
+                            />
+                            <label htmlFor="followUpNo" className="ml-2">
+                              No
+                            </label>
+                          </div>
                         </div>
                       </div>
-                    </div>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Last Appointment Date */}
-              <FormField
-                control={form.control}
-                name="lastAppointmentDate"
-                render={({ field }) => (
-                  <FormItem className="form-item">
-                    <FormLabel>Last appointment date?</FormLabel>
-                    <FormControl>
-                      <Input
-                        id="aDate"
-                        {...field}
-                        value={lastAppointmentDate || ""}
-                        disabled
-                        placeholder="Last appointment date"
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Preferred Doctor */}
-              <FormField
-                control={form.control}
-                name="preferredDoctor"
-                render={({ field }) => (
-                  <FormItem className="form-item">
-                    <FormLabel>Preferred doctor (if any)</FormLabel>
-                    <FormControl>
-                      <Select
-                        {...field}
-                        onValueChange={(value: any) => field.onChange(value)}
-                        disabled={doctors.length === 0}
-                      >
-                        <SelectTrigger id="doctor" className="mb-5">
-                          <SelectValue
-                            placeholder={
-                              doctors.length === 0
-                                ? "No doctors available"
-                                : "Select a doctor"
-                            }
-                          />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            {doctors.map((doctor: any) => (
-                              <SelectItem key={doctor.id} value={doctor.id}>
-                                {doctor.name}
-                              </SelectItem>
-                            ))}
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              {/* Reason for Preference */}
-              <FormField
-                control={form.control}
-                name="reasonForPreference"
-                render={({ field }) => (
-                  <FormItem className="form-item">
-                    <FormLabel>Reason for Preference?</FormLabel>
-                    <FormControl>
-                      <Textarea
-                        id="reasonForPref"
-                        placeholder="Enter reason for preference (if preferred)"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            </div>
-
-            {/* Form Buttons */}
-            <div className="appointment-container__footer">
-              <Button
-                type="button"
-                onClick={handleCancel}
-                variant="secondary"
-                className="back-btn"
-              >
-                Back
-              </Button>
-              <Button type="submit" className="save-btn">
-                Save
-              </Button>
-            </div>
-          </form>
-        </Form>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Last Appointment Date */}
+                <FormField
+                  control={form.control}
+                  name="lastAppointmentDate"
+                  render={({ field }) => (
+                    <FormItem className="form-item">
+                      <FormLabel>Last appointment date?</FormLabel>
+                      <FormControl>
+                        <Input
+                          id="aDate"
+                          {...field}
+                          value={lastAppointmentDate || ""}
+                          disabled
+                          placeholder="Last appointment date"
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Preferred Doctor */}
+                <FormField
+                  control={form.control}
+                  name="preferredDoctor"
+                  render={({ field }) => (
+                    <FormItem className="form-item">
+                      <FormLabel>Preferred doctor (if any)</FormLabel>
+                      <FormControl>
+                        <Select
+                          {...field}
+                          onValueChange={(value: any) => field.onChange(value)}
+                          disabled={doctors.length === 0}
+                        >
+                          <SelectTrigger id="doctor" className="mb-5">
+                            <SelectValue
+                              placeholder={
+                                doctors.length === 0
+                                  ? "No doctors available"
+                                  : "Select a doctor"
+                              }
+                            />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectGroup>
+                              {doctors.map((doctor: any) => (
+                                <SelectItem key={doctor.id} value={doctor.id}>
+                                  {doctor.name}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+                {/* Reason for Preference */}
+                <FormField
+                  control={form.control}
+                  name="reasonForPreference"
+                  render={({ field }) => (
+                    <FormItem className="form-item">
+                      <FormLabel>Reason for Preference?</FormLabel>
+                      <FormControl>
+                        <Textarea
+                          id="reasonForPref"
+                          placeholder="Enter reason for preference (if preferred)"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </form>
+          </Form>
+        </div>
+        {/* Form Buttons */}
+        <div className="appointment-container__footer">
+          <Button
+            type="button"
+            onClick={handleCancel}
+            variant="secondary"
+            className="back-btn"
+          >
+            Back
+          </Button>
+          <Button type="submit" className="save-btn">
+            Save
+          </Button>
+        </div>
       </div>
     </div>
   );

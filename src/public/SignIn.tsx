@@ -105,21 +105,29 @@ const SignIn = ({ role }: { role: string }) => {
               <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
             )}
 
-            <Button className="sign-in-btn" onClick={handleSignIn}>
-              Sign In
-            </Button>
-
-            <hr className="mt-4 mb-2 w-full" />
-            <div className="flex w-full">
-              <Link to={"/doctor"} className="text-blue-500 text-left w-full">
-                Login as Doctor
-              </Link>
-              <Link
-                to={"/assistant_doctor"}
-                className="text-blue-500 text-right w-full"
-              >
-                Login as Assistant Doctor
-              </Link>
+            <div className="gap-3 flex flex-col w-full">
+              <Button className="sign-in-btn" onClick={handleSignIn}>
+                Sign In
+              </Button>
+              <div className="flex w-full justify-center items-center">
+                <hr className="w-[40%]" />
+                <span className="w-[20%] text-center">Login as</span>
+                <hr className="w-[40%]" />
+              </div>
+              <div className="flex w-full">
+                <Link to={"/doctor"} className="text-blue-500 text-left w-full">
+                  Doctor
+                </Link>
+                <Link to={"/"} className="text-blue-500 text-center w-full">
+                  Patient
+                </Link>
+                <Link
+                  to={"/assistant_doctor"}
+                  className="text-blue-500 text-right w-full"
+                >
+                  Assistant Doctor
+                </Link>
+              </div>
             </div>
           </div>
         </div>

@@ -15,9 +15,7 @@ import { useNavigate } from "react-router-dom";
 
 const PatientList = () => {
   const navigate = useNavigate();
-  const [patient, setPatient] = useState<
-    Array<{ email: string; name: String; reason: string }>
-  >([]);
+  const [patient,setPatient] = useState<Array<{email:string,name:string,reason:string}>>([]);
 
   useEffect(() => {
     const fetchList = async () => {
