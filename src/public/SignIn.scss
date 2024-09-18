@@ -1,0 +1,86 @@
+.sign-container {
+  height: 94svh;
+  display: grid;
+  grid-template-columns: 1.2fr 0.9fr;
+  grid-template-rows: 1fr;
+  grid-template-areas: "left right";
+
+  &__left {
+    grid-area: left;
+    background-image: url(/patient-auth-bg.jpg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+
+  &__right {
+    grid-area: right;
+    background-image: url(/gradient-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 4rem;
+
+    &-content {
+      display: flex;
+      align-items: center;
+      flex-direction: column;
+      img {
+        width: 12rem;
+        height: 5rem;
+        border-radius: 0.5rem;
+        margin-bottom: 3rem;
+      }
+      form {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        margin-bottom: 1rem;
+      }
+      .sign-in-btn {
+        background: linear-gradient(to right, #2061f5 0%, #13398f 100%);
+        width: 100%;
+      }
+    }
+
+    &-header {
+      width: 100%;
+      h1 {
+        font-weight: bold;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+      }
+      p {
+        margin-bottom: 1rem;
+      }
+    }
+
+    &-footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 1rem;
+
+      .createOne {
+        text-decoration: underline;
+        color: #87acff;
+      }
+    }
+  }
+}
+
+.helpline {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  border: 1px solid gray;
+  font-weight: 600;
+  background-color: white;
+  color: #8F8F8F;
+  height: 6svh;
+}
