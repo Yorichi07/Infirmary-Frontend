@@ -39,8 +39,9 @@ const UserPrescription = () => {
   },[]);
 
   return (
-    <div className="h-[83%] pt-5 pb-10 flex justify-center">
-      <div className="w-[50%] overflow-y-scroll">
+    <div className="h-[83%] flex justify-center">
+      <img src="/public/prescription.jpg" alt="" />
+      <div className="w-[50%] overflow-y-scroll p-5">
         <Table className="border">
           <TableCaption>A list of your recent reports</TableCaption>
           <TableHeader>

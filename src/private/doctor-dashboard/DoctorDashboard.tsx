@@ -43,11 +43,11 @@ const DoctorDashboard = () => {
         setInQueue(data.In_Queue);
       } else {
         console.error("Failed to fetch patient data.");
-        alert("Failed to fetch patient data")
+        alert("Failed to fetch patient data");
       }
     } catch (error) {
       console.error("Error fetching patient data:", error);
-      alert("Failed to fetch patient data")
+      alert("Failed to fetch patient data");
     }
   };
 
@@ -169,7 +169,7 @@ const DoctorDashboard = () => {
           </div>
         </div>
         <div className="w-full px-14">
-          <div className="w-full flex flex-col px-10 space-y-8">
+          <div className="w-full flex flex-col px-10 py-10 space-y-12">
             <div className="flex w-full justify-between">
               <button
                 className="text-white px-10 py-3 rounded-md font-semibold text-lg text-center bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
@@ -197,24 +197,26 @@ const DoctorDashboard = () => {
                 Patient Details
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
-            onClick={() => navigate("/medicine-stock")}>
+            <button
+              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              onClick={() => navigate("/medicine-stock")}
+            >
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Medical Stock
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
-              <p className="text-white font-semibold text-lg text-center flex-1">
-                Reports
-              </p>
-            </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
+            <button 
+              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              onClick={() => navigate("/ambulance")}
+            >
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Ambulance Tracker
               </p>
             </button>
-            <button className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md">
-              <img src="/emergency.png" alt="" />
+            <button
+              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
+              onClick={() => navigate("/emergency")}
+            >
               <p className="text-white font-semibold text-lg text-center flex-1">
                 Emergency
               </p>

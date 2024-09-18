@@ -156,7 +156,7 @@ const UserDashboard = () => {
 
           {/* Other Buttons */}
           <div className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
-            <img src="/calander.png" alt="" />
+            {/* <img src="/calander.png" alt="" /> */}
             <button
               className="text-white font-semibold text-lg text-center flex-1"
               onClick={() => navigateTo("/user-appointment")}
@@ -165,7 +165,7 @@ const UserDashboard = () => {
             </button>
           </div>
           <div className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
-            <img src="/prescription.png" alt="" />
+            {/* <img src="/prescription.png" alt="" /> */}
             <button
               className="text-white font-semibold text-lg text-center flex-1"
               onClick={() => navigateTo("/user-prescription")}
@@ -174,8 +174,8 @@ const UserDashboard = () => {
             </button>
           </div>
           <div className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md">
-            <img src="/emergency.png" alt="" />
-            <button className="text-white font-semibold text-lg text-center flex-1">
+            {/* <img src="/emergency.png" alt="" /> */}
+            <button className="text-white font-semibold text-lg text-center flex-1" onClick={()=>navigateTo("/emergency")}>
               Emergency
             </button>
           </div>

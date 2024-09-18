@@ -16,6 +16,8 @@ import {
   faSquareXmark,
   faHospitalUser,
 } from "@fortawesome/free-solid-svg-icons";
+import { MdEmergency } from "react-icons/md";
+import { FaAmbulance } from "react-icons/fa";
 
 const Shared = {
   UserPlus: <FontAwesomeIcon icon={faUserPlus} />,
@@ -33,6 +35,8 @@ const Shared = {
   SquareCheck: <FontAwesomeIcon icon={faSquareCheck} />,
   SquareCross: <FontAwesomeIcon icon={faSquareXmark} />,
   Report: <FontAwesomeIcon icon={faHospitalUser} />,
+  Emergency: <MdEmergency />,
+  Ambulance: <FaAmbulance/>,
 };
 
 export default Shared;
