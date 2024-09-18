@@ -8,81 +8,36 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Shared from "@/Shared";
+import axios from "axios";
+import { useEffect, useState } from "react";
 
-const reports = [
-  {
-    reportId: "INV001",
-    date: "2023-09-01",
-    downloadLink: "/report-INV001.pdf",
-  },
-  {
-    reportId: "INV002",
-    date: "2023-09-02",
-    downloadLink: "/report-INV002.pdf",
-  },
-  {
-    reportId: "INV003",
-    date: "2023-09-03",
-    downloadLink: "/report-INV003.pdf",
-  },
-  {
-    reportId: "INV004",
-    date: "2023-09-04",
-    downloadLink: "/report-INV004.pdf",
-  },
-  {
-    reportId: "INV005",
-    date: "2023-09-05",
-    downloadLink: "/report-INV005.pdf",
-  },
-  {
-    reportId: "INV006",
-    date: "2023-09-06",
-    downloadLink: "/report-INV006.pdf",
-  },
-  {
-    reportId: "INV007",
-    date: "2023-09-07",
-    downloadLink: "/report-INV007.pdf",
-  },
-  {
-    reportId: "INV001",
-    date: "2023-09-01",
-    downloadLink: "/report-INV001.pdf",
-  },
-  {
-    reportId: "INV002",
-    date: "2023-09-02",
-    downloadLink: "/report-INV002.pdf",
-  },
-  {
-    reportId: "INV003",
-    date: "2023-09-03",
-    downloadLink: "/report-INV003.pdf",
-  },
-  {
-    reportId: "INV004",
-    date: "2023-09-04",
-    downloadLink: "/report-INV004.pdf",
-  },
-  {
-    reportId: "INV005",
-    date: "2023-09-05",
-    downloadLink: "/report-INV005.pdf",
-  },
-  {
-    reportId: "INV006",
-    date: "2023-09-06",
-    downloadLink: "/report-INV006.pdf",
-  },
-  {
-    reportId: "INV007",
-    date: "2023-09-07",
-    downloadLink: "/report-INV007.pdf",
-  },
-];
+
 
 const UserPrescription = () => {
+
+  const [reports, setReports] = useState<Array<{reportId:string,date:string,downloadLink:string}>>([]);
+
+  useEffect(()=>{
+    const fetchData = async () => {
+      const resp = await axios.get("http://localhost:8081/api/patient/getAppointment",{
+        headers:{
+          Authorization:`Bearer ${localStorage.getItem("token")}`
+        }
+      })
+      const response = resp.data;
+
+      const formatData = response.map((rept:any)=>({
+        reportId:rept.appointmentId,
+        date:rept.date,
+        downloadLink:`http://localhost:5173/prescription?id=${rept.appointmentId}`
+      }));
+
+      setReports(formatData)
+    }
+    fetchData();
+    console.log(reports);
+  },[]);
+
   return (
     <div className="h-[83%] pt-5 pb-10 flex justify-center">
       <div className="w-[50%] overflow-y-scroll">

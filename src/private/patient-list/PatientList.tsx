@@ -8,15 +8,18 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Shared from "@/Shared";
+import { Popover } from "@radix-ui/react-popover";
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const PatientList = () => {
   const navigate = useNavigate();
-  const [patient,setPatient] = useState<Array<{email:string,name:String,reason:string}>>([]);
+  const [patient, setPatient] = useState<
+    Array<{ email: string; name: String; reason: string }>
+  >([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchList = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -27,7 +30,7 @@ const PatientList = () => {
               Authorization: `Bearer ${token}`,
             },
           }
-          );
+        );
         const fetchd = response.data;
         const ffetchd = fetchd.map((pat:any)=>({
           email:pat.sapEmail,
@@ -35,12 +38,14 @@ const PatientList = () => {
           reason:pat.reason
         }))
         setPatient(ffetchd);
-      }catch(error){
+      } catch (error) {
         console.log(error);
       }
-    }
+    };
     fetchList();
   }, []);
+
+
 
   return (
     <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col">
@@ -70,19 +75,27 @@ const PatientList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              patient.map((pat,index)=>(
-                <TableRow className="text-center">
-              <TableCell className="border">{index+1}</TableCell>
-              <TableCell className="border">{pat.name}</TableCell>
-              <TableCell className="border">{pat.email}</TableCell>
-              <TableCell className="border">{pat.reason}</TableCell>
-              <TableCell className="border flex items-center justify-center">
-                <button className="text-3xl" key={pat.email} onClick={()=>{navigate(`/`)}}>{Shared.Report}</button>
-              </TableCell>
-            </TableRow>
-              ))
-            }
+            {patient.map((pat, index) => (
+              <TableRow className="text-center">
+                <TableCell className="border">{index + 1}</TableCell>
+                <TableCell className="border">{pat.name}</TableCell>
+                <TableCell className="border">{pat.email}</TableCell>
+                <TableCell className="border">{pat.reason}</TableCell>
+                <TableCell className="border flex items-center justify-center">
+                  <button
+                    className="text-3xl"
+                    key={pat.email}
+                    onClick={() => {
+                      <Popover>
+
+                      </Popover>
+                    }}
+                  >
+                    {Shared.Report}
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>

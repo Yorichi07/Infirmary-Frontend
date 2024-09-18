@@ -94,8 +94,8 @@ const UserProfile = () => {
         form.setValue("program", data.program || "");
         form.setValue("dateOfBirth", data.dateOfBirth || "");
         form.setValue("emergencyContact", data.emergencyContact || "");
-        form.setValue("height", data.height.toString() || "");
-        form.setValue("weight", data.weight.toString() || "");
+        form.setValue("height", `${data.height}` || "");
+        form.setValue("weight", `${data.weight}` || "");
         form.setValue("gender", data.gender || "");
         form.setValue("bloodGroup", data.bloodGroup || "");
         form.setValue("medicalHistory", data.medicalHistory || "");
@@ -125,8 +125,8 @@ const UserProfile = () => {
               "emergencyContact",
               dataBackup.emergencyContact || ""
             );
-            form.setValue("height", dataBackup.height.toString() || "");
-            form.setValue("weight", dataBackup.toString() || "");
+            form.setValue("height", dataBackup.height || "");
+            form.setValue("weight", dataBackup.weight|| "");
             form.setValue("gender", dataBackup.gender || "");
             form.setValue("bloodGroup", dataBackup.bloodGroup || "");
             form.setValue("medicalHistory", dataBackup.medicalHistory || "");
