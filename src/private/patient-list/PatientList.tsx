@@ -14,9 +14,11 @@ import { useNavigate } from "react-router-dom";
 
 const PatientList = () => {
   const navigate = useNavigate();
-  const [patient,setPatient] = useState<Array<{email:string,name:String,reason:string}>>([]);
+  const [patient, setPatient] = useState<
+    Array<{ email: string; name: String; reason: string }>
+  >([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchList = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -27,18 +29,18 @@ const PatientList = () => {
               Authorization: `Bearer ${token}`,
             },
           }
-          );
+        );
         const fetchd = response.data;
-        const ffetchd = fetchd.map((pat:any)=>({
-          id:pat.sapEmail,
-          name:pat.name,
-          reason:pat.reason
-        }))
+        const ffetchd = fetchd.map((pat: any) => ({
+          id: pat.sapEmail,
+          name: pat.name,
+          reason: pat.reason,
+        }));
         setPatient(ffetchd);
-      }catch(error){
+      } catch (error) {
         console.log(error);
       }
-    }
+    };
     fetchList();
   }, []);
 
@@ -70,19 +72,25 @@ const PatientList = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {
-              patient.map((pat,index)=>(
-                <TableRow className="text-center">
-              <TableCell className="border">{index+1}</TableCell>
-              <TableCell className="border">{pat.name}</TableCell>
-              <TableCell className="border">{pat.email}</TableCell>
-              <TableCell className="border">{pat.reason}</TableCell>
-              <TableCell className="border flex items-center justify-center">
-                <button className="text-3xl" key={pat.email} onClick={()=>{navigate(`/`)}}>{Shared.Report}</button>
-              </TableCell>
-            </TableRow>
-              ))
-            }
+            {patient.map((pat, index) => (
+              <TableRow className="text-center">
+                <TableCell className="border">{index + 1}</TableCell>
+                <TableCell className="border">{pat.name}</TableCell>
+                <TableCell className="border">{pat.email}</TableCell>
+                <TableCell className="border">{pat.reason}</TableCell>
+                <TableCell className="border flex items-center justify-center">
+                  <button
+                    className="text-3xl"
+                    key={pat.email}
+                    onClick={() => {
+                      navigate(`/`);
+                    }}
+                  >
+                    {Shared.Report}
+                  </button>
+                </TableCell>
+              </TableRow>
+            ))}
           </TableBody>
         </Table>
       </div>
