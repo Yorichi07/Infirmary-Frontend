@@ -2,7 +2,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  gap: 30px;
+  gap: 50px;
 
   label {
     width: 100%;
@@ -18,7 +18,7 @@
 }
 
 .history-btn {
-  width: 200px;
+  width: 100%;
   padding: 10px;
   background-color: #008080;
   color: white;
