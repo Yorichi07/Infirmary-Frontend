@@ -94,7 +94,7 @@ const UserDashboard = () => {
         <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col">
           <div className="bg-white border border-spacing-1 min-w-64">
             <img
-              src="/default-user.jpg"
+              src={userDetails.imageUrl != null ? `http://localhost:8081/${userDetails.imageUrl}`:"http://localhost:8081/Profile/Profile.jpg"}
               alt=""
               className="w-64 object-contain border-2 border-black"
             />

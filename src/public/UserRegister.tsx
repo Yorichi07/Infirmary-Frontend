@@ -133,10 +133,10 @@ const UserRegister = () => {
           JSON.stringify(formattedData, null, 2)
         );
 
-        // await axios.post(
-        //   "http://localhost:8081/api/auth/patient/signup",
-        //   formattedData
-        // );
+        await axios.post(
+          "http://localhost:8081/api/auth/patient/signup",
+          formattedData
+        );
 
         alert("Registration successful");
         navigate("/");

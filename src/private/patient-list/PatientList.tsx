@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 const PatientList = () => {
   const navigate = useNavigate();
   const [patient, setPatient] = useState<
-    Array<{ email: string; name: string; reason: string; aptId: string }>
+    Array<{ email: string; name: string; reason: string; aptId:String ,Id:string}>
   >([]);
   const [selectedButton, setSelectedButton] = useState("Pending");
   const [dialogData, setDialogData] = useState({
@@ -41,29 +41,80 @@ const PatientList = () => {
   const [doctors, setDoctors] = useState<{ id: string; name: string }[]>([]);
   const [currentPatientEmail, setCurrentPatientEmail] = useState("");
 
+  // useEffect(() => {
+  //   const fetchList = async () => {
+  //     try {
+  //       const token = localStorage.getItem("token");
+  //       const apiUrl =
+  //         selectedButton === "Pending"
+  //           ? "http://localhost:8081/api/AD/getPatientQueue"
+  //           : "http://localhost:8081/api/AD/getCompletedQueue";
+
+  //       const response = await axios.get(apiUrl, {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
+
+  //       const fetchedData = response.data;
+  //       const formattedData = fetchedData.map((pat: any) => ({
+  //         email: pat.sapEmail,
+  //         name: pat.name,
+  //         reason: pat.reason,
+  //       }));
+
+  //       setPatient(formattedData);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+
+  //   fetchList();
+  // }, [selectedButton]);
+
   useEffect(() => {
     const fetchList = async () => {
       try {
-        const token = localStorage.getItem("token");
-        const apiUrl =
-          selectedButton === "Pending"
-            ? "http://localhost:8081/api/AD/getPatientQueue"
-            : "http://localhost:8081/api/AD/getCompletedQueue";
+        if (selectedButton === "Pending") {
+          const token = localStorage.getItem("token");
+          const response = await axios.get(
+            "http://localhost:8081/api/AD/getPatientQueue",
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
 
-        const response = await axios.get(apiUrl, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+          const fetchedData = response.data;
+          const formattedData = fetchedData.map((pat: any) => ({
+            email: pat.sapEmail,
+            name: pat.name,
+            reason: pat.reason,
+            aptId:pat.aptId,
+            Id:pat.Id
+          }));
 
-        const fetchedData = response.data;
-        const formattedData = fetchedData.map((pat: any) => ({
-          email: pat.sapEmail,
-          name: pat.name,
-          reason: pat.reason,
-        }));
-
-        setPatient(formattedData);
+          setPatient(formattedData);
+        } else if (selectedButton === "Appointed") {
+          // Hardcoded example for the "Appointed" list
+          const response = await axios.get("http://localhost:8081/api/AD/getCompletedQueue",{
+            headers:{
+              Authorization:`Bearer ${localStorage.getItem("token")}`
+            }
+          })
+          const fetchedData = response.data;
+          const formattedData = fetchedData.map((pat: any) => ({
+            email: pat.sapEmail,
+            name: pat.name,
+            reason: pat.reason,
+            aptId:pat.aptId,
+            Id:pat.Id,
+          }));
+          
+          setPatient(formattedData);
+          console.log(patient);
+        }
       } catch (error) {
         console.log(error);
       }
@@ -90,6 +141,7 @@ const PatientList = () => {
       setDocData({
         pref_doc: formatData.pref_doc || "No Preffered Doctor",
         doc_reason: formatData.doc_reason || "",
+
       });
 
       // Fetch available doctors when dialog opens
@@ -314,14 +366,43 @@ const PatientList = () => {
                                   />
                                 </div>
                               </div>
-
-                              <div className="flex justify-end items-center">
+                              <div className="flex justify-begin items-center">
                                 <button
                                   type="submit"
                                   className="submit-button"
                                   onClick={() => console.log(dialogData)}
                                 >
                                   Submit
+                                </button>
+                              </div>
+                              <div className="flex justify-end items-center">
+                                <button
+                                  type="submit"
+                                  className="reject-button"
+                                  onClick={async () => {
+                                    try {
+                                      const token = localStorage.getItem("token");
+                                      const response = await axios.get(
+                                        `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
+                                        {
+                                          headers: {
+                                            Authorization: `Bearer ${token}`,
+                                          },
+                                        }
+                                      );
+                                
+                                      if (response.status === 200) {
+                                        alert("Appointment Rejected.");
+                                      } else {
+                                        alert("Failed to Reject appointment details.");
+                                      }
+                                    } catch (error) {
+                                      console.error("Error Rejecting appointment details:", error);
+                                      alert("Failed to Reject appointment details.");
+                                    }
+                                  }}
+                                >
+                                  Reject
                                 </button>
                               </div>
                             </form>
@@ -331,34 +412,41 @@ const PatientList = () => {
                     </Dialog>
                   ) : (
                     <div className="flex items-center gap-5 text-2xl">
-                      <button
-                        onClick={() =>
-                          navigate(`/prescription?id=${pat.aptId}`)
-                        }
-                      >
+                      <button onClick={() => navigate(`/prescription?id=${pat.aptId}`)}>
                         {Shared.Prescription}
                       </button>
 
-                      <button
-                        onClick={async () => {
-                          try {
-                            const resp = await axios.get(
-                              `http://localhost:8081/api/AD/completeAppointment/${pat.email}`,
-                              {
-                                headers: {
-                                  Authorization: `Bearer ${localStorage.getItem(
-                                    "token"
-                                  )}`,
-                                },
-                              }
-                            );
-                            window.alert(resp.data);
-                          } catch (err) {
-                            console.log(err);
-                          }
-                        }}
-                      >
+                      <button onClick={async () => {
+                        try{
+
+                          let resp = await axios.get(`http://localhost:8081/api/AD/completeAppointment/${pat.email}`,{
+                            headers:{
+                              Authorization: `Bearer ${localStorage.getItem('token')}`
+                            }
+                          })
+                          window.alert(resp.data);
+                        }catch(err){
+                          console.log(err)
+                        }
+                        
+                      }}>
                         {Shared.SquareCheck}
+                      </button>
+                      <button onClick={async () => {
+                        try{
+
+                          let resp = await axios.get(`http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,{
+                            headers:{
+                              Authorization: `Bearer ${localStorage.getItem('token')}`
+                            }
+                          })
+                          window.alert(resp.data);
+                        }catch(err){
+                          console.log(err)
+                        }
+                        
+                      }}>
+                        {Shared.SquareCross}
                       </button>
                     </div>
                   )}
