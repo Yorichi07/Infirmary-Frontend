@@ -379,12 +379,21 @@ const PatientList = () => {
                         {Shared.Prescription}
                       </button>
 
-                      <button onClick={() => console.log("Check clicked")}>
-                        {Shared.SquareCheck}
-                      </button>
+                      <button onClick={async () => {
+                        try{
 
-                      <button onClick={() => console.log("Cross clicked")}>
-                        {Shared.SquareCross}
+                          let resp = await axios.get(`http://localhost:8081/api/AD/completeAppointment/${pat.email}`,{
+                            headers:{
+                              Authorization: `Bearer ${localStorage.getItem('token')}`
+                            }
+                          })
+                          window.alert(resp.data);
+                        }catch(err){
+                          console.log(err)
+                        }
+                        
+                      }}>
+                        {Shared.SquareCheck}
                       </button>
                     </div>
                   )}
