@@ -160,7 +160,7 @@ const PatientDetails = () => {
   return (
     <div className="h-[83%] p-5 flex flex-col bg-[#f5f5f5]">
       <div className=" overflow-y-scroll p-5">
-        <div className="flex justify-between mb-5 gap-12">
+        <div className="flex justify-between mb-5">
           <img
             className="w-[15%] border-black border"
             src="/public/default-user.jpg"
@@ -188,7 +188,7 @@ const PatientDetails = () => {
               <input type="text" value={ndata?.course} disabled />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center gap-4">
+          <div className="flex flex-col justify-center items-center gap-4 w-[20%]">
             <Popover>
               <PopoverTrigger className="history-btn">
                 Medical History
@@ -214,7 +214,7 @@ const PatientDetails = () => {
               </PopoverTrigger>
             </Popover>
           </div>
-          <div className="flex flex-col w-full gap-2">
+          <div className="flex flex-col w-[30%] gap-2">
             <label className="font-medium">Reason for Visit:</label>
             <textarea
               className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
@@ -343,10 +343,10 @@ const PatientDetails = () => {
                         <input type="number" className="small-input dosage" />
                       </td>
                       <td>
-                        <input type="number" className="small-input duration" />
+                        <input type="number" className="small-input duration" min={1} />
                       </td>
                       <td>
-                        <input type="text" className="suggestions-input suggestion" />
+                        <input type="number" className="small-input" />
                       </td>
                       <td>
                         <button type="button" className="">{Shared.SquareCheck}</button>

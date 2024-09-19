@@ -24,7 +24,7 @@ import { useNavigate } from "react-router-dom";
 const PatientList = () => {
   const navigate = useNavigate();
   const [patient, setPatient] = useState<
-    Array<{ email: string; name: string; reason: string }>
+    Array<{ email: string; name: string; reason: string; aptId:String }>
   >([]);
   const [selectedButton, setSelectedButton] = useState("Pending");
   const [dialogData, setDialogData] = useState({
@@ -91,6 +91,7 @@ const PatientList = () => {
             email: pat.sapEmail,
             name: pat.name,
             reason: pat.reason,
+            aptId:pat.aptId
           }));
 
           setPatient(formattedData);
@@ -101,6 +102,7 @@ const PatientList = () => {
               email: "test.patient@example.com",
               name: "John Doe",
               reason: "Routine Checkup",
+              aptId: ""
             },
           ];
           setPatient(appointedPatients);
@@ -131,6 +133,7 @@ const PatientList = () => {
       setDocData({
         pref_doc: formatData.pref_doc || "No Preffered Doctor",
         doc_reason: formatData.doc_reason || "",
+
       });
 
       // Fetch available doctors when dialog opens
@@ -372,7 +375,7 @@ const PatientList = () => {
                     </Dialog>
                   ) : (
                     <div className="flex items-center gap-5 text-2xl">
-                      <button onClick={() => navigate(`/prescription?id=${pat.email}`)}>
+                      <button onClick={() => navigate(`/prescription?id=${pat.aptId}`)}>
                         {Shared.Prescription}
                       </button>
 
