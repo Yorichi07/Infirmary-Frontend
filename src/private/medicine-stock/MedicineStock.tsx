@@ -289,7 +289,7 @@ const MedicineStock = () => {
             <img src="/save.png" alt="" className="w-6" />
           </button>
         </div>
-        <div className="flex items-center space-x-8">
+        {/* <div className="flex items-center space-x-8">
           <button className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md">
             Add From Excel
             <img src="/excel.png" alt="" className="w-6" />
@@ -298,7 +298,7 @@ const MedicineStock = () => {
             Export to Excel
             <img src="/excel.png" alt="" className="w-6" />
           </button>
-        </div>
+        </div> */}
       </div>
     </div>
   );
