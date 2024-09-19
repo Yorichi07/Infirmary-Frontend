@@ -115,7 +115,7 @@ const PatientDetails = () => {
           allergies: response.medicalDetails.allergies,
           reports: response.prescriptions,
           reason: response.reason,
-          email:response.email
+          email:response.patient.email
         };
         setNdata(formatData);
       } catch (err) {
@@ -308,7 +308,6 @@ const PatientDetails = () => {
                     <th>Dosage (per day)</th>
                     <th>Duration (Days)</th>
                     <th>Suggestions</th>
-                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -346,10 +345,7 @@ const PatientDetails = () => {
                         <input type="number" className="small-input duration" min={1} />
                       </td>
                       <td>
-                        <input type="number" className="small-input" />
-                      </td>
-                      <td>
-                        <button type="button" className="">{Shared.SquareCheck}</button>
+                        <input type="text" className="small-input suggestion" />
                       </td>
                     </tr>
                   ))}
