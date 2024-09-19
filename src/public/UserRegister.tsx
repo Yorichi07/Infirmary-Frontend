@@ -91,7 +91,10 @@ const formSchema = z
 
 const UserRegister = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
+  const [bs64Img, setBs64Img] = useState<string | null>(null);
+  
   const navigate = useNavigate();
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -107,6 +110,7 @@ const UserRegister = () => {
       phoneNumber: "",
       gender: "",
       bloodGroup: "",
+      img:""
     },
   });
   const { isValid } = form.formState;
@@ -120,6 +124,7 @@ const UserRegister = () => {
           dateOfBirth: data.dateOfBirth
             ? new Date(data.dateOfBirth).toISOString().split("T")[0] // yyyy-MM-dd format
             : undefined,
+            img:bs64Img
         };
 
         // Send the data to the backend
@@ -128,10 +133,10 @@ const UserRegister = () => {
           JSON.stringify(formattedData, null, 2)
         );
 
-        await axios.post(
-          "http://localhost:8081/api/auth/patient/signup",
-          formattedData
-        );
+        // await axios.post(
+        //   "http://localhost:8081/api/auth/patient/signup",
+        //   formattedData
+        // );
 
         alert("Registration successful");
         navigate("/");
@@ -153,8 +158,16 @@ const UserRegister = () => {
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
+    const file:any = event.target.files?.[0];
+    
+    const reader = new FileReader();
+
+    reader.onload =  () => {
+      const base64String = reader.result as string;
+      setBs64Img(base64String);
+      }
+    if(file){
+      reader.readAsDataURL(file);
       const url = URL.createObjectURL(file);
       setUploadedImage(url);
     }
