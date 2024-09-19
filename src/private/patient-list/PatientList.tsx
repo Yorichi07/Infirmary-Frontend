@@ -372,7 +372,7 @@ const PatientList = () => {
                     </Dialog>
                   ) : (
                     <div className="flex items-center gap-5 text-2xl">
-                      <button onClick={() => navigate("/prescription")}>
+                      <button onClick={() => navigate(`/prescription?id=${pat.email}`)}>
                         {Shared.Prescription}
                       </button>
 

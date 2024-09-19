@@ -70,7 +70,7 @@ const UserDashboard = () => {
         setStatus({
           appointmentStatus: statusData.Appointment ? "Queued" : "NA",
           doctorName: statusData.Doctor
-            ? statusData.Doctor.name
+            ? statusData.DoctorName
             : "Not Appointed",
         });
       } catch (error) {
@@ -144,12 +144,14 @@ const UserDashboard = () => {
               Doctor Status
             </p>
             <div className="bg-[#E0E0E0] flex justify-center items-center text-[#797979] font-semibold  rounded-lg w-1/2">
-              {status.appointmentStatus === "Done" ? (
-                <div className="p-4 bg-gray text-[#797979] w-full rounded-md justify-center flex shadow-md">
+              {status.doctorName !== "Not Appointed" ? (
+                <div className="p-4 bg-[#1F60C0] text-white w-full rounded-md justify-center flex shadow-md">
                   {status.doctorName}
                 </div>
               ) : (
-                <div className="p-4">Not Appointed</div>
+                <div className="p-4 bg-gray text-[#797979] w-full rounded-md justify-center flex shadow-md">
+                  {status.doctorName}
+                </div>
               )}
             </div>
           </div>

@@ -15,9 +15,16 @@ import {
 } from "@/components/ui/select";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
+import Shared from "@/Shared";
 
 const PatientDetails = () => {
   const navigate = useNavigate();
+  // Ref Elements
+  const [diagnosis, setDiagnosis] = useState<string>();
+  const [dietary, setDietary] = useState<string>();
+  const [tests, setTests] = useState<string>();
+  const [medLst, setMedLst] = useState<Record<number, string>>();
+
   const [rows, setRows] = useState([1]);
   const [ndata, setNdata] = useState<{
     name: string;
@@ -30,6 +37,7 @@ const PatientDetails = () => {
     allergies: string;
     reports: [];
     reason: string;
+    email:string;
   }>();
   const [stock, setStock] = useState<
     Array<{ batchNumber: number; medicineName: string; quantity: number }>
@@ -45,6 +53,42 @@ const PatientDetails = () => {
 
     return Math.abs(age_dt.getUTCFullYear() - 1970);
   };
+
+  const handleSubmit = async () =>{
+    let medAry:any = new Array<{ medicine: any,dosage:any,duration:any,suggestion:any }>();
+
+    const dosg = document.querySelectorAll(".dosage");
+    const dur = document.querySelectorAll(".duration");
+    const sugs = document.querySelectorAll(".suggestion");
+    
+    for( const meds in medLst){
+      medAry.push({
+        medicine: medLst[parseInt(meds)],
+        dosage: dosg[parseInt(meds)].value,
+        duration: dur[parseInt(meds)].value,
+        suggestion: sugs[parseInt(meds)].value
+      });
+    }
+    let req: {diagnosis:string,dietaryRemarks:string,testNeeded:string,meds:any} = {
+      diagnosis:diagnosis||"",
+      dietaryRemarks:dietary||"",
+      testNeeded:tests||"",
+      meds:medAry
+    }
+
+    try{
+
+      const resp = await axios.post("http://localhost:8081/api/prescription/submit",req,{
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      window.alert(resp.data);
+    }catch(err){
+      console.log(err)
+    }
+  }
 
   useEffect(() => {
     const fetchData = async () => {
@@ -64,16 +108,14 @@ const PatientDetails = () => {
           name: response.patient.name,
           age: age(response.patient.dateOfBirth),
           sex: response.patient.gender,
-          id: response.patient.email.substring(
-            0,
-            response.patient.email.indexOf("@")
-          ),
+          id: response.patient.sapID,
           course: response.patient.school,
           medHis: response.medicalDetails.medicalHistory,
           famHis: response.medicalDetails.familyMedicalHistory,
           allergies: response.medicalDetails.allergies,
           reports: response.prescriptions,
           reason: response.reason,
+          email:response.email
         };
         setNdata(formatData);
       } catch (err) {
@@ -110,7 +152,9 @@ const PatientDetails = () => {
   };
 
   const handleMedicineSelect = (index: number, medicine: string) => {
-    setSelectedMedicine({ ...selectedMedicine, [index]: medicine });
+    const indx = medicine.indexOf(":");
+    setSelectedMedicine({ ...selectedMedicine, [index]: medicine.substring(0,indx) });
+    setMedLst({ ...medLst , [index]:medicine.substring(indx+1) });
   };
 
   return (
@@ -164,7 +208,7 @@ const PatientDetails = () => {
             <Popover>
               <PopoverTrigger
                 className="history-btn"
-                onClick={() => navigate("/user-prescription")}
+                onClick={() => navigate(`/user-prescription?id=${ndata?.email}`)}
               >
                 Reports
               </PopoverTrigger>
@@ -251,6 +295,7 @@ const PatientDetails = () => {
               <textarea
                 className="w-full h-[150px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
                 placeholder="Enter diagnosis here..."
+                onChange={(event:any)=>setDiagnosis(event.target.value)}
               ></textarea>
             </div>
             <div className="mt-5">
@@ -263,6 +308,7 @@ const PatientDetails = () => {
                     <th>Dosage (per day)</th>
                     <th>Duration (Days)</th>
                     <th>Suggestions</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -284,7 +330,7 @@ const PatientDetails = () => {
                             {stock.map((medicine) => (
                               <SelectItem
                                 key={medicine.batchNumber}
-                                value={medicine.medicineName}
+                                value={`${medicine.medicineName}:${medicine.batchNumber}`}
                               >
                                 {medicine.medicineName} (Quantity:{" "}
                                 {medicine.quantity})
@@ -294,13 +340,16 @@ const PatientDetails = () => {
                         </Select>
                       </td>
                       <td>
-                        <input type="number" className="small-input" />
+                        <input type="number" className="small-input dosage" />
                       </td>
                       <td>
-                        <input type="number" className="small-input" />
+                        <input type="number" className="small-input duration" />
                       </td>
                       <td>
-                        <input type="text" className="suggestions-input" />
+                        <input type="text" className="suggestions-input suggestion" />
+                      </td>
+                      <td>
+                        <button type="button" className="">{Shared.SquareCheck}</button>
                       </td>
                     </tr>
                   ))}
@@ -320,6 +369,7 @@ const PatientDetails = () => {
               <textarea
                 className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
                 placeholder="Enter dietary recommendations here..."
+                onChange={(event:any)=>setDietary(event.target.value)}
               ></textarea>
             </div>
             <div className="mt-5">
@@ -327,6 +377,7 @@ const PatientDetails = () => {
               <textarea
                 className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
                 placeholder="Enter tests needed here..."
+                onChange={(event:any)=>setTests(event.target.value)}
               ></textarea>
             </div>
             <div className="flex flex-col items-end mt-10">
@@ -334,7 +385,7 @@ const PatientDetails = () => {
               <div className="signature-text">Doctor Name</div>
             </div>
           </div>
-          <Button className="rounded-none rounded-b-lg w-[70%]">Submit</Button>
+          <Button className="rounded-none rounded-b-lg w-[70%]" onClick={handleSubmit}>Submit</Button>
         </div>
       </div>
     </div>

@@ -19,7 +19,17 @@ const UserPrescription = () => {
 
   useEffect(()=>{
     const fetchData = async () => {
-      const resp = await axios.get("http://localhost:8081/api/patient/getAppointment",{
+      let apiUrl = "";
+
+      if(localStorage.getItem("role") === "user"){
+        apiUrl = "http://localhost:8081/api/patient/getAppointment"
+      }else{
+        const url = window.location.search
+        const val = url.substring(url.indexOf("?")+4)
+        apiUrl = `http://localhost:8081/api/patient/getAppointmentPat/${val}`
+      }
+
+      const resp = await axios.get(apiUrl,{
         headers:{
           Authorization:`Bearer ${localStorage.getItem("token")}`
         }
@@ -35,7 +45,6 @@ const UserPrescription = () => {
       setReports(formatData)
     }
     fetchData();
-    console.log(reports);
   },[]);
 
   return (
