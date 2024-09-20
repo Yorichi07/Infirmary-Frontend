@@ -17,7 +17,7 @@ const Emergency = () => {
       />
 
       <div className="h-[80%] w-[60%] flex items-center justify-center gap-8">
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl">
           <CardHeader>
             <CardTitle>Dr. Ramesh Kumar</CardTitle>
             <CardDescription>Cardiologist</CardDescription>
@@ -29,7 +29,7 @@ const Emergency = () => {
             <p>+91 12345 67891</p>
           </CardFooter>
         </Card>
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl">
           <CardHeader>
             <CardTitle>Dr. Anjali Mehta</CardTitle>
             <CardDescription>Pediatrician</CardDescription>
@@ -41,7 +41,7 @@ const Emergency = () => {
             <p>+91 12345 65846</p>
           </CardFooter>
         </Card>
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl">
           <CardHeader>
             <CardTitle>Dr. Suresh Gupta</CardTitle>
             <CardDescription>Orthopedic Surgeon</CardDescription>

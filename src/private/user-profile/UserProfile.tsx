@@ -15,7 +15,7 @@ import {
   FormControl,
   FormMessage,
 } from "@/components/ui/form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 
 const formSchema = z.object({
@@ -51,7 +51,6 @@ const formSchema = z.object({
   medicalHistory: z.string().optional().nullable(),
   familyMedicalHistory: z.string().optional().nullable(),
   allergies: z.string().optional().nullable(),
-  imageUrl: z.string(),
   currentAddress: z.string(),
 });
 
@@ -73,10 +72,10 @@ const UserProfile = () => {
       medicalHistory: "",
       familyMedicalHistory: "",
       allergies: "",
-      imageUrl: "",
       currentAddress: "",
     },
   });
+  const [img,setImg] = useState<string>("");
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -109,8 +108,9 @@ const UserProfile = () => {
         form.setValue("medicalHistory", data.medicalHistory || "");
         form.setValue("familyMedicalHistory", data.familyMedicalHistory || "");
         form.setValue("allergies", data.allergies || "");
-        form.setValue("imageUrl", data.imageUrl || "/default-user.jpg");
         form.setValue("currentAddress", data.currentAddress || "");
+
+        setImg(data.imageUrl);
       } catch (error: any) {
         if (error.response && error.response.status === 404) {
           try {
@@ -134,7 +134,7 @@ const UserProfile = () => {
               dataBackup.emergencyContact || ""
             );
             form.setValue("height", dataBackup.height || "");
-            form.setValue("weight", dataBackup.weight|| "");
+            form.setValue("weight", dataBackup.weight || "");
             form.setValue("gender", dataBackup.gender || "");
             form.setValue("bloodGroup", dataBackup.bloodGroup || "");
             form.setValue("medicalHistory", dataBackup.medicalHistory || "");
@@ -143,11 +143,9 @@ const UserProfile = () => {
               dataBackup.familyMedicalHistory || ""
             );
             form.setValue("allergies", dataBackup.allergies || "");
-            form.setValue(
-              "imageUrl",
-              dataBackup.imageUrl || "/default-user.jpg"
-            );
             form.setValue("currentAddress", dataBackup.currentAddress || "");
+
+            setImg(dataBackup.imageUrl);
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
           }
@@ -211,9 +209,11 @@ const UserProfile = () => {
           <div className="profile-container__body">
             <div className="image-container">
               <Image
-                // src={form.watch("imageUrl")}
-                src="/default-user.jpg"
-                alt="Profile Picture"
+                src={
+                   img != null
+                    ? `http://localhost:8081/${img}`
+                    : "/default-user.jpg"
+                }
                 preview
                 style={{
                   border: "1px solid black",
@@ -221,6 +221,7 @@ const UserProfile = () => {
                   justifyContent: "center",
                   alignItems: "center",
                 }}
+                className="shadow-xl rounded"
               />
             </div>
             <div className="patient-details">

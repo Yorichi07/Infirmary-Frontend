@@ -38,6 +38,7 @@
     display: flex;
     gap: 1rem;
     padding: 1.5rem;
+    height: 92%;
 
     .image-container {
       display: flex;
@@ -66,10 +67,14 @@
         grid-template-columns: 1fr 1fr;
         column-gap: 2rem;
         grid-template-areas: "left right";
+        height: 100%;
       }
 
       &__left {
         grid-area: left;
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
         .dropdown {
           padding-top: 0.25rem !important;
           padding-bottom: 0.25rem !important;
@@ -78,6 +83,13 @@
             width: 5% !important;
           }
         }
+      }
+
+      &__right {
+        grid-area: right;
+        justify-content: space-between;
+        display: flex;
+        flex-direction: column;
       }
     }
   }

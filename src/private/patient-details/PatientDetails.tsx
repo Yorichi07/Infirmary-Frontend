@@ -18,7 +18,6 @@ import { Button } from "@/components/ui/button";
 
 const PatientDetails = () => {
   const navigate = useNavigate();
-  // Ref Elements
   const [diagnosis, setDiagnosis] = useState<string>();
   const [dietary, setDietary] = useState<string>();
   const [tests, setTests] = useState<string>();
@@ -37,6 +36,7 @@ const PatientDetails = () => {
     reports: [];
     reason: string;
     email: string;
+    imageUrl: string;
   }>();
   const [stock, setStock] = useState<
     Array<{ batchNumber: number; medicineName: string; quantity: number }>
@@ -128,6 +128,7 @@ const PatientDetails = () => {
           reports: response.prescriptions,
           reason: response.reason,
           email: response.patient.email,
+          imageUrl: response.patient.imageUrl,
         };
         setNdata(formatData);
       } catch (err) {
@@ -178,8 +179,11 @@ const PatientDetails = () => {
         <div className="flex justify-between mb-5">
           <img
             className="w-[15%] border-black border"
-            src="/public/default-user.jpg"
-            alt="Profile Picture"
+            src={
+              ndata?.imageUrl != null
+                ? `http://localhost:8081/${ndata?.imageUrl}`
+                : "/default-user.jpg"
+            }
           />
           <div className="flex flex-col justify-between">
             <div className="input-field">

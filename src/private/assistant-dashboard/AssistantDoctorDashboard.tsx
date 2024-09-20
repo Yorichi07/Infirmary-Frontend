@@ -59,15 +59,12 @@ const AssistantDoctorDashboard = () => {
   };
 
   useEffect(() => {
-    // Fetch patient data on mount
     fetchPatientData();
 
-    // Set up interval to fetch data every 30 seconds
     const interval = setInterval(() => {
       fetchPatientData();
     }, 30000);
 
-    // Clear interval on component unmount
     return () => {
       clearInterval(interval);
     };
@@ -78,17 +75,17 @@ const AssistantDoctorDashboard = () => {
       <div className="w-full px-14 py-10 flex justify-center items-center">
         <div className="w-full flex flex-col items-center">
           <div className="flex space-x-4">
-            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg">
+            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg">
               <p className="font-semibold text-xl">Patients</p>
               <p className="text-lg">{totalPatients}</p>
             </div>
             <div className="w-[3px] my-4 bg-black"></div>
-            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg">
+            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg">
               <p className="font-semibold text-xl">In Queue</p>
               <p className="text-lg">{inQueue}</p>
             </div>
             <div className="w-[3px] my-4 bg-black"></div>
-            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg">
+            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg">
               <p className="font-semibold text-xl">Treatments</p>
               <p className="text-lg">{patientsLeft}</p>
             </div>
@@ -101,14 +98,14 @@ const AssistantDoctorDashboard = () => {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border bg-white"
+              className="rounded-md border bg-white shadow-lg"
             />
           </div>
         </div>
         <div className="w-full px-14">
           <div className="w-full flex flex-col px-10 space-y-10">
             <button
-              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/doctor-check-in-out")}
             >
               <p className="text-white font-semibold text-lg text-center flex-1">
@@ -116,7 +113,7 @@ const AssistantDoctorDashboard = () => {
               </p>
             </button>
             <button
-              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/patient-list")}
             >
               <p className="text-white font-semibold text-lg text-center flex-1">
@@ -124,7 +121,7 @@ const AssistantDoctorDashboard = () => {
               </p>
             </button>
             <button
-              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/medicine-stock")}
             >
               <p className="text-white font-semibold text-lg text-center flex-1">
@@ -132,19 +129,19 @@ const AssistantDoctorDashboard = () => {
               </p>
             </button>
             <button
-              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+              className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/Ambulance")}
             >
               <p className="text-white font-semibold text-lg text-center flex-1">
-                Ambulance Tracker
+                Ambulance Details
               </p>
             </button>
             <button
-              className="flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
+              className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/Emergency")}
             >
               <p className="text-white font-semibold text-lg text-center flex-1">
-                Emergengy
+                Emergengy Contacts
               </p>
             </button>
           </div>

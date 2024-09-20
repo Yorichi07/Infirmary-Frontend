@@ -10,23 +10,26 @@ import {
 import Shared from "@/Shared";
 import axios from "axios";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 
 
 const UserPrescription = () => {
-
+  const navigate = useNavigate();
   const [reports, setReports] = useState<Array<{reportId:string,date:string,downloadLink:string}>>([]);
 
   useEffect(()=>{
     const fetchData = async () => {
       let apiUrl = "";
-
-      if(localStorage.getItem("role") === "user"){
-        apiUrl = "http://localhost:8081/api/patient/getAppointment"
-      }else{
+      const role = localStorage.getItem("roles");
+      console.log(role)
+      if(role !== "user"){
         const url = window.location.search
         const val = url.substring(url.indexOf("?")+4)
         apiUrl = `http://localhost:8081/api/patient/getAppointmentPat/${val}`
+        
+      }else{
+        apiUrl = "http://localhost:8081/api/patient/getAppointment"
       }
 
       const resp = await axios.get(apiUrl,{
@@ -71,7 +74,7 @@ const UserPrescription = () => {
 
                 {/* Download Report */}
                 <TableCell className="text-center">
-                  <a href={report.downloadLink} download>
+                  <a onClick={()=>navigate(`/prescription?id=${report.reportId}`)} download>
                     {Shared.Download}
                   </a>
                 </TableCell>

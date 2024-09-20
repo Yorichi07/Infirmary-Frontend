@@ -17,7 +17,7 @@ const Ambulance = () => {
       />
 
       <div className="h-[80%] w-[60%] flex items-center justify-center gap-14">
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200 shadow-xl">
           <CardHeader>
             <CardTitle>Ram Kumar</CardTitle>
             <CardDescription>Bidholi Campus</CardDescription>
@@ -30,7 +30,7 @@ const Ambulance = () => {
           <p><b>Phone: </b>+91 12345 65846</p>
           </CardFooter>
         </Card>
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200 shadow-xl">
           <CardHeader>
             <CardTitle>Shyam Kumar</CardTitle>
             <CardDescription>Kandoli Campus</CardDescription>

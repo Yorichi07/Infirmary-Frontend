@@ -45,7 +45,6 @@ const SignIn = () => {
       const res = await axios.post(apiUrl, input);
       const { token, email, roles } = res.data;
 
-      // Store token, email, and roles in local storage
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
       localStorage.setItem(

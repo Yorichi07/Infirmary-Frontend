@@ -92,25 +92,25 @@ const formSchema = z
 const UserRegister = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [bs64Img, setBs64Img] = useState<string | null>(null);
-  
+
   const navigate = useNavigate();
 
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      name: "",
+      name: undefined,
       sapID: undefined,
       password: undefined,
       confirmPassword: undefined,
-      email: "",
-      school: "",
-      program: "",
+      email: undefined,
+      school: undefined,
+      program: undefined,
       dateOfBirth: undefined,
-      emergencyContact: "",
-      phoneNumber: "",
-      gender: "",
-      bloodGroup: "",
-      img:""
+      emergencyContact: undefined,
+      phoneNumber: undefined,
+      gender: undefined,
+      bloodGroup: undefined,
+      img: undefined,
     },
   });
   const { isValid } = form.formState;
@@ -118,16 +118,14 @@ const UserRegister = () => {
   const onSubmit = async (data: any) => {
     if (isValid) {
       try {
-        // Convert dateOfBirth to yyyy-MM-dd format
         const formattedData = {
           ...data,
           dateOfBirth: data.dateOfBirth
-            ? new Date(data.dateOfBirth).toISOString().split("T")[0] // yyyy-MM-dd format
+            ? new Date(data.dateOfBirth).toISOString().split("T")[0]
             : undefined,
-            img:bs64Img
+          img: bs64Img,
         };
 
-        // Send the data to the backend
         console.log(
           "Formatted Form Data Submitted: ",
           JSON.stringify(formattedData, null, 2)
@@ -158,15 +156,15 @@ const UserRegister = () => {
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file:any = event.target.files?.[0];
-    
+    const file: any = event.target.files?.[0];
+
     const reader = new FileReader();
 
-    reader.onload =  () => {
+    reader.onload = () => {
       const base64String = reader.result as string;
       setBs64Img(base64String);
-      }
-    if(file){
+    };
+    if (file) {
       reader.readAsDataURL(file);
       const url = URL.createObjectURL(file);
       setUploadedImage(url);
@@ -185,7 +183,7 @@ const UserRegister = () => {
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="h-[84%]">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="h-[91%]">
             <div className="register-container__body">
               <div className="image-container">
                 <Image
@@ -194,7 +192,7 @@ const UserRegister = () => {
                   preview
                   style={{
                     border: "1px solid black",
-                    display: "flex",
+                    width: "100%",
                   }}
                 />
                 <input
@@ -336,6 +334,7 @@ const UserRegister = () => {
                               type="number"
                               placeholder="Enter your Id"
                               {...field}
+                              min={0}
                             />
                           </FormControl>
                           <FormMessage />

@@ -12,7 +12,6 @@ const DoctorCheckIn = () => {
   >([]);
 
   useEffect(() => {
-    // Fetch doctors data from API
     const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem("token");
@@ -26,7 +25,6 @@ const DoctorCheckIn = () => {
         );
         const doctorsData = response.data;
 
-        // Map the API response to the required format
         const formattedDoctors = doctorsData.map((doctor: any) => ({
           id: doctor.doctorId,
           name: doctor.name,
@@ -114,16 +112,16 @@ const DoctorCheckIn = () => {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border bg-white"
+              className="rounded-md border bg-white shadow-lg"
             />
           </div>
         </div>
         <div className="w-full px-14">
-          <div className="w-full flex flex-col space-y-2 p-4 bg-black rounded-lg bg-opacity-10">
+          <div className="w-full flex flex-col space-y-2 p-4 bg-black rounded-lg bg-opacity-10 shadow-lg">
             {doctors.map((doctor, index) => (
               <div
                 key={index}
-                className="w-full bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] p-8 rounded-md flex items-center"
+                className="w-full bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] p-8 rounded-md flex items-center shadow-lg"
               >
                 <p className="text-white font-semibold text-lg w-2/3">
                   {doctor.name}
@@ -131,7 +129,7 @@ const DoctorCheckIn = () => {
                 <div className="flex w-full justify-between">
                   <button
                   data-key={`${doctor.id}`}
-                    className={`px-8 py-2 ${
+                    className={`shadow-lg px-8 py-2 ${
                       doctor.status !== "checked-in"
                         ? "bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
                         : "bg-[#8F8F8F]"
@@ -141,7 +139,7 @@ const DoctorCheckIn = () => {
                   </button>
                   <button 
                   data-key={`${doctor.id}`}
-                    className={`px-8 py-2 ${
+                    className={`shadow-lg px-8 py-2 ${
                       doctor.status !== "checked-out"
                         ? "bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
                         : "bg-[#8F8F8F]"

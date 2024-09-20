@@ -113,17 +113,15 @@ const UserAppointment = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // Map form data to API request DTO
         const appointmentData = {
           reason: data.reason,
-          isFollowUp: data.followUp === "Yes", // Convert "Yes"/"No" to boolean
+          isFollowUp: data.followUp === "Yes",
           preferredDoctor: data.preferredDoctor
             ? Number(data.preferredDoctor)
-            : null, // Convert string to number
+            : null,
           reasonPrefDoctor: data.reasonForPreference || null,
         };
 
-        // Make POST request
         const response = await axios.post(
           "http://localhost:8081/api/patient/submitAppointment",
           appointmentData,
@@ -161,7 +159,8 @@ const UserAppointment = () => {
 
   return (
     <div className="h-[83%] pr-4 w-full flex gap-8">
-      <img src="/public/appointment.jpg" alt="" />
+      <img src="/public/appointment.jpg" className="w-[60%]" />
+
       <div className="appointment-container justify-between flex flex-col pt-5 pb-5">
         <div className="appointment-container__content">
           <Form {...form}>
@@ -170,7 +169,6 @@ const UserAppointment = () => {
               className="h-[100%] flex flex-col justify-between"
             >
               <div className="appointment-container__body">
-                {/* Reason for Appointment */}
                 <FormField
                   control={form.control}
                   name="reason"
@@ -187,7 +185,6 @@ const UserAppointment = () => {
                     </FormItem>
                   )}
                 />
-                {/* Follow-up Radio */}
                 <FormField
                   control={form.control}
                   name="followUp"
@@ -232,7 +229,6 @@ const UserAppointment = () => {
                     </FormItem>
                   )}
                 />
-                {/* Last Appointment Date */}
                 <FormField
                   control={form.control}
                   name="lastAppointmentDate"
@@ -252,7 +248,6 @@ const UserAppointment = () => {
                     </FormItem>
                   )}
                 />
-                {/* Preferred Doctor */}
                 <FormField
                   control={form.control}
                   name="preferredDoctor"
@@ -262,7 +257,9 @@ const UserAppointment = () => {
                       <FormControl>
                         <Select
                           {...field}
-                          onValueChange={(value: any) => field.onChange(value)}
+                          onValueChange={(value: any) =>
+                            field.onChange(value === "none" ? null : value)
+                          }
                           disabled={doctors.length === 0}
                         >
                           <SelectTrigger id="doctor" className="mb-5">
@@ -276,6 +273,7 @@ const UserAppointment = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <SelectGroup>
+                              <SelectItem value="none">None</SelectItem>
                               {doctors.map((doctor: any) => (
                                 <SelectItem key={doctor.id} value={doctor.id}>
                                   {doctor.name}
@@ -289,7 +287,7 @@ const UserAppointment = () => {
                     </FormItem>
                   )}
                 />
-                {/* Reason for Preference */}
+
                 <FormField
                   control={form.control}
                   name="reasonForPreference"
@@ -311,7 +309,6 @@ const UserAppointment = () => {
             </form>
           </Form>
         </div>
-        {/* Form Buttons */}
         <div className="appointment-container__footer">
           <Button
             type="button"
