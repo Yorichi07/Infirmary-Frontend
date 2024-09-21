@@ -268,7 +268,7 @@ const PatientList = () => {
                                 />
                               </div>
                               <div className="form-group">
-                                <label htmlFor="reason">Reason</label>
+                                <label htmlFor="reason">Reason for preference</label>
                                 <input
                                   id="reason"
                                   name="reason"

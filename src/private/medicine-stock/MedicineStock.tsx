@@ -22,7 +22,7 @@ interface Stock {
   composition: string;
   quantity: number | string;
   medicineType: string;
-  expirationDate: string; // Expected in YYYY-MM-DD format
+  expirationDate: string; 
   company: string;
 }
 

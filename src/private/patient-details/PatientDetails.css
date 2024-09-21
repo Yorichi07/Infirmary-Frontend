@@ -48,11 +48,9 @@
 .medicine-table td {
   border: 1px solid #ddd;
   padding: 8px;
-  text-align: left;
 }
 
 .small-input {
-  width: 80px;
   border-radius: 8px;
   border: 1px solid #ddd;
   padding: 8px;

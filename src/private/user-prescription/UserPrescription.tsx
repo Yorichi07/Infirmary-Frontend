@@ -52,7 +52,7 @@ const UserPrescription = () => {
 
   return (
     <div className="h-[83%] flex justify-center">
-      <img src="/public/prescription.jpg" alt="" />
+      <img src="/public/prescription.jpg" className="w-[60%]"/>
       <div className="w-[50%] overflow-y-scroll p-5">
         <Table className="border">
           <TableCaption>A list of your recent reports</TableCaption>

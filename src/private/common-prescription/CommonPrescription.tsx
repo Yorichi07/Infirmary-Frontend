@@ -1,11 +1,4 @@
 import { useEffect, useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import axios from "axios";
 
 const CommonPrescription = () => {
@@ -15,22 +8,25 @@ const CommonPrescription = () => {
     age: number;
     course: string;
     sex: string;
+    meds: Array<{
+      name: string;
+      dosage: string;
+      duration: string;
+      suggestion: string;
+    }>;
   }>({
     name: "",
     id: "",
     age: 0,
     course: "",
     sex: "",
+    meds: [],
   });
 
   const [diagnosis, setDiagnosis] = useState("");
   const [dietaryRemarks, setDietaryRemarks] = useState("");
   const [testNeeded, setTestNeeded] = useState("");
   const [doctorName, setDoctorName] = useState("");
-  const [selectedMedicine, setSelectedMedicine] = useState<string[]>([]);
-  const [rows, setRows] = useState([0]);
-
-  const [stock, setStock] = useState<any[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -54,8 +50,16 @@ const CommonPrescription = () => {
           });
 
           const data = response.data.prescription;
-
           const patientData = data.patient;
+
+          // Map meds to the required fields
+          const medsData = data.meds.map((med: any) => ({
+            name: med.medicine.medicineName,
+            dosage: med.dosage,
+            duration: med.duration,
+            suggestion: med.suggestion,
+          }));
+
           setNdata({
             name: patientData.name,
             id: patientData.sapId || patientData.phoneNumber,
@@ -64,19 +68,13 @@ const CommonPrescription = () => {
               new Date(patientData.dateOfBirth).getFullYear(),
             course: patientData.program,
             sex: patientData.gender,
+            meds: medsData, // Set mapped meds data here
           });
 
           setDoctorName(data.doctor.name);
-
           setDiagnosis(data.diagnosis);
           setDietaryRemarks(data.dietaryRemarks);
           setTestNeeded(data.testNeeded);
-
-          setStock(data.medicine.map((med: any) => med.medicine));
-          setRows(new Array(data.medicine.length).fill(0));
-          setSelectedMedicine(
-            data.medicine.map((med: any) => med.medicine.medicineName)
-          );
         } catch (error) {
           console.error("Error fetching prescription data:", error);
         }
@@ -85,12 +83,6 @@ const CommonPrescription = () => {
 
     fetchData();
   }, []);
-
-  const handleMedicineSelect = (index: number, value: string) => {
-    const newSelection = [...selectedMedicine];
-    newSelection[index] = value;
-    setSelectedMedicine(newSelection);
-  };
 
   return (
     <div className="p-5 flex flex-col justify-center items-center h-[83%]">
@@ -171,65 +163,48 @@ const CommonPrescription = () => {
         </div>
 
         <div className="mt-5">
-          <h2 className="mb-[10px]">Medicine</h2>
+          <label>Medicine:</label>
           <table className="medicine-table">
             <thead>
               <tr>
                 <th>S. No.</th>
                 <th>Medicine</th>
                 <th>Dosage (per day)</th>
-                <th>Duration (Days)</th>
+                <th>Duration (in Days)</th>
                 <th>Suggestions</th>
               </tr>
             </thead>
             <tbody>
-              {rows.map((_, index) => (
-                <tr key={index}>
+              {ndata.meds.map((med, index) => (
+                <tr key={index} className="text-center">
                   <td>{index + 1}</td>
-                  <td>
-                    <Select
-                      onValueChange={(value) =>
-                        handleMedicineSelect(index, value)
-                      }
-                      value={selectedMedicine[index]}
-                    >
-                      <SelectTrigger className="w-[180px]">
-                        <SelectValue>{selectedMedicine[index]}</SelectValue>
-                      </SelectTrigger>
-                      <SelectContent>
-                        {stock.map((medicine: any) => (
-                          <SelectItem
-                            key={medicine.batchNumber}
-                            value={medicine.medicineName}
-                          >
-                            {medicine.medicineName} (Quantity:{" "}
-                            {medicine.quantity})
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
+                  <td className="w-[25%]">
+                    <input
+                      className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                      value={med.name}
+                      readOnly
+                    />
                   </td>
-                  <td>
+                  <td className="w-[15%]">
                     <input
                       type="number"
-                      value={stock[index]?.dosage}
-                      className="small-input"
+                      className="bg-[#d5d4df] rounded-lg p-2 text-center"
+                      value={med.dosage}
+                      readOnly
+                    />
+                  </td>
+                  <td className="w-[15%]">
+                    <input
+                      type="number"
+                      className="bg-[#d5d4df] rounded-lg p-2 text-center"
+                      value={med.duration}
                       readOnly
                     />
                   </td>
                   <td>
-                    <input
-                      type="number"
-                      value={stock[index]?.duration}
-                      className="small-input"
-                      readOnly
-                    />
-                  </td>
-                  <td>
-                    <input
-                      type="text"
-                      value={stock[index]?.suggestion}
-                      className="suggestions-input"
+                    <textarea
+                      className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                      value={med.suggestion}
                       readOnly
                     />
                   </td>

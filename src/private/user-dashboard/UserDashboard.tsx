@@ -174,7 +174,7 @@ const UserDashboard = () => {
               className="text-white font-semibold text-lg text-center flex-1"
               onClick={() => navigateTo("/emergency")}
             >
-              Emergency
+              Emergency Details
             </button>
           </div>
         </div>

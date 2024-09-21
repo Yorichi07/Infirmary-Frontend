@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import "./PatientDetails.css";
 import {
   Popover,
@@ -37,6 +37,7 @@ const PatientDetails = () => {
     reason: string;
     email: string;
     imageUrl: string;
+    docName: string;
   }>();
   const [stock, setStock] = useState<
     Array<{ batchNumber: number; medicineName: string; quantity: number }>
@@ -44,6 +45,8 @@ const PatientDetails = () => {
   const [selectedMedicine, setSelectedMedicine] = useState<
     Record<number, string>
   >({});
+  const [searchQuery, setSearchQuery] = useState<string>("");
+  const searchInputRef = useRef<HTMLInputElement | null>(null);
 
   const age = (dob: string) => {
     const diff_ms = Date.now() - new Date(dob).getTime();
@@ -129,6 +132,7 @@ const PatientDetails = () => {
           reason: response.reason,
           email: response.patient.email,
           imageUrl: response.patient.imageUrl,
+          docName: response.docName,
         };
         setNdata(formatData);
       } catch (err) {
@@ -171,6 +175,10 @@ const PatientDetails = () => {
       [index]: medicine.substring(0, indx),
     });
     setMedLst({ ...medLst, [index]: medicine.substring(indx + 1) });
+
+    if (searchInputRef.current) {
+      searchInputRef.current.focus(); // Ensure the input keeps focus after selection
+    }
   };
 
   return (
@@ -320,13 +328,13 @@ const PatientDetails = () => {
               ></textarea>
             </div>
             <div className="mt-5">
-              <h2 className="mb-[10px]">Medicine</h2>
+              <label className="mb-[10px]">Medicine:</label>
               <table className="medicine-table">
                 <thead>
                   <tr>
                     <th>S. No.</th>
                     <th>Medicine</th>
-                    <th>Dosage (per day)</th>
+                    <th>Dosage (/day)</th>
                     <th>Duration (Days)</th>
                     <th>Suggestions</th>
                   </tr>
@@ -334,43 +342,63 @@ const PatientDetails = () => {
                 <tbody>
                   {rows.map((_, index) => (
                     <tr key={index}>
-                      <td>{index + 1}</td>
-                      <td>
+                      <td className="text-center">{index + 1}</td>
+                      <td className="w-[30%]">
                         <Select
                           onValueChange={(value) =>
                             handleMedicineSelect(index, value)
                           }
                         >
-                          <SelectTrigger className="w-[180px]">
+                          <SelectTrigger className="w-[100%]">
                             <SelectValue placeholder="Select Medicine">
                               {selectedMedicine[index] || "Select Medicine"}
                             </SelectValue>
                           </SelectTrigger>
                           <SelectContent>
-                            {stock.map((medicine) => (
-                              <SelectItem
-                                key={medicine.batchNumber}
-                                value={`${medicine.medicineName}:${medicine.batchNumber}`}
-                              >
-                                {medicine.medicineName} (Quantity:{" "}
-                                {medicine.quantity})
-                              </SelectItem>
-                            ))}
+                            <div className="p-2">
+                              {/* Use ref for search input */}
+                              <input
+                                ref={searchInputRef} // Assign the ref to the input
+                                type="text"
+                                placeholder="Search Medicine"
+                                className="w-full px-2 py-1 border rounded"
+                                onChange={(e) => setSearchQuery(e.target.value)}
+                              />
+                            </div>
+                            {stock
+                              .filter((medicine) =>
+                                medicine.medicineName
+                                  .toLowerCase()
+                                  .includes(searchQuery.toLowerCase())
+                              )
+                              .map((medicine) => (
+                                <SelectItem
+                                  key={medicine.batchNumber}
+                                  value={`${medicine.medicineName}:${medicine.batchNumber}`}
+                                >
+                                  {medicine.medicineName} (Quantity:{" "}
+                                  {medicine.quantity})
+                                </SelectItem>
+                              ))}
                           </SelectContent>
                         </Select>
                       </td>
-                      <td>
-                        <input type="number" className="small-input dosage" />
-                      </td>
-                      <td>
+                      <td className="w-[15%]">
                         <input
                           type="number"
-                          className="small-input duration"
+                          min={1}
+                          className="small-input dosage w-full"
+                        />
+                      </td>
+                      <td className="w-[16%]">
+                        <input
+                          type="number"
+                          className="small-input w-full"
                           min={1}
                         />
                       </td>
                       <td>
-                        <input type="text" className="long-input suggestion" />
+                        <textarea className="long-input suggestion" />
                       </td>
                     </tr>
                   ))}
@@ -402,7 +430,7 @@ const PatientDetails = () => {
               ></textarea>
             </div>
             <div className="flex flex-col items-end mt-10">
-              <span className="">Dr. Lakshit Butola</span>
+              <span className="">{ndata?.docName}</span>
               <div className="signature-text">Doctor Name</div>
             </div>
           </div>
