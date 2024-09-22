@@ -1,14 +1,14 @@
 import Navbar from "@/components/Navbar";
+import Shared from "@/Shared";
 import React from "react";
-import { any } from "zod";
 
 const ReportsLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
-    title: any,
-    titleLogo: any,
-    additionalLogo: any,
-    menu: any,
-    role:any
+    title: "Reports",
+    titleLogo: Shared.Report,
+    additionalLogo: Shared.ArrowLeft,
+    menu: false,
+    role: localStorage.getItem("roles"),
   };
   return (
     <div className="h-screen">
