@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
-  patient: "http://localhost:8081/api/auth/patient/signin",
-  doctor: "http://localhost:8081/api/auth/doc/signin",
-  assistant_doctor: "http://localhost:8081/api/auth/ad/signin",
+  patient: "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
+  doctor: "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
+  assistant_doctor: "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {

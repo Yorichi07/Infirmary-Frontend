@@ -35,7 +35,7 @@ const MedicineStock = () => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8081/api/stock/", {
+        const response = await axios.get("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -95,7 +95,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          "http://localhost:8081/api/stock/addStock",
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/addStock",
           formattedNewStock,
           {
             headers: {

@@ -29,7 +29,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/doctor/total-patient-count",
+        "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/doctor/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -59,7 +59,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=true",
+        "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/doctor/setStatus?isDoctorCheckIn=true",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -89,7 +89,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=false",
+        "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/doctor/setStatus?isDoctorCheckIn=false",
         {
           headers: {
             Authorization: "Bearer " + token,

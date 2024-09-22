@@ -33,7 +33,7 @@ const UserDashboard = () => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:8081/api/patient/", {
+        const res = await axios.get("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/", {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -55,7 +55,7 @@ const UserDashboard = () => {
       }
       try {
         const response = await axios.get(
-          "http://localhost:8081/api/patient/getStatus",
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/getStatus",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -92,8 +92,8 @@ const UserDashboard = () => {
             <img
               src={
                 userDetails.imageUrl != null
-                  ? `http://localhost:8081/${userDetails.imageUrl}`
-                  : "http://localhost:8081/Profile/Profile.jpg"
+                  ? `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/${userDetails.imageUrl}`
+                  : "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/Profile/Profile.jpg"
               }
               className="w-63 h-64 object-cover border-2 border-black rounded-md"
             />
