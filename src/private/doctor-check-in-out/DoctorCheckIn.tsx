@@ -57,7 +57,7 @@ const DoctorCheckIn = () => {
         navigate("/");
         return;
       }
-      const response = await fetch(
+      await fetch(
         `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
@@ -78,7 +78,7 @@ const DoctorCheckIn = () => {
         navigate("/");
         return;
       }
-      const response = await fetch(
+      await fetch(
         `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {

@@ -64,7 +64,7 @@ const UserPrescription = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {reports.map((report, index) => (
+            {reports.map((report) => (
               <TableRow key={report.reportId}>
                 {/* Report Id */}
                 <TableCell className="font-medium text-center">{report.reportId}</TableCell>

@@ -77,7 +77,7 @@ const MedicineStock = () => {
 
   const formatExpirationDate = (dateString: string) => {
     // Assuming the input date format is MM/DD/YY
-    const [month, day, year] = dateString.split("/");
+    const month= dateString.split("/");
     return month // Convert to YYYY-MM-DD
   };
 
@@ -105,7 +105,9 @@ const MedicineStock = () => {
         );
 
         // Clear the new stock after saving and add it to the stocks list
-        setStocks([...stocks, formattedNewStock]);
+        const stckList:any = stocks;
+        stckList.push(formattedNewStock);
+        setStocks(stckList);
         setNewStock(null);
       } catch (error) {
         console.error("Error adding new stock:", error);

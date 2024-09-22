@@ -71,9 +71,9 @@ const PatientDetails = () => {
     for (const meds in medLst) {
       medAry.push({
         medicine: medLst[parseInt(meds)],
-        dosage: dosg[parseInt(meds)].value,
-        duration: dur[parseInt(meds)].value,
-        suggestion: sugs[parseInt(meds)].value,
+        dosage: dosg[parseInt(meds)].valueOf,
+        duration: dur[parseInt(meds)].valueOf,
+        suggestion: sugs[parseInt(meds)].valueOf,
       });
     }
     const req: {

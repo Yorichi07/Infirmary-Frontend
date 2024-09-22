@@ -1,12 +1,14 @@
 import Navbar from "@/components/Navbar";
 import React from "react";
+import { any } from "zod";
 
 const ReportsLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
-    title: "Reports",
-    titleLogo: "/report.png",
-    additionalLogo: "/return.png",
-    menu: false,
+    title: any,
+    titleLogo: any,
+    additionalLogo: any,
+    menu: any,
+    role:any
   };
   return (
     <div className="h-screen">
