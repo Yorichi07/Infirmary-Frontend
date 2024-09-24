@@ -42,12 +42,16 @@ const DoctorDashboard = () => {
         setPatientsLeft(data.Patients_left);
         setInQueue(data.In_Queue);
       } else {
-        console.error("Failed to fetch patient data.");
-        alert("Failed to fetch patient data");
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to fetch patient data.");
+        console.error("Failed to fetch patient data:", errorData);
       }
-    } catch (error) {
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message ||
+          "Failed to fetch patient data due to a network error."
+      );
       console.error("Error fetching patient data:", error);
-      alert("Failed to fetch patient data");
     }
   };
 
@@ -69,10 +73,14 @@ const DoctorDashboard = () => {
       if (response.ok) {
         setMessage("Doctor checked in successfully.");
       } else {
-        setMessage("Failed to check in.");
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to check in.");
       }
-    } catch (error) {
-      setMessage("Error during check-in.");
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message ||
+          "Error during check-in. Please try again."
+      );
       console.error("Error during check-in:", error);
     }
 
@@ -99,10 +107,14 @@ const DoctorDashboard = () => {
       if (response.ok) {
         setMessage("Doctor checked out successfully.");
       } else {
-        setMessage("Failed to check out.");
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to check out.");
       }
-    } catch (error) {
-      setMessage("Error during check-out.");
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message ||
+          "Error during check-out. Please try again."
+      );
       console.error("Error during check-out:", error);
     }
 
@@ -200,7 +212,7 @@ const DoctorDashboard = () => {
                 Medical Stock
               </p>
             </button>
-            <button 
+            <button
               className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/ambulance")}
             >

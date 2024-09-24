@@ -29,7 +29,7 @@ const Navbar = ({
 
   return (
     <div className="bg-white shadow-md p-4 pr-8 flex items-center justify-between h-[9%] border-b border border-[gray]">
-      <img src="/upes-logo.png" alt="UPES Logo" className="w-14" />
+      <img src="/upes-logo2.jpg" alt="UPES Logo" className="w-14" />
       <div className="capitalize font-semibold text-2xl flex items-center gap-2">
         {props.titleLogo &&
           (typeof props.titleLogo === "string" ? (

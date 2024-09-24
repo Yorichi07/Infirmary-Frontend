@@ -73,10 +73,13 @@ const UserAppointment = () => {
           name: doctor.name,
         }));
         setDoctors(doctorList);
-        console.log(doctorList);
       } catch (error) {
-        console.error("Error fetching doctors: ", error);
-        alert("Could not fetch available doctors");
+        if (axios.isAxiosError(error) && error.response) {
+          alert(error.response.data.details);
+        } else {
+          console.error("Error fetching doctors: ", error);
+          alert("Could not fetch available doctors");
+        }
       }
     };
     fetchDoctors();
@@ -96,9 +99,13 @@ const UserAppointment = () => {
       setLastAppointmentDate(response.data || null);
       form.setValue("lastAppointmentDate", response.data);
     } catch (error) {
-      if (axios.isAxiosError(error) && error.response?.status === 404) {
-        setLastAppointmentDate("No Last Appointment Date");
-        form.setValue("lastAppointmentDate", "No Last Appointment Date");
+      if (axios.isAxiosError(error) && error.response) {
+        if (error.response.status === 404) {
+          setLastAppointmentDate("No Last Appointment Date");
+          form.setValue("lastAppointmentDate", "No Last Appointment Date");
+        } else {
+          alert(error.response.data.details);
+        }
       } else {
         console.error("Error fetching last appointment date:", error);
         alert("Could'nt get last appointment date");
@@ -140,8 +147,8 @@ const UserAppointment = () => {
           alert("Failed to submit appointment");
         }
       } catch (error) {
-        if (axios.isAxiosError(error) && error.response?.status === 400) {
-          alert("Appointment already in queue");
+        if (axios.isAxiosError(error) && error.response) {
+          alert(error.response.data.details);
         } else {
           console.error("Error submitting appointment:", error);
           alert("Failed to submit appointment");

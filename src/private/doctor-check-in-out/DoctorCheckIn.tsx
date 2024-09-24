@@ -8,7 +8,7 @@ const DoctorCheckIn = () => {
   const [time, setTime] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [doctors, setDoctors] = useState<
-    Array<{id:number,name: string; status: string, email: string }>
+    Array<{ id: number; name: string; status: string; email: string }>
   >([]);
 
   useEffect(() => {
@@ -32,7 +32,8 @@ const DoctorCheckIn = () => {
           email: doctor.doctorEmail,
         }));
         setDoctors(formattedDoctors);
-      } catch (error) {
+      } catch (error: any) {
+        alert(error.response?.data?.message || "Error fetching doctors.");
         console.error("Error fetching doctors:", error);
       }
     };
@@ -50,14 +51,14 @@ const DoctorCheckIn = () => {
     };
   }, []);
 
-  const handleCheckIn = async (event:any) => {
+  const handleCheckIn = async (event: any) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         navigate("/");
         return;
       }
-      await fetch(
+      const response = await fetch(
         `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
@@ -65,20 +66,29 @@ const DoctorCheckIn = () => {
           },
         }
       );
-      location.reload();
-    } catch (error) {
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to check in.");
+      } else {
+        location.reload();
+      }
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message ||
+          "Error during check-in. Please try again."
+      );
       console.error("Error during check-in:", error);
     }
   };
 
-  const handleCheckOut = async (event:any) => {
+  const handleCheckOut = async (event: any) => {
     try {
       const token = localStorage.getItem("token");
       if (!token) {
         navigate("/");
         return;
       }
-      await fetch(
+      const response = await fetch(
         `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {
@@ -86,8 +96,17 @@ const DoctorCheckIn = () => {
           },
         }
       );
-      location.reload();
-    } catch (error) {
+      if (!response.ok) {
+        const errorData = await response.json();
+        alert(errorData.message || "Failed to check out.");
+      } else {
+        location.reload();
+      }
+    } catch (error: any) {
+      alert(
+        error.response?.data?.message ||
+          "Error during check-out. Please try again."
+      );
       console.error("Error during check-out:", error);
     }
   };
@@ -128,22 +147,26 @@ const DoctorCheckIn = () => {
                 </p>
                 <div className="flex w-full justify-between">
                   <button
-                  data-key={`${doctor.id}`}
+                    data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${
                       doctor.status !== "checked-in"
                         ? "bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
                         : "bg-[#8F8F8F]"
-                    } rounded-md text-white`} onClick={(event:any) => {handleCheckIn(event)}}
+                    } rounded-md text-white`}
+                    onClick={(event: any) => {
+                      handleCheckIn(event);
+                    }}
                   >
                     Check-In
                   </button>
-                  <button 
-                  data-key={`${doctor.id}`}
+                  <button
+                    data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${
                       doctor.status !== "checked-out"
                         ? "bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
                         : "bg-[#8F8F8F]"
-                    } rounded-md text-white`} onClick={(event:any)=>handleCheckOut(event)}
+                    } rounded-md text-white`}
+                    onClick={(event: any) => handleCheckOut(event)}
                   >
                     Check-Out
                   </button>

@@ -44,9 +44,13 @@ const AssistantDoctorDashboard = () => {
         console.error("Failed to fetch patient data.");
         alert("Failed to fetch patient data");
       }
-    } catch (error) {
+    } catch (error: any) {
       console.error("Error fetching patient data:", error);
-      alert("Failed to fetch patient data");
+      if (error.response) {
+        alert(error.response.data.message);
+      } else {
+        alert("Failed to fetch patient data due to a network error.");
+      }
     }
   };
 

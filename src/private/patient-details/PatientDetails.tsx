@@ -50,9 +50,7 @@ const PatientDetails = () => {
 
   const age = (dob: string) => {
     const diff_ms = Date.now() - new Date(dob).getTime();
-
     const age_dt = new Date(diff_ms);
-
     return Math.abs(age_dt.getUTCFullYear() - 1970);
   };
 
@@ -98,10 +96,14 @@ const PatientDetails = () => {
           },
         }
       );
-
       window.alert(resp.data);
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.details) {
+        alert(err.response.data.details);
+      } else {
+        alert("An error occurred. Please try again.");
+      }
+      console.error(err);
     }
   };
 
@@ -135,11 +137,15 @@ const PatientDetails = () => {
           docName: response.docName,
         };
         setNdata(formatData);
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        if (err.response && err.response.data && err.response.data.details) {
+          alert(err.response.data.details);
+        } else {
+          alert("An error occurred while fetching patient data.");
+        }
+        console.error(err);
       }
     };
-    fetchData();
 
     const fetchMed = async () => {
       try {
@@ -151,10 +157,17 @@ const PatientDetails = () => {
 
         const response = resp.data;
         setStock(response);
-      } catch (err) {
-        console.log(err);
+      } catch (err: any) {
+        if (err.response && err.response.data && err.response.data.details) {
+          alert(err.response.data.details);
+        } else {
+          alert("An error occurred while fetching stock data.");
+        }
+        console.error(err);
       }
     };
+
+    fetchData();
     fetchMed();
   }, []);
 
@@ -177,7 +190,7 @@ const PatientDetails = () => {
     setMedLst({ ...medLst, [index]: medicine.substring(indx + 1) });
 
     if (searchInputRef.current) {
-      searchInputRef.current.focus(); // Ensure the input keeps focus after selection
+      searchInputRef.current.focus();
     }
   };
 
@@ -356,9 +369,8 @@ const PatientDetails = () => {
                           </SelectTrigger>
                           <SelectContent>
                             <div className="p-2">
-                              {/* Use ref for search input */}
                               <input
-                                ref={searchInputRef} // Assign the ref to the input
+                                ref={searchInputRef}
                                 type="text"
                                 placeholder="Search Medicine"
                                 className="w-full px-2 py-1 border rounded"

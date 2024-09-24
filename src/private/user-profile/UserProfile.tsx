@@ -48,9 +48,9 @@ const formSchema = z.object({
     ),
   gender: z.string(),
   bloodGroup: z.string(),
-  medicalHistory: z.string().optional().nullable(),
-  familyMedicalHistory: z.string().optional().nullable(),
-  allergies: z.string().optional().nullable(),
+  medicalHistory: z.string(),
+  familyMedicalHistory: z.string(),
+  allergies: z.string(),
   currentAddress: z.string(),
 });
 
@@ -69,13 +69,13 @@ const UserProfile = () => {
       weight: "",
       gender: "",
       bloodGroup: "",
-      medicalHistory: "",
-      familyMedicalHistory: "",
-      allergies: "",
-      currentAddress: "",
+      medicalHistory: undefined,
+      familyMedicalHistory: undefined,
+      allergies: undefined,
+      currentAddress: undefined,
     },
   });
-  const [img,setImg] = useState<string>("");
+  const [img, setImg] = useState<string>("");
 
   useEffect(() => {
     const getUserDetails = async () => {
@@ -148,10 +148,11 @@ const UserProfile = () => {
             setImg(dataBackup.imageUrl);
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
+            alert(error.response.data.details);
           }
         } else {
-          console.log("Error:", error);
-          alert("Failed to get user information");
+          console.log(error);
+          alert(error.response.data.details);
         }
       }
     };
@@ -186,8 +187,9 @@ const UserProfile = () => {
         console.log("Form Data Submitted: ", response.data);
         alert("Profile updated successfully");
         navigate("/user-dashboard");
-      } catch (error) {
+      } catch (error: any) {
         console.error("Error submitting form:", error);
+        alert(error.response.data.details);
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
@@ -210,7 +212,7 @@ const UserProfile = () => {
             <div className="image-container">
               <Image
                 src={
-                   img != null
+                  img != null
                     ? `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/${img}`
                     : "/default-user.jpg"
                 }

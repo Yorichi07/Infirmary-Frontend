@@ -61,6 +61,7 @@
     .patient-details {
       width: 85%;
       padding: 0 1rem;
+      overflow-y: scroll;
 
       &__top {
         display: grid;

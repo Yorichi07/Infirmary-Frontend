@@ -61,7 +61,7 @@ const SignIn = () => {
       if (error.response && error.response.status === 401) {
         setErrorMessage("Incorrect email or password. Please try again.");
       } else {
-        setErrorMessage("An error occurred. Please try again later.");
+        setErrorMessage(error.response.data.details);
       }
     }
   };

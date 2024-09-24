@@ -139,15 +139,12 @@ const UserRegister = () => {
         alert("Registration successful");
         navigate("/");
       } catch (error) {
-        console.error("Error submitting form:", error);
+        console.error("Error submitting form: ",error);
+        alert(`There is some issue please try again later. Error: ${error}`);
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
-      alert("Form not valid. Check details and try again.");
-
-      Object.entries(form.formState.errors).forEach(([field, error]) => {
-        console.error(`Error in ${field}: ${error.message}`);
-      });
+      alert("Please fill in required details before submitting!");
     }
   };
 

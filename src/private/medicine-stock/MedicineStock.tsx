@@ -9,12 +9,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-} from "@/components/ui/select";
+import Shared from "@/Shared";
 
 interface Stock {
   batchNumber: number | string;
@@ -22,7 +17,7 @@ interface Stock {
   composition: string;
   quantity: number | string;
   medicineType: string;
-  expirationDate: string; 
+  expirationDate: string;
   company: string;
 }
 
@@ -30,20 +25,29 @@ const MedicineStock = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
   const [newStock, setNewStock] = useState<Stock | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [selectedStocks, setSelectedStocks] = useState<Set<number | string>>(
+    new Set()
+  );
 
   useEffect(() => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setStocks(response.data);
-        setLoading(false);
       } catch (error) {
         console.error("Error fetching stock data:", error);
+        setError("Failed to fetch stock data. Please try again.");
+      } finally {
         setLoading(false);
       }
     };
@@ -76,9 +80,8 @@ const MedicineStock = () => {
   };
 
   const formatExpirationDate = (dateString: string) => {
-    // Assuming the input date format is MM/DD/YY
-    const month= dateString.split("/");
-    return month // Convert to YYYY-MM-DD
+    const month = dateString.split("/");
+    return month.join("-");
   };
 
   const handleSave = async () => {
@@ -86,7 +89,6 @@ const MedicineStock = () => {
       try {
         const token = localStorage.getItem("token");
 
-        // Format expirationDate to YYYY-MM-DD
         const formattedNewStock = {
           ...newStock,
           expirationDate: formatExpirationDate(
@@ -104,33 +106,84 @@ const MedicineStock = () => {
           }
         );
 
-        // Clear the new stock after saving and add it to the stocks list
-        const stckList:any = stocks;
-        stckList.push(formattedNewStock);
-        setStocks(stckList);
+        setStocks((prevStocks) => [...prevStocks, formattedNewStock]);
         setNewStock(null);
       } catch (error) {
         console.error("Error adding new stock:", error);
+        setError("Failed to add new stock. Please try again.");
       }
     }
   };
 
+  const handleDelete = async () => {
+    const token = localStorage.getItem("token");
+
+    for (const batchNumber of selectedStocks) {
+      try {
+        await axios.delete(
+          `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/doc/${batchNumber}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        // Update state after deletion
+        setStocks((prevStocks) =>
+          prevStocks.filter((stock) => stock.batchNumber !== batchNumber)
+        );
+      } catch (error) {
+        console.error("Error deleting stock:", error);
+        setError(`Failed to delete stock with batch number ${batchNumber}.`);
+      }
+    }
+
+    // Clear selected stocks
+    setSelectedStocks(new Set());
+  };
+
+  const filteredStocks = stocks.filter(
+    (stock) =>
+      stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.composition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      stock.company.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  const handleSelectStock = (batchNumber: number | string) => {
+    const updatedSelection = new Set(selectedStocks);
+    if (updatedSelection.has(batchNumber)) {
+      updatedSelection.delete(batchNumber);
+    } else {
+      updatedSelection.add(batchNumber);
+    }
+    setSelectedStocks(updatedSelection);
+  };
+
   if (loading) {
-    return <div>Loading...</div>; // Show a loading state while the data is being fetched
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col">
+      {error && <div className="text-red-500 font-medium">{error}</div>}
       <div className="flex space-x-2 items-center">
-        <img src="/search.png" alt="" className="w-6" />
-        <Input className="bg-white" placeholder="Search"></Input>
+        {Shared.Search}
+        <Input
+          className="bg-white"
+          placeholder="Search Medicine"
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+        />
       </div>
-
       <div className="h-full overflow-y-scroll">
         {stocks.length > 0 || newStock ? (
           <Table className="bg-white rounded-md">
             <TableHeader>
               <TableRow>
+                <TableHead className="w-[100px] border text-black font-bold text-center">
+                  Select
+                </TableHead>
                 <TableHead className="w-[100px] border text-black font-bold text-center">
                   Batch no.
                 </TableHead>
@@ -141,6 +194,15 @@ const MedicineStock = () => {
                   Composition
                 </TableHead>
                 <TableHead className="border text-black font-bold text-center">
+                  Quantity
+                </TableHead>
+                <TableHead className="border text-black font-bold text-center">
+                  Type
+                </TableHead>
+                <TableHead className="border text-black font-bold text-center">
+                  Expiration Date
+                </TableHead>
+                {/* <TableHead className="border text-black font-bold text-center">
                   <div className="flex items-center justify-center space-x-2">
                     <p>Quantity</p>
                     <Select>
@@ -155,8 +217,9 @@ const MedicineStock = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                </TableHead>
-                <TableHead className="border text-black font-bold text-center h-20">
+                </TableHead> */}
+
+                {/* <TableHead className="border text-black font-bold text-center h-20">
                   <div className="flex items-center justify-center space-x-2">
                     <p>Type</p>
                     <Select>
@@ -170,8 +233,8 @@ const MedicineStock = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                </TableHead>
-                <TableHead className="border text-black font-bold text-center">
+                </TableHead> */}
+                {/* <TableHead className="border text-black font-bold text-center">
                   <div className="flex space-x-2 items-center justify-center">
                     <p>Expiration Date</p>
                     <Select>
@@ -190,15 +253,22 @@ const MedicineStock = () => {
                       </SelectContent>
                     </Select>
                   </div>
-                </TableHead>
+                </TableHead> */}
                 <TableHead className="border text-black font-bold text-center">
                   Company
                 </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
-              {stocks.map((stock) => (
+              {filteredStocks.map((stock) => (
                 <TableRow key={stock.batchNumber} className="text-center">
+                  <TableCell className="border">
+                    <input
+                      type="checkbox"
+                      checked={selectedStocks.has(stock.batchNumber)}
+                      onChange={() => handleSelectStock(stock.batchNumber)}
+                    />
+                  </TableCell>
                   <TableCell className="border">{stock.batchNumber}</TableCell>
                   <TableCell className="border">{stock.medicineName}</TableCell>
                   <TableCell className="border">{stock.composition}</TableCell>
@@ -213,6 +283,9 @@ const MedicineStock = () => {
 
               {newStock && (
                 <TableRow className="text-center">
+                  <TableCell className="border">
+                    <input type="checkbox" disabled />
+                  </TableCell>
                   <TableCell className="border">
                     <Input
                       value={newStock.batchNumber}
@@ -250,7 +323,7 @@ const MedicineStock = () => {
                   </TableCell>
                   <TableCell className="border">
                     <Input
-                      type="date" // Change type to date for better input handling
+                      type="date"
                       value={newStock.expirationDate}
                       onChange={(e) => handleInputChange(e, "expirationDate")}
                       placeholder="Expiration date"
@@ -273,7 +346,6 @@ const MedicineStock = () => {
           </div>
         )}
       </div>
-
       <div className="flex items-center justify-between">
         <div className="flex items-center space-x-8">
           <button
@@ -281,14 +353,21 @@ const MedicineStock = () => {
             className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md"
           >
             Add
-            <img src="/add.png" alt="" className="w-6" />
+            {Shared.SquarePlus}
+          </button>
+          <button
+            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md"
+            onClick={handleDelete}
+          >
+            Delete
+            {Shared.TrashCan}
           </button>
           <button
             onClick={handleSave}
             className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md"
           >
             Save
-            <img src="/save.png" alt="" className="w-6" />
+            {Shared.Save}
           </button>
         </div>
         {/* <div className="flex items-center space-x-8">

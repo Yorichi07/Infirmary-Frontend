@@ -6,8 +6,6 @@ import UserAppointment from "@/private/user-appointment/UserAppointment";
 import SignIn from "@/public/SignIn";
 import MedicineStock from "@/private/medicine-stock/MedicineStock";
 import MedicineStockLayout from "@/private/medicine-stock/MedicineStockLayout";
-import Reports from "@/private/reports/Reports";
-import ReportsLayout from "@/private/reports/ReportsLayout";
 import { createBrowserRouter } from "react-router-dom";
 import UserProfileLayout from "@/private/user-profile/UserProfileLayout";
 import UserProfile from "@/private/user-profile/UserProfile";
@@ -109,14 +107,6 @@ const router = createBrowserRouter([
       <PatientListLayout>
         <PatientList />
       </PatientListLayout>
-    ),
-  },
-  {
-    path: "/reports",
-    element: (
-      <ReportsLayout>
-        <Reports />
-      </ReportsLayout>
     ),
   },
   {

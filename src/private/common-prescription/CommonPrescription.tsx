@@ -52,7 +52,6 @@ const CommonPrescription = () => {
           const data = response.data.prescription;
           const patientData = data.patient;
 
-          // Map meds to the required fields
           const medsData = data.meds.map((med: any) => ({
             name: med.medicine.medicineName,
             dosage: med.dosage,
@@ -68,14 +67,17 @@ const CommonPrescription = () => {
               new Date(patientData.dateOfBirth).getFullYear(),
             course: patientData.program,
             sex: patientData.gender,
-            meds: medsData, // Set mapped meds data here
+            meds: medsData,
           });
 
           setDoctorName(data.doctor.name);
           setDiagnosis(data.diagnosis);
           setDietaryRemarks(data.dietaryRemarks);
           setTestNeeded(data.testNeeded);
-        } catch (error) {
+        } catch (error: any) {
+          alert(
+            error.response?.data?.message || "Error fetching prescription data."
+          );
           console.error("Error fetching prescription data:", error);
         }
       }
@@ -83,13 +85,12 @@ const CommonPrescription = () => {
 
     fetchData();
   }, []);
-
   return (
     <div className="p-5 flex flex-col justify-center items-center h-[83%]">
       <div className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll">
         <div className="flex items-center justify-between mb-[10px]">
           <div className="flex center">
-            <img src="/public/upes-logo.png" alt="Logo" className="w-[50px]" />
+            <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
           </div>
           <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
           <div className="text-[18px]">{new Date().toLocaleDateString()}</div>

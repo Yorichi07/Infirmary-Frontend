@@ -41,9 +41,17 @@ const UserDashboard = () => {
 
         const data = await res.data;
         setUserDetails(data);
-      } catch (e) {
-        console.log(e);
-        alert("Error fetching patient details, please try again later.");
+      } catch (error: any) {
+        console.log(error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.details
+        ) {
+          alert(error.response.data.details);
+        } else {
+          alert("Error fetching patient details, please try again later.");
+        }
       }
     };
 
@@ -70,9 +78,17 @@ const UserDashboard = () => {
             ? statusData.DoctorName
             : "Not Appointed",
         });
-      } catch (error) {
+      } catch (error: any) {
         console.log("Error fetching status: ", error);
-        alert("Couldn't fetch appointment details");
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.details
+        ) {
+          alert(error.response.data.details);
+        } else {
+          alert("Couldn't fetch appointment details, please try again later.");
+        }
       }
     };
 
@@ -93,7 +109,7 @@ const UserDashboard = () => {
               src={
                 userDetails.imageUrl != null
                   ? `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/${userDetails.imageUrl}`
-                  : "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/Profile/Profile.jpg"
+                  : "/default-user.jpg"
               }
               className="w-63 h-64 object-cover border-2 border-black rounded-md"
             />

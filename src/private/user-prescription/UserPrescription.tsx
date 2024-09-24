@@ -12,47 +12,61 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-
-
 const UserPrescription = () => {
   const navigate = useNavigate();
-  const [reports, setReports] = useState<Array<{reportId:string,date:string,downloadLink:string}>>([]);
+  const [reports, setReports] = useState<
+    Array<{ reportId: string; date: string; downloadLink: string }>
+  >([]);
 
-  useEffect(()=>{
+  useEffect(() => {
     const fetchData = async () => {
-      let apiUrl = "";
-      const role = localStorage.getItem("roles");
-      console.log(role)
-      if(role !== "user"){
-        const url = window.location.search
-        const val = url.substring(url.indexOf("?")+4)
-        apiUrl = `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/getAppointmentPat/${val}`
-        
-      }else{
-        apiUrl = "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/getAppointment"
-      }
+      try {
+        let apiUrl = "";
+        const role = localStorage.getItem("roles");
+        console.log(role);
 
-      const resp = await axios.get(apiUrl,{
-        headers:{
-          Authorization:`Bearer ${localStorage.getItem("token")}`
+        if (role !== "user") {
+          const url = window.location.search;
+          const val = url.substring(url.indexOf("?") + 4);
+          apiUrl = `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/getAppointmentPat/${val}`;
+        } else {
+          apiUrl = "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/getAppointment";
         }
-      })
-      const response = resp.data;
 
-      const formatData = response.map((rept:any)=>({
-        reportId:rept.appointmentId,
-        date:rept.date,
-        downloadLink:`http://localhost:5173/prescription?id=${rept.appointmentId}`
-      }));
+        const resp = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
 
-      setReports(formatData)
-    }
+        const response = resp.data;
+
+        const formatData = response.map((rept: any) => ({
+          reportId: rept.appointmentId,
+          date: rept.date,
+          downloadLink: `http://localhost:5173/prescription?id=${rept.appointmentId}`,
+        }));
+
+        setReports(formatData);
+      } catch (error: any) {
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.details
+        ) {
+          alert(error.response.data.details);
+        } else {
+          alert("An error occurred while fetching reports. Please try again.");
+        }
+      }
+    };
+
     fetchData();
-  },[]);
+  }, []);
 
   return (
     <div className="h-[83%] flex justify-center">
-      <img src="/public/prescription.jpg" className="w-[60%]"/>
+      <img src="/public/prescription.jpg" className="w-[60%]" />
       <div className="w-[50%] overflow-y-scroll p-5">
         <Table className="border">
           <TableCaption>A list of your recent reports</TableCaption>
@@ -67,14 +81,21 @@ const UserPrescription = () => {
             {reports.map((report) => (
               <TableRow key={report.reportId}>
                 {/* Report Id */}
-                <TableCell className="font-medium text-center">{report.reportId}</TableCell>
+                <TableCell className="font-medium text-center">
+                  {report.reportId}
+                </TableCell>
 
                 {/* Date */}
                 <TableCell className="text-center">{report.date}</TableCell>
 
                 {/* Download Report */}
                 <TableCell className="text-center">
-                  <a onClick={()=>navigate(`/prescription?id=${report.reportId}`)} download>
+                  <a
+                    onClick={() =>
+                      navigate(`/prescription?id=${report.reportId}`)
+                    }
+                    download
+                  >
                     {Shared.Download}
                   </a>
                 </TableCell>
