@@ -121,7 +121,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/doc/${batchNumber}`,
+          `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

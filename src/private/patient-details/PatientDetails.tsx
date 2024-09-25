@@ -69,9 +69,9 @@ const PatientDetails = () => {
     for (const meds in medLst) {
       medAry.push({
         medicine: medLst[parseInt(meds)],
-        dosage: dosg[parseInt(meds)].valueOf,
-        duration: dur[parseInt(meds)].valueOf,
-        suggestion: sugs[parseInt(meds)].valueOf,
+        dosage: (dosg[parseInt(meds)] as HTMLInputElement).value,
+        duration: (dur[parseInt(meds)] as HTMLInputElement).value,
+        suggestion: (sugs[parseInt(meds)] as HTMLInputElement).value,
       });
     }
     const req: {
@@ -97,6 +97,7 @@ const PatientDetails = () => {
         }
       );
       window.alert(resp.data);
+      navigate(-1);
     } catch (err: any) {
       if (err.response && err.response.data && err.response.data.details) {
         alert(err.response.data.details);
@@ -270,7 +271,7 @@ const PatientDetails = () => {
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex center">
                 <img
-                  src="/public/upes-logo.png"
+                  src="/upes-logo2.jpg"
                   alt="Logo"
                   className="w-[50px]"
                 />
@@ -405,7 +406,7 @@ const PatientDetails = () => {
                       <td className="w-[16%]">
                         <input
                           type="number"
-                          className="small-input w-full"
+                          className="small-input duration w-full"
                           min={1}
                         />
                       </td>

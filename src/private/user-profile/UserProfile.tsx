@@ -69,10 +69,10 @@ const UserProfile = () => {
       weight: "",
       gender: "",
       bloodGroup: "",
-      medicalHistory: undefined,
-      familyMedicalHistory: undefined,
-      allergies: undefined,
-      currentAddress: undefined,
+      medicalHistory: "",
+      familyMedicalHistory: "",
+      allergies: "",
+      currentAddress: "",
     },
   });
   const [img, setImg] = useState<string>("");
@@ -171,10 +171,10 @@ const UserProfile = () => {
         const response = await axios.put(
           "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/update",
           {
-            currentAddress: data.currentAddress,
-            medicalHistory: data.medicalHistory || null,
-            familyMedicalHistory: data.familyMedicalHistory || null,
-            allergies: data.allergies || null,
+            currentAddress: data.currentAddress || "",
+            medicalHistory: data.medicalHistory || "",
+            familyMedicalHistory: data.familyMedicalHistory || "",
+            allergies: data.allergies || "",
             height: height,
             weight: weight,
           },
