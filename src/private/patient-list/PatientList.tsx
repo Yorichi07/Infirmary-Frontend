@@ -48,7 +48,6 @@ const PatientList = () => {
   const [currentPatientEmail, setCurrentPatientEmail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPatient, setFilteredPatient] = useState(patient);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   useEffect(() => {
     const fetchList = async () => {
@@ -57,7 +56,6 @@ const PatientList = () => {
         if (!token) {
           throw new Error("No authentication token found");
         }
-
         const url =
           selectedButton === "Pending"
             ? "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/AD/getPatientQueue"
@@ -176,7 +174,6 @@ const PatientList = () => {
 
       if (response.status === 200) {
         alert("Appointment details submitted successfully.");
-        setIsDialogOpen(false);
       } else {
         throw new Error("Failed to submit appointment details.");
       }
@@ -393,7 +390,6 @@ const PatientList = () => {
 
                                         if (response.status === 200) {
                                           alert("Appointment Rejected.");
-                                          setIsDialogOpen(false);
                                         } else {
                                           alert(
                                             "Failed to Reject appointment details."
