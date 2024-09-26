@@ -150,7 +150,7 @@ const PatientDetails = () => {
 
     const fetchMed = async () => {
       try {
-        const resp = await axios.get("http://localhost:8081/api/stock/", {
+        const resp = await axios.get("http://localhost:8081/api/stock/available", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -448,6 +448,7 @@ const PatientDetails = () => {
             </div>
           </div>
           <Button
+            type="button"
             className="rounded-none rounded-b-lg w-[70%]"
             onClick={handleSubmit}
           >

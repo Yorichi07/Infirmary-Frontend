@@ -187,7 +187,7 @@ const PatientList = () => {
     let message = defaultMessage;
     if (axios.isAxiosError(error)) {
       if (error.response) {
-        message = `${error.response.data.details}`;
+        message = `${error.response.data.message}`;
       } else if (error.request) {
         message =
           "No response from server. Please check your network connection.";

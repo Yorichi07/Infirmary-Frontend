@@ -52,9 +52,9 @@ const UserPrescription = () => {
         if (
           error.response &&
           error.response.data &&
-          error.response.data.details
+          error.response.data.message
         ) {
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         } else {
           alert("An error occurred while fetching reports. Please try again.");
         }

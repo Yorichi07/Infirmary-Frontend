@@ -46,9 +46,9 @@ const UserDashboard = () => {
         if (
           error.response &&
           error.response.data &&
-          error.response.data.details
+          error.response.data.message
         ) {
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         } else {
           alert("Error fetching patient details, please try again later.");
         }
@@ -83,9 +83,9 @@ const UserDashboard = () => {
         if (
           error.response &&
           error.response.data &&
-          error.response.data.details
+          error.response.data.message
         ) {
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         } else {
           alert("Couldn't fetch appointment details, please try again later.");
         }

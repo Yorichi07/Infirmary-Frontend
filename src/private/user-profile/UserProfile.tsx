@@ -148,11 +148,11 @@ const UserProfile = () => {
             setImg(dataBackup.imageUrl);
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
-            alert(error.response.data.details);
+            alert(error.response.data.message);
           }
         } else {
           console.log(error);
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         }
       }
     };
@@ -189,7 +189,7 @@ const UserProfile = () => {
         navigate("/user-dashboard");
       } catch (error: any) {
         console.error("Error submitting form:", error);
-        alert(error.response.data.details);
+        alert(error.response.data.message);
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
@@ -447,7 +447,6 @@ const UserProfile = () => {
             <Button
               type="submit"
               className="save-btn text-white"
-              onClick={onSubmit}
             >
               Submit
             </Button>

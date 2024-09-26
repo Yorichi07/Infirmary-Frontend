@@ -75,7 +75,7 @@ const UserAppointment = () => {
         setDoctors(doctorList);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         } else {
           console.error("Error fetching doctors: ", error);
           alert("Could not fetch available doctors");
@@ -104,7 +104,7 @@ const UserAppointment = () => {
           setLastAppointmentDate("No Last Appointment Date");
           form.setValue("lastAppointmentDate", "No Last Appointment Date");
         } else {
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         }
       } else {
         console.error("Error fetching last appointment date:", error);
@@ -148,7 +148,7 @@ const UserAppointment = () => {
         }
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          alert(error.response.data.details);
+          alert(error.response.data.message);
         } else {
           console.error("Error submitting appointment:", error);
           alert("Failed to submit appointment");

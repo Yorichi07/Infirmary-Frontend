@@ -136,7 +136,7 @@ const UserRegister = () => {
         navigate("/");
       } catch (error: any) {
         console.error("Error submitting form: ", error);
-        alert(error.response.data.details);
+        alert(error.response.data.message);
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
