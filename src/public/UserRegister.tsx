@@ -126,16 +126,17 @@ const UserRegister = () => {
           img: bs64Img,
         };
 
-        await axios.post(
-          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup",
-          formattedData
-        );
+        await axios
+          .post("http://localhost:8081/api/auth/patient/signup", formattedData)
+          .then((res) => {
+            return res.data;
+          });
 
         alert("Registration successful");
         navigate("/");
-      } catch (error) {
-        console.error("Error submitting form: ",error);
-        alert(`There is some issue please try again later. Error: ${error}`);
+      } catch (error: any) {
+        console.error("Error submitting form: ", error);
+        alert(error.response.data.details);
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
