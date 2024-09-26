@@ -126,8 +126,6 @@ const UserRegister = () => {
           img: bs64Img,
         };
 
-        
-
         await axios.post(
           "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup",
           formattedData
