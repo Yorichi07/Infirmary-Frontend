@@ -120,7 +120,7 @@ const SignIn = () => {
             </div>
             <form>
               <div className="input">
-                <Label htmlFor="email">Username</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   type="email"
                   id="email"

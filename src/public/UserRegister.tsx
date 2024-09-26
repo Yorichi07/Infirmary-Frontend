@@ -126,8 +126,10 @@ const UserRegister = () => {
           img: bs64Img,
         };
 
+        const dataSend = JSON.stringify(formattedData);
+
         await axios
-          .post("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", formattedData)
+          .post("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", dataSend)
           .then((res) => {
             return res.data;
           });
@@ -151,6 +153,12 @@ const UserRegister = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file: any = event.target.files?.[0];
 
+    if(file.size > 1048576){
+      alert("File Size should be less than 1MB");
+      event.target.value = "";
+      return 0;
+    }
+    
     const reader = new FileReader();
 
     reader.onload = () => {
