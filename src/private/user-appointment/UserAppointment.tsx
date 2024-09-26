@@ -166,7 +166,7 @@ const UserAppointment = () => {
 
   return (
     <div className="h-[83%] pr-4 w-full flex gap-8">
-      <img src="/public/appointment.jpg" className="w-[60%]" />
+      <img src="/appointment.jpg" className="w-[60%]" />
 
       <div className="appointment-container justify-between flex flex-col pt-5 pb-5">
         <div className="appointment-container__content">

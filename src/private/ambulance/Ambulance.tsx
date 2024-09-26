@@ -11,7 +11,7 @@ const Ambulance = () => {
   return (
     <div className="h-[83%] pl-10 flex items-center justify-center ">
       <img
-        src="/public/Ambulance.png"
+        src="/Ambulance.png"
         className="w-[40%]"
         alt="emergency png"
       />
