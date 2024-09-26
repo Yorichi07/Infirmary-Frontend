@@ -126,10 +126,8 @@ const UserRegister = () => {
           img: bs64Img,
         };
 
-        const dataSend = JSON.stringify(formattedData);
-
         await axios
-          .post("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", dataSend)
+          .post("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", formattedData)
           .then((res) => {
             return res.data;
           });
@@ -158,7 +156,7 @@ const UserRegister = () => {
       event.target.value = "";
       return 0;
     }
-    
+
     const reader = new FileReader();
 
     reader.onload = () => {
