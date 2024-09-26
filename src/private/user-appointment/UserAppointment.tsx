@@ -61,7 +61,7 @@ const UserAppointment = () => {
           return;
         }
         const response = await axios.get(
-          "http://localhost:8081/api/AD/getAvailableDoctors",
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -89,7 +89,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://localhost:8081/api/appointment/lastAppointmentDate",
+        "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/appointment/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -130,7 +130,7 @@ const UserAppointment = () => {
         };
 
         const response = await axios.post(
-          "http://localhost:8081/api/patient/submitAppointment",
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/patient/submitAppointment",
           appointmentData,
           {
             headers: {

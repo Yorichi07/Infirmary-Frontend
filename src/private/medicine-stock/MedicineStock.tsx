@@ -36,7 +36,7 @@ const MedicineStock = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://localhost:8081/api/stock/",
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -97,7 +97,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          "http://localhost:8081/api/stock/addStock",
+          "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/addStock",
           formattedNewStock,
           {
             headers: {
@@ -121,7 +121,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://localhost:8081/api/stock/${batchNumber}`,
+          `http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
