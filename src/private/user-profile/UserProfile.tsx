@@ -193,10 +193,6 @@ const UserProfile = () => {
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
-
-      Object.entries(form.formState.errors).forEach(([field, error]) => {
-        console.error(`Error in ${field}: ${error?.message}`);
-      });
     }
   };
 

@@ -174,6 +174,7 @@ const PatientList = () => {
 
       if (response.status === 200) {
         alert("Appointment details submitted successfully.");
+        window.location.reload();
       } else {
         throw new Error("Failed to submit appointment details.");
       }
@@ -390,6 +391,7 @@ const PatientList = () => {
 
                                         if (response.status === 200) {
                                           alert("Appointment Rejected.");
+                                          window.location.reload();
                                         } else {
                                           alert(
                                             "Failed to Reject appointment details."
@@ -445,6 +447,7 @@ const PatientList = () => {
                                 }
                               );
                               window.alert(resp.data);
+                              window.location.reload();
                             } catch (err) {
                               console.log(err);
                             }
@@ -466,6 +469,7 @@ const PatientList = () => {
                                 }
                               );
                               window.alert(resp.data);
+                              window.location.reload();
                             } catch (err) {
                               console.log(err);
                             }
