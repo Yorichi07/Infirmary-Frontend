@@ -8,11 +8,11 @@ import "./SignIn.scss";
 
 const API_URLS = {
   patient:
-    "http://localhost:8081/api/auth/patient/signin",
+    "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
   doctor:
-    "http://localhost:8081/api/auth/doc/signin",
+    "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
   assistant_doctor:
-    "http://localhost:8081/api/auth/ad/signin",
+    "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
