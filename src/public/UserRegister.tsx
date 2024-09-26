@@ -126,10 +126,7 @@ const UserRegister = () => {
           img: bs64Img,
         };
 
-        console.log(
-          "Formatted Form Data Submitted: ",
-          JSON.stringify(formattedData, null, 2)
-        );
+        
 
         await axios.post(
           "http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup",
