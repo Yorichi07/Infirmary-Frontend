@@ -327,7 +327,7 @@ const UserRegister = () => {
                       name="sapID"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Patient Id</FormLabel>
+                          <FormLabel>SapId</FormLabel>
                           <FormControl>
                             <Input
                               type="number"
