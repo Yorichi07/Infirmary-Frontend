@@ -117,7 +117,7 @@ const PatientList = () => {
 
       const formatData = response.data;
       setDocData({
-        pref_doc: formatData.pref_doc.name || "No Preferred Doctor",
+        pref_doc: formatData.pref_doc? formatData.pref_doc.name : "No Preferred Doctor",
         doc_reason: formatData.doc_reason || "",
       });
 
