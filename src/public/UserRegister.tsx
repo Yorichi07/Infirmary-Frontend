@@ -127,7 +127,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://ec2-3-108-51-210.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", formattedData)
+          .post("http://localhost:8081/api/auth/patient/signup", formattedData)
           .then((res) => {
             return res.data;
           });
