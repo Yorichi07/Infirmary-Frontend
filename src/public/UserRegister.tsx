@@ -26,6 +26,17 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
+const programOptions = {
+  SOCS: ["B.Tech", "M.Tech", "B.Sc", "BCA", "MCA"],
+  SOB: ["MBA", "BBA", "B.Com(Hons)", "BBA-MBA", "B.Com-MBA(Hons)"],
+  SOL: ["BA LL.B(Hons)", "BBA LL.B(Hons)", "B.COM LL.B(Hons)", "LL.B(Hons)", "LL.M"],
+  SOHS: ["B.Sc", "M.Sc", "B.Pharm", "B.Tech"],
+  SOAE: ["B.Tech", "B.Sc(Hons)", "M.Tech.", "M.Sc"],
+  SFL: ["B.A", "M.A"],
+  SOD: ["B.Des", "M.Des"],
+  SOLSM: ["B.Sc (H)", "BA", "BA(H)", "MA"],
+};
+
 const formSchema = z
   .object({
     name: z
@@ -57,28 +68,22 @@ const formSchema = z
           "Password must contain at least one special character (@, $, !, %, *, ?, &, or #)",
       }),
     confirmPassword: z.string(),
-    email: z.string(),
-    school: z.string().min(1, { message: "School cannot be empty" }),
+    email: z.string().email({ message: "Invalid email address" }),
+    school: z.enum(["SOCS", "SOB", "SOL", "SOHS", "SOAE", "SFL", "SOD", "SOLSM"], { message: "Please choose from below options only." }),
     program: z.string().min(1, { message: "Program cannot be empty" }),
     dateOfBirth: z
       .date()
       .max(new Date(), { message: "Date of birth cannot be in the future" }),
     emergencyContact: z
       .string()
-      .regex(/^\d+$/, {
-        message: "Emergency contact phone must contain only numbers",
-      })
-      .length(10, {
-        message: "Emergency contact phone must be 10 digits long",
-      }),
+      .regex(/^\d+$/, { message: "Emergency contact must contain only numbers" })
+      .length(10, { message: "Emergency contact must be 10 digits long" }),
+
     phoneNumber: z
       .string()
-      .regex(/^\d+$/, {
-        message: "Emergency contact phone must contain only numbers",
-      })
-      .length(10, {
-        message: "Emergency contact phone must be 10 digits long",
-      }),
+      .regex(/^\d+$/, { message: "Phone number must contain only numbers" })
+      .length(10, { message: "Phone number must be 10 digits long" }),
+
     gender: z.enum(["Male", "Female", "Other"], {
       message: "Choose gender from given options",
     }),
@@ -92,6 +97,7 @@ const formSchema = z
 const UserRegister = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [bs64Img, setBs64Img] = useState<string | null>(null);
+  const [availablePrograms, setAvailablePrograms] = useState<string[]>([]);
 
   const navigate = useNavigate();
 
@@ -144,6 +150,11 @@ const UserRegister = () => {
     }
   };
 
+  const handleSchoolChange = (school: string) => {
+    setAvailablePrograms(programOptions[school] || []);
+    form.setValue("program", ""); // Reset program selection when school changes
+  };
+
   const handleCancel = () => {
     navigate("/");
   };
@@ -151,7 +162,7 @@ const UserRegister = () => {
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file: any = event.target.files?.[0];
 
-    if(file.size > 1048576){
+    if (file.size > 1048576) {
       alert("File Size should be less than 1MB");
       event.target.value = "";
       return 0;
@@ -268,8 +279,8 @@ const UserRegister = () => {
                               value={
                                 field.value
                                   ? new Date(field.value)
-                                      .toISOString()
-                                      .substring(0, 10)
+                                    .toISOString()
+                                    .substring(0, 10)
                                   : ""
                               }
                               onChange={(e) =>
@@ -296,7 +307,7 @@ const UserRegister = () => {
                               <SelectValue placeholder="Select gender" />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectGroup>
+                              <SelectGroup className="h-[5rem] overflow-y-scroll">
                                 <SelectItem value="Male">Male</SelectItem>
                                 <SelectItem value="Female">Female</SelectItem>
                                 <SelectItem value="Other">Other</SelectItem>
@@ -363,29 +374,62 @@ const UserRegister = () => {
                       render={({ field }) => (
                         <FormItem className="mt-3">
                           <FormLabel>School</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter school" {...field} />
-                          </FormControl>
+                          <Select
+                            {...field}
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              handleSchoolChange(value);
+                            }}
+                            value={field.value}
+                          >
+                            <SelectTrigger className="dropdown">
+                              <SelectValue placeholder="Select school" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup className="h-max-[8rem] overflow-y-scroll">
+                                {Object.keys(programOptions).map((school) => (
+                                  <SelectItem key={school} value={school}>
+                                    {school}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="program"
                       render={({ field }) => (
                         <FormItem className="mt-3">
                           <FormLabel>Program</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter your program"
-                              {...field}
-                            />
-                          </FormControl>
+                          <Select
+                            {...field}
+                            onValueChange={(value) => field.onChange(value)}
+                            value={field.value}
+                            disabled={!availablePrograms.length}
+                          >
+                            <SelectTrigger className="dropdown">
+                              <SelectValue placeholder="Select program" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup className="h-max-[8rem] overflow-y-scroll">
+                                {availablePrograms.map((program) => (
+                                  <SelectItem key={program} value={program}>
+                                    {program}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="emergencyContact"

@@ -149,7 +149,7 @@ const DoctorCheckIn = () => {
                   <button
                     data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${
-                      doctor.status !== "checked-in"
+                      doctor.status == "checked-in"
                         ? "bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
                         : "bg-[#8F8F8F]"
                     } rounded-md text-white`}
@@ -162,7 +162,7 @@ const DoctorCheckIn = () => {
                   <button
                     data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${
-                      doctor.status !== "checked-out"
+                      doctor.status == "checked-out"
                         ? "bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
                         : "bg-[#8F8F8F]"
                     } rounded-md text-white`}

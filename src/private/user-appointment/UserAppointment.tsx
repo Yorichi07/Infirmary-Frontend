@@ -265,7 +265,7 @@ const UserAppointment = () => {
                         <Select
                           {...field}
                           onValueChange={(value: any) =>
-                            field.onChange(value === "none" ? null : value)
+                            field.onChange(value === "none" ? undefined : value)
                           }
                           disabled={doctors.length === 0}
                         >
@@ -302,11 +302,20 @@ const UserAppointment = () => {
                     <FormItem className="form-item">
                       <FormLabel>Reason for Preference?</FormLabel>
                       <FormControl>
-                        <Textarea
-                          id="reasonForPref"
-                          placeholder="Enter reason for preference (if preferred)"
-                          {...field}
-                        />
+                        {
+                            form.getValues("preferredDoctor") ? (<Textarea
+                            id="reasonForPref"
+                            placeholder="Enter reason for preference (if preferred)"
+                            {...field}
+                            
+                          />):(<Textarea
+                            id="reasonForPref"
+                            placeholder="Enter reason for preference (if preferred)"
+                            {...field}
+                            disabled
+                          />)
+                        }
+                        
                       </FormControl>
                       <FormMessage />
                     </FormItem>

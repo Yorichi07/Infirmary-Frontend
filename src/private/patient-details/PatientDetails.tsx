@@ -140,7 +140,7 @@ const PatientDetails = () => {
         setNdata(formatData);
       } catch (err: any) {
         if (err.response && err.response.data && err.response.data.details) {
-          alert(err.response.data.details);
+          alert(err.response.data.message);
         } else {
           alert("An error occurred while fetching patient data.");
         }

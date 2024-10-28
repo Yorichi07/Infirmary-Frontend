@@ -26,6 +26,33 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
+
+    const getMedicalDetailsStatus = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/");
+        return;
+      }
+
+      try{
+        const res = axios.get("http://localhost:8081/api/patient/getAllDetails", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        const data = (await res).data;  
+
+      }catch(err:any){
+        console.log(err)
+        if(err.response.status === 404){
+          window.alert("Set medical details by going to profile icon then click on the profile button and set the neccessary details");
+        }
+      }
+
+    }
+
+
     const getUser = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -92,8 +119,13 @@ const UserDashboard = () => {
       }
     };
 
-    getUser();
-    getStatus();
+    const initFunc = async () => {
+      await getUser();
+      await getStatus();
+      getMedicalDetailsStatus();
+    };
+
+    initFunc();
 
     const intervalId = setInterval(getStatus, 60000);
 
@@ -143,7 +175,7 @@ const UserDashboard = () => {
               <div
                 className={`px-8 py-3 w-full ${
                   status.appointmentStatus === "Queued"
-                    ? "bg-[#1F60C0] text-white shadow-lg rounded-md"
+                    ? "bg-gradient-to-r from-green-600 to-green-500 text-white shadow-lg rounded-md"
                     : ""
                 }`}
               >

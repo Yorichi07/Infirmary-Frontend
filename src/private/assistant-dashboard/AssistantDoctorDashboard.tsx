@@ -145,7 +145,7 @@ const AssistantDoctorDashboard = () => {
               onClick={() => navigate("/Emergency")}
             >
               <p className="text-white font-semibold text-lg text-center flex-1">
-                Emergengy Contacts
+                Emergency Contacts
               </p>
             </button>
           </div>
