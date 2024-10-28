@@ -28,9 +28,9 @@ const UserPrescription = () => {
         if (role !== "user") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://localhost:8081/api/patient/getAppointmentPat/${val}`;
+          apiUrl = `http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/patient/getAppointmentPat/${val}`;
         } else {
-          apiUrl = "http://localhost:8081/api/patient/getAppointment";
+          apiUrl = "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/patient/getAppointment";
         }
 
         const resp = await axios.get(apiUrl, {

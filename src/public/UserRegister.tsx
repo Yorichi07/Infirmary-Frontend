@@ -133,7 +133,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://localhost:8081/api/auth/patient/signup", formattedData)
+          .post("http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", formattedData)
           .then((res) => {
             return res.data;
           });
