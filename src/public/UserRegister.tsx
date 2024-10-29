@@ -26,15 +26,15 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const programOptions = {
-  SOCS: ["B.Tech", "M.Tech", "B.Sc", "BCA", "MCA"],
-  SOB: ["MBA", "BBA", "B.Com(Hons)", "BBA-MBA", "B.Com-MBA(Hons)"],
-  SOL: ["BA LL.B(Hons)", "BBA LL.B(Hons)", "B.COM LL.B(Hons)", "LL.B(Hons)", "LL.M"],
-  SOHS: ["B.Sc", "M.Sc", "B.Pharm", "B.Tech"],
-  SOAE: ["B.Tech", "B.Sc(Hons)", "M.Tech.", "M.Sc"],
-  SFL: ["B.A", "M.A"],
-  SOD: ["B.Des", "M.Des"],
-  SOLSM: ["B.Sc (H)", "BA", "BA(H)", "MA"],
+const programOptions : any = {
+  "SOCS": ["B.Tech", "M.Tech", "B.Sc", "BCA", "MCA"],
+  "SOB": ["MBA", "BBA", "B.Com(Hons)", "BBA-MBA", "B.Com-MBA(Hons)"],
+  "SOL": ["BA LL.B(Hons)", "BBA LL.B(Hons)", "B.COM LL.B(Hons)", "LL.B(Hons)", "LL.M"],
+  "SOHS": ["B.Sc", "M.Sc", "B.Pharm", "B.Tech"],
+  "SOAE": ["B.Tech", "B.Sc(Hons)", "M.Tech.", "M.Sc"],
+  "SFL": ["B.A", "M.A"],
+  "SOD": ["B.Des", "M.Des"],
+  "SOLSM": ["B.Sc (H)", "BA", "BA(H)", "MA"],
 };
 
 const formSchema = z
@@ -152,7 +152,7 @@ const UserRegister = () => {
 
   const handleSchoolChange = (school: string) => {
     setAvailablePrograms(programOptions[school] || []);
-    form.setValue("program", ""); // Reset program selection when school changes
+    form.setValue("program", undefined); // Reset program selection when school changes
   };
 
   const handleCancel = () => {

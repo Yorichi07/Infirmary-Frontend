@@ -41,7 +41,7 @@ const UserDashboard = () => {
           },
         });
 
-        const data = (await res).data;  
+        (await res).data;  
 
       }catch(err:any){
         console.log(err)
