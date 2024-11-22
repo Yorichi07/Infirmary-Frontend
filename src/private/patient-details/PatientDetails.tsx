@@ -88,7 +88,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/prescription/submit",
+        "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/prescription/submit",
         req,
         {
           headers: {
@@ -112,7 +112,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
+          "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -150,7 +150,7 @@ const PatientDetails = () => {
 
     const fetchMed = async () => {
       try {
-        const resp = await axios.get("http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/stock/available", {
+        const resp = await axios.get("ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/stock/available", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -203,7 +203,7 @@ const PatientDetails = () => {
             className="w-[15%] border-black border"
             src={
               ndata?.imageUrl != null
-                ? `http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
+                ? `ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
                 : "/default-user.jpg"
             }
           />

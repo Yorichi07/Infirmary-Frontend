@@ -86,7 +86,7 @@ const UserProfile = () => {
       }
       try {
         const res = await axios.get(
-          "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/patient/getAllDetails",
+          "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/patient/getAllDetails",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -115,7 +115,7 @@ const UserProfile = () => {
         if (error.response && error.response.status === 404) {
           try {
             const resBackup = await axios.get(
-              "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/patient/",
+              "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/patient/",
               {
                 headers: {
                   Authorization: "Bearer " + token,
@@ -169,7 +169,7 @@ const UserProfile = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.put(
-          "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/patient/update",
+          "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/patient/update",
           {
             currentAddress: data.currentAddress || "",
             medicalHistory: data.medicalHistory || "",
@@ -209,7 +209,7 @@ const UserProfile = () => {
               <Image
                 src={
                   img != null
-                    ? `http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/${img}`
+                    ? `ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/${img}`
                     : "/default-user.jpg"
                 }
                 preview

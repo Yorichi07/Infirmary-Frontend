@@ -8,11 +8,11 @@ import "./SignIn.scss";
 
 const API_URLS = {
   patient:
-    "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
+    "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
   doctor:
-    "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
+    "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
   assistant_doctor:
-    "http://ec2-3-110-92-255.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+    "ec2-3-108-64-92.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
