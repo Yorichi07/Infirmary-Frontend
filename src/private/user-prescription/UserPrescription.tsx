@@ -44,7 +44,7 @@ const UserPrescription = () => {
         const formatData = response.map((rept: any) => ({
           reportId: rept.appointmentId,
           date: rept.date,
-          downloadLink: `http://localhost:5173/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);
