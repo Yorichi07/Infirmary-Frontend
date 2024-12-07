@@ -62,3 +62,18 @@
     }
   }
 }
+
+@media only screen and (max-width: 1024px) {
+  .profile-container{
+    &__content{
+      padding: 1rem 0;
+      height: auto;
+    }
+    &__body{
+      padding: 0.5rem;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+}

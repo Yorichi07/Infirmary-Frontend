@@ -7,12 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
-  patient:
-    "http://localhost:8081/api/auth/patient/signin",
-  doctor:
-    "http://localhost:8081/api/auth/doc/signin",
-  assistant_doctor:
-    "http://localhost:8081/api/auth/ad/signin",
+  patient: "http://192.168.147.176:8081/api/auth/patient/signin",
+  doctor: "http://192.168.147.176:8081/api/auth/doc/signin",
+  assistant_doctor: "http://192.168.147.176:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -21,36 +18,38 @@ const DASHBOARD_ROUTES = {
   assistant_doctor: "/assistant-dashboard",
 };
 
+const ROLES = [
+  { value: "doctor", label: "Doctor" },
+  { value: "patient", label: "Patient" },
+  { value: "assistant_doctor", label: "Assistant Doctor" },
+];
+
 const SignIn = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [role, setRole] = useState<string>("patient");
-  
-  const [latitude,setLatitude] = useState(-1);
-  const [longitude,setLongitude] = useState(-1);
+  const [location, setLocation] = useState({ latitude: -1, longitude: -1 });
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
-    setInput((prevInput) => ({
-      ...prevInput,
-      [id]: value,
-    }));
+    setInput((prev) => ({ ...prev, [id]: value }));
   };
 
+  const handleRoleChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
+    const selectedRole = e.target.value;
+    setRole(selectedRole);
 
-  const handleRoleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-    if(e.target.value.toString() === "assistant_doctor"){
-        if(!navigator.geolocation) alert("Location Services not Supported");
-
-        navigator.geolocation.getCurrentPosition((pos)=>{
-          setLatitude(pos.coords.latitude);
-          setLongitude(pos.coords.longitude);
-        })
-
-      
+    if (selectedRole === "assistant_doctor" && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) =>
+          setLocation({
+            latitude: pos.coords.latitude,
+            longitude: pos.coords.longitude,
+          }),
+        () => alert("Please enable location services.")
+      );
     }
-    setRole(e.target.value);
   };
 
   const handleSignIn = async () => {
@@ -58,41 +57,41 @@ const SignIn = () => {
     const dashboardRoute =
       DASHBOARD_ROUTES[role as keyof typeof DASHBOARD_ROUTES];
 
+    if (
+      role === "assistant_doctor" &&
+      (location.latitude === -1 || location.longitude === -1)
+    ) {
+      return alert(
+        "Allow Location Services to sign in as an Assistant Doctor."
+      );
+    }
+
     try {
-      var res = null;
-      if (dashboardRoute == "/assistant-dashboard" ){
-        if(latitude == -1 || longitude == -1) alert("Allow Location Services");
-        res = await axios.post(apiUrl, input,{
-          headers:{
-            "X-Latitude":latitude,
-            "X-Longitude":longitude
-          }
-        });
-        console.log([latitude,longitude])
-      }else{
-        res = await axios.post(apiUrl, input);
-      }
-      console.log(res)
-      const { token, email, roles } = res?.data;
+      const headers =
+        role === "assistant_doctor"
+          ? {
+              "X-Latitude": location.latitude,
+              "X-Longitude": location.longitude,
+            }
+          : {};
+
+      const response = await axios.post(apiUrl, input, { headers });
+      const { token, email, roles } = response.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);
       localStorage.setItem(
         "roles",
-        roles[0] === "ROLE_PATIENT"
-          ? "user"
-          : roles[0] === "ROLE_AD"
-          ? "assistant"
-          : "doctor"
+        roles[0].replace("ROLE_", "").toLowerCase()
       );
 
       navigate(dashboardRoute);
     } catch (error: any) {
-      if (error.response && error.response.status === 401) {
-        setErrorMessage("Incorrect email or password. Please try again.");
-      } else {
-        setErrorMessage(error.response.data.message);
-      }
+      const message =
+        error.response?.status === 401
+          ? "Incorrect email or password. Please try again."
+          : error.response?.data?.message || "An error occurred.";
+      setErrorMessage(message);
     }
   };
 
@@ -103,42 +102,34 @@ const SignIn = () => {
         <div className="sign-container__right">
           <div className="sign-container__right-content">
             <img src="/upes-logo.jpg" alt="UPES Logo" />
+            <h1 className="text-2xl font-medium pb-3 whitespace-nowrap">
+              Welcome to UPES Infirmary Portal
+            </h1>
             <div className="sign-container__right-header">
-              <p className="font-medium">Login as:</p>
+              <p className="font-medium pb-1">Login as:</p>
               <div className="flex w-full pb-5">
-                <label className="text-left w-full flex items-center justify-start">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="doctor"
-                    checked={role === "doctor"}
-                    onChange={handleRoleChange}
-                    className="mr-2"
-                  />
-                  Doctor
-                </label>
-                <label className="text-center w-full flex items-center justify-center">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="patient"
-                    checked={role === "patient"}
-                    onChange={handleRoleChange}
-                    className="mr-2"
-                  />
-                  Patient
-                </label>
-                <label className="text-right w-full flex items-center justify-end">
-                  <input
-                    type="radio"
-                    name="role"
-                    value="assistant_doctor"
-                    checked={role === "assistant_doctor"}
-                    onChange={handleRoleChange}
-                    className="mr-2"
-                  />
-                  Assistant Doctor
-                </label>
+                {ROLES.map(({ value, label }) => (
+                  <label
+                    key={value}
+                    className={`flex items-center whitespace-nowrap justify-${
+                      value === "doctor"
+                        ? "start"
+                        : value === "assistant_doctor"
+                        ? "end"
+                        : "center"
+                    } w-full`}
+                  >
+                    <input
+                      type="radio"
+                      name="role"
+                      value={value}
+                      checked={role === value}
+                      onChange={handleRoleChange}
+                      className="mr-2"
+                    />
+                    {label}
+                  </label>
+                ))}
               </div>
               <h1>
                 <span className="capitalize">{role.replace("_", " ")}</span>{" "}
@@ -146,28 +137,21 @@ const SignIn = () => {
               </h1>
             </div>
             <form>
-              <div className="input">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="Email"
-                  value={input.email}
-                  onChange={onInputChange}
-                  className="bg-white text-black"
-                />
-              </div>
-              <div className="input">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  placeholder="Password"
-                  value={input.password}
-                  onChange={onInputChange}
-                  className="bg-white text-black"
-                />
-              </div>
+              {["email", "password"].map((field) => (
+                <div key={field} className="input">
+                  <Label htmlFor={field}>
+                    {field.charAt(0).toUpperCase() + field.slice(1)}
+                  </Label>
+                  <Input
+                    type={field}
+                    id={field}
+                    placeholder={field}
+                    value={input[field as keyof typeof input]}
+                    onChange={onInputChange}
+                    className="bg-white text-black"
+                  />
+                </div>
+              ))}
             </form>
 
             {errorMessage && (
@@ -182,17 +166,12 @@ const SignIn = () => {
               {role === "patient" && (
                 <div className="flex flex-col items-center">
                   <div className="flex w-full justify-center items-center">
-                    <hr className="w-[30%]" />
-                    <span className="w-[40%] flex items-center justify-center">
+                    <span className="w-[40%] flex items-center justify-center whitespace-nowrap">
                       Need an account?&nbsp;&nbsp;
-                      <Link
-                        to="/register"
-                        className="text-blue-500 text-center flex items-center justify-center"
-                      >
+                      <Link to="/register" className="text-blue-500">
                         Register
                       </Link>
                     </span>
-                    <hr className="w-[30%]" />
                   </div>
                 </div>
               )}

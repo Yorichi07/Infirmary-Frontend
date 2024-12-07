@@ -38,8 +38,8 @@ const CommonPrescription = () => {
 
       const apiUrl =
         role === "user"
-          ? `http://localhost:8081/api/patient/getPrescription/${val}`
-          : `http://localhost:8081/api/prescription/getPrescription/${val}`;
+          ? `http://192.168.147.176:8081/api/patient/getPrescription/${val}`
+          : `http://192.168.147.176:8081/api/prescription/getPrescription/${val}`;
 
       if (apiUrl) {
         try {

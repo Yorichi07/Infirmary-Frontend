@@ -1,13 +1,13 @@
-import React, { useState } from "react";
-import "./UserRegister.scss";
-import { Image } from "primereact/image";
-import Shared from "@/Shared";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
+
+import { Image } from "primereact/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { z } from "zod";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Select,
   SelectContent,
@@ -16,7 +16,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useNavigate } from "react-router-dom";
 import {
   Form,
   FormField,
@@ -26,68 +25,87 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-const programOptions : any = {
-  "SOCS": ["B.Tech", "M.Tech", "B.Sc", "BCA", "MCA"],
-  "SOB": ["MBA", "BBA", "B.Com(Hons)", "BBA-MBA", "B.Com-MBA(Hons)"],
-  "SOL": ["BA LL.B(Hons)", "BBA LL.B(Hons)", "B.COM LL.B(Hons)", "LL.B(Hons)", "LL.M"],
-  "SOHS": ["B.Sc", "M.Sc", "B.Pharm", "B.Tech"],
-  "SOAE": ["B.Tech", "B.Sc(Hons)", "M.Tech.", "M.Sc"],
-  "SFL": ["B.A", "M.A"],
-  "SOD": ["B.Des", "M.Des"],
-  "SOLSM": ["B.Sc (H)", "BA", "BA(H)", "MA"],
+import "./UserRegister.scss";
+import Shared from "@/Shared";
+
+const schoolOptions = [
+  "Guest",
+  "SOCS",
+  "SOB",
+  "SOL",
+  "SOHS",
+  "SOAE",
+  "SFL",
+  "SOD",
+  "SOLSM",
+] as const;
+
+const bloodGroup = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"] as const;
+
+const programOptions = {
+  Guest: ["Guest"],
+  SOCS: ["Faculty", "B.Tech", "M.Tech", "B.Sc", "BCA", "MCA"],
+  SOB: ["Faculty", "MBA", "BBA", "B.Com(Hons)", "BBA-MBA", "B.Com-MBA(Hons)"],
+  SOL: [
+    "Faculty",
+    "BA LL.B(Hons)",
+    "BBA LL.B(Hons)",
+    "B.COM LL.B(Hons)",
+    "LL.B(Hons)",
+    "LL.M",
+  ],
+  SOHS: ["Faculty", "B.Sc", "M.Sc", "B.Pharm", "B.Tech"],
+  SOAE: ["Faculty", "B.Tech", "B.Sc(Hons)", "M.Tech.", "M.Sc"],
+  SFL: ["Faculty", "B.A", "M.A"],
+  SOD: ["Faculty", "B.Des", "M.Des"],
+  SOLSM: ["Faculty", "B.Sc (H)", "BA", "BA(H)", "MA"],
 };
 
 const formSchema = z
   .object({
     name: z
       .string()
-      .min(3, { message: "Name must be at least 3 characters long" })
-      .max(30, { message: "Name must be at most 30 characters long" })
-      .regex(/^[a-zA-Z0-9_ ]+$/, {
-        message:
-          "Name can only contain letters, numbers, underscores, and spaces",
-      }),
-    sapID: z
-      .string()
-      .min(1, { message: "Patient Id must be at least 1" })
-      .transform((val) => parseInt(val, 10))
-      .refine((val) => val > 0, { message: "Patient Id must be positive" }),
+      .min(3, "Name must be at least 3 characters long")
+      .max(30, "Name must be at most 30 characters long")
+      .regex(
+        /^[a-zA-Z0-9_ ]+$/,
+        "Name can only contain letters, numbers, underscores, and spaces"
+      ),
+    sapID: z.string().regex(/^\d+$/, "Sap ID must be a valid number"),
     password: z
       .string()
-      .min(8, { message: "Password must be at least 8 characters long" })
-      .max(64, { message: "Password must be at most 64 characters long" })
-      .regex(/[a-z]/, {
-        message: "Password must contain at least one lowercase letter",
-      })
-      .regex(/[A-Z]/, {
-        message: "Password must contain at least one uppercase letter",
-      })
-      .regex(/\d/, { message: "Password must contain at least one number" })
-      .regex(/[@$!%*?&#]/, {
-        message:
-          "Password must contain at least one special character (@, $, !, %, *, ?, &, or #)",
-      }),
+      .min(8, "Password must be at least 8 characters long")
+      .regex(/[a-z]/, "Password must contain at least one lowercase letter")
+      .regex(/[A-Z]/, "Password must contain at least one uppercase letter")
+      .regex(/\d/, "Password must contain at least one number")
+      .regex(
+        /[@$!%*?&#]/,
+        "Password must contain at least one special character"
+      ),
     confirmPassword: z.string(),
-    email: z.string().email({ message: "Invalid email address" }),
-    school: z.enum(["SOCS", "SOB", "SOL", "SOHS", "SOAE", "SFL", "SOD", "SOLSM"], { message: "Please choose from below options only." }),
-    program: z.string().min(1, { message: "Program cannot be empty" }),
+    email: z.string().email("Invalid email address"),
+    school: z.enum(schoolOptions, {
+      required_error: "Please select a valid school",
+    }),
+    program: z.string().min(1, "Please select a program"),
     dateOfBirth: z
       .date()
-      .max(new Date(), { message: "Date of birth cannot be in the future" }),
+      .max(new Date(), "Date of birth cannot be in the future"),
     emergencyContact: z
       .string()
-      .regex(/^\d+$/, { message: "Emergency contact must contain only numbers" })
-      .length(10, { message: "Emergency contact must be 10 digits long" }),
-
+      .regex(/^\d{10}$/, "Emergency contact must be a 10-digit number"),
     phoneNumber: z
       .string()
-      .regex(/^\d+$/, { message: "Phone number must contain only numbers" })
-      .length(10, { message: "Phone number must be 10 digits long" }),
+      .regex(/^\d{10}$/, "Phone number must be a 10-digit number"),
+    gender: z
+      .enum(["Male", "Female", "Other"])
+      .refine((value) => value !== undefined, {
+        message: "Please select a gender",
+      }),
 
-    gender: z.enum(["Male", "Female", "Other"], {
-      message: "Choose gender from given options",
+    bloodGroup: z.enum(bloodGroup, {
+      required_error: "Please select a valid blood group",
     }),
-    bloodGroup: z.string().min(1, { message: "Blood group cannot be empty" }),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -110,7 +128,7 @@ const UserRegister = () => {
       confirmPassword: undefined,
       email: undefined,
       school: undefined,
-      program: undefined,
+      program: "",
       dateOfBirth: undefined,
       emergencyContact: undefined,
       phoneNumber: undefined,
@@ -124,7 +142,7 @@ const UserRegister = () => {
   const onSubmit = async (data: any) => {
     if (isValid) {
       try {
-        const formattedData = {
+        const payload = {
           ...data,
           dateOfBirth: data.dateOfBirth
             ? new Date(data.dateOfBirth).toISOString().split("T")[0]
@@ -133,7 +151,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://localhost:8081/api/auth/patient/signup", formattedData)
+          .post("http://192.168.147.176:8081/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });
@@ -142,7 +160,7 @@ const UserRegister = () => {
         navigate("/");
       } catch (error: any) {
         console.error("Error submitting form: ", error);
-        alert(error.response.data.message);
+        alert(error?.response?.data?.message || "Registration failed");
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
@@ -150,9 +168,9 @@ const UserRegister = () => {
     }
   };
 
-  const handleSchoolChange = (school: string) => {
+  const handleSchoolChange = (school: keyof typeof programOptions) => {
     setAvailablePrograms(programOptions[school] || []);
-    form.setValue("program", undefined); // Reset program selection when school changes
+    form.setValue("program", "");
   };
 
   const handleCancel = () => {
@@ -160,32 +178,35 @@ const UserRegister = () => {
   };
 
   const handleImageUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file: any = event.target.files?.[0];
+    const file = event.target.files?.[0];
+
+    if (!file) return;
 
     if (file.size > 1048576) {
       alert("File Size should be less than 1MB");
       event.target.value = "";
-      return 0;
+      return;
     }
 
     const reader = new FileReader();
-
     reader.onload = () => {
-      const base64String = reader.result as string;
-      setBs64Img(base64String);
+      setBs64Img(reader.result as string);
+      setUploadedImage(URL.createObjectURL(file));
     };
-    if (file) {
-      reader.readAsDataURL(file);
-      const url = URL.createObjectURL(file);
-      setUploadedImage(url);
-    }
+    reader.readAsDataURL(file);
   };
+
+  useEffect(() => {
+    if (form.watch("school") === "Guest") {
+      form.setValue("sapID", 0);
+    }
+  }, [form.watch("school")]);
 
   return (
     <div className="register-container">
       <div className="register-container__content">
         <div className="register-container__header">
-          <img src="/upes-logo2.jpg" alt="UPES Logo" />
+          <img src="/upes-logo.jpg" alt="UPES Logo" />
           <div className="title">
             {Shared.UserPlus}
             <h1>Patient Registration Form</h1>
@@ -201,7 +222,7 @@ const UserRegister = () => {
                   alt="Profile Picture"
                   preview
                   style={{
-                    border: "1px solid black",
+                    border: "1.5px solid black",
                     width: "100%",
                   }}
                 />
@@ -212,9 +233,7 @@ const UserRegister = () => {
                   id="upload-image"
                   style={{ display: "none" }}
                 />
-                <label htmlFor="upload-image" className="upload-button">
-                  Upload Image
-                </label>
+                <label htmlFor="upload-image">Upload Image</label>
               </div>
               <div className="patient-details">
                 <div className="patient-details__top">
@@ -279,8 +298,8 @@ const UserRegister = () => {
                               value={
                                 field.value
                                   ? new Date(field.value)
-                                    .toISOString()
-                                    .substring(0, 10)
+                                      .toISOString()
+                                      .substring(0, 10)
                                   : ""
                               }
                               onChange={(e) =>
@@ -303,7 +322,7 @@ const UserRegister = () => {
                             onValueChange={(value) => field.onChange(value)}
                             value={field.value}
                           >
-                            <SelectTrigger className="dropdown">
+                            <SelectTrigger>
                               <SelectValue placeholder="Select gender" />
                             </SelectTrigger>
                             <SelectContent>
@@ -324,9 +343,24 @@ const UserRegister = () => {
                       render={({ field }) => (
                         <FormItem className="mt-3">
                           <FormLabel>Blood Group</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter blood group" {...field} />
-                          </FormControl>
+                          <Select
+                            {...field}
+                            onValueChange={(value) => field.onChange(value)}
+                            value={field.value}
+                          >
+                            <SelectTrigger>
+                              <SelectValue placeholder="Select blood group" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectGroup className="h-max-[8rem] overflow-y-scroll">
+                                {bloodGroup.map((group) => (
+                                  <SelectItem key={group} value={group}>
+                                    {group}
+                                  </SelectItem>
+                                ))}
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -344,7 +378,7 @@ const UserRegister = () => {
                               type="number"
                               placeholder="Enter your Id"
                               {...field}
-                              min={0}
+                              disabled={form.watch("school") === "Guest"}
                             />
                           </FormControl>
                           <FormMessage />
@@ -378,11 +412,13 @@ const UserRegister = () => {
                             {...field}
                             onValueChange={(value) => {
                               field.onChange(value);
-                              handleSchoolChange(value);
+                              handleSchoolChange(
+                                value as keyof typeof programOptions
+                              );
                             }}
                             value={field.value}
                           >
-                            <SelectTrigger className="dropdown">
+                            <SelectTrigger>
                               <SelectValue placeholder="Select school" />
                             </SelectTrigger>
                             <SelectContent>
@@ -412,7 +448,7 @@ const UserRegister = () => {
                             value={field.value}
                             disabled={!availablePrograms.length}
                           >
-                            <SelectTrigger className="dropdown">
+                            <SelectTrigger>
                               <SelectValue placeholder="Select program" />
                             </SelectTrigger>
                             <SelectContent>
@@ -425,23 +461,6 @@ const UserRegister = () => {
                               </SelectGroup>
                             </SelectContent>
                           </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="emergencyContact"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Emergency Contact</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter emergency contact"
-                              {...field}
-                            />
-                          </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
@@ -462,6 +481,22 @@ const UserRegister = () => {
                         </FormItem>
                       )}
                     />
+                    <FormField
+                      control={form.control}
+                      name="emergencyContact"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Emergency Contact</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter emergency contact"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </div>
               </div>
@@ -475,11 +510,7 @@ const UserRegister = () => {
               >
                 Cancel
               </Button>
-              <Button
-                type="submit"
-                className="save-btn text-white"
-                onClick={onSubmit}
-              >
+              <Button type="submit" className="save-btn text-white">
                 Submit
               </Button>
             </div>
