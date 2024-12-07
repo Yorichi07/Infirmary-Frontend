@@ -34,7 +34,7 @@ const Navbar = ({
         alt="UPES Logo"
         className="w-[100px] h-[45px]"
       />
-      <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline">
+      <div className={props.role !== "ad" ?"capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline":"capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline max-lg:hidden"}>
         {props.titleLogo &&
           (typeof props.titleLogo === "string" ? (
             <img src={props.titleLogo} alt="Title Logo" className="w-8" />
@@ -49,7 +49,8 @@ const Navbar = ({
             {props.additionalLogo}
           </PopoverTrigger>
           <PopoverContent className="space-y-4 p-4 max-lg:p-2">
-            {props.role !== "doctor" && props.role !== "assistant" && (
+            
+            {props.role !== "doctor" && props.role !== "ad" ? (
               <div
                 className="flex items-center gap-2 max-lg:items-start max-lg:gap-1 hover:cursor-pointer"
                 onClick={() => navigateTo("/user-profile")}
@@ -61,7 +62,7 @@ const Navbar = ({
                 />
                 <span className="text-base max-lg:text-sm">Profile</span>
               </div>
-            )}
+            ):(<></>)}
             <div
               className="flex items-center gap-2 max-lg:items-start max-lg:gap-1 hover:cursor-pointer"
               onClick={handleLogout}

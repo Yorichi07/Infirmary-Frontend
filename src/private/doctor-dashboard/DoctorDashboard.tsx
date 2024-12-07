@@ -152,7 +152,6 @@ const DoctorDashboard = () => {
 
     if(response.status == 200){
       setToken(response.data)
-      console.log(token)
     }else{
       setToken("No Patient Assigned")
       alert(response.data.message)
@@ -187,26 +186,26 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden">
-      <div className="w-full px-14 py-10 flex justify-center items-center">
+    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden max-lg:min-h-[91svh]">
+      <div className="w-full px-14 py-10 max-lg:py-5 flex justify-center items-center flex-col max-lg:px-0">
         <div className="w-full flex flex-col items-center">
-          <div className="flex space-x-4">
-            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg">
+          <div className="flex space-x-4 max-lg:gap-5">
+            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg max-lg:p-0 max-lg:bg-opacity-0 max-lg:shadow-none">
               <p className="font-semibold text-xl">Patients</p>
               <p className="text-lg">{totalPatients}</p>
             </div>
-            <div className="w-[3px] my-4 bg-black"></div>
-            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg">
+            <div className="w-[3px] my-4 bg-black max-lg:hidden"></div>
+            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg max-lg:p-0 max-lg:bg-opacity-0 max-lg:shadow-none">
               <p className="font-semibold text-xl">In Queue</p>
               <p className="text-lg">{inQueue}</p>
             </div>
-            <div className="w-[3px] my-4 bg-black"></div>
-            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg">
+            <div className="w-[3px] my-4 bg-black max-lg:hidden"></div>
+            <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg max-lg:p-0 max-lg:bg-opacity-0 max-lg:shadow-none">
               <p className="font-semibold text-xl">Treatments</p>
               <p className="text-lg">{patientsLeft}</p>
             </div>
           </div>
-          <div className="flex items-center justify-center p-10">
+          <div className="flex items-center justify-center p-10 max-lg:p-5">
             <p className="text-4xl font-bold">{formatTime(time)}</p>
           </div>
           <div>
@@ -214,7 +213,7 @@ const DoctorDashboard = () => {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border bg-white shadow-lg"
+              className="rounded-md border bg-white shadow-lg max-lg:hidden"
             />
           </div>
         </div>

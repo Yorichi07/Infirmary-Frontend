@@ -78,7 +78,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/assistant-dashboard",
+    path: "/ad-dashboard",
     element: (
       <AssistantDoctorDashboardLayout>
         <AssistantDoctorDashboard />

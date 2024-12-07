@@ -25,7 +25,7 @@ const UserPrescription = () => {
         const role = localStorage.getItem("roles");
         console.log(role);
 
-        if (role !== "user") {
+        if (role !== "patient") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
           apiUrl = `http://192.168.0.107:8081/api/patient/getAppointmentPat/${val}`;

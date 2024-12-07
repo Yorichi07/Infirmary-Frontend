@@ -72,11 +72,6 @@ const UserAppointment = () => {
           return;
         }
 
-        if(latitude === -1 || longitude === -1){
-          alert("Enable Location Service");
-          return 0;
-        }
-
         const response = await axios.get(
           "http://192.168.0.107:8081/api/AD/getAvailableDoctors",
           {
@@ -94,7 +89,7 @@ const UserAppointment = () => {
         setDoctors(doctorList);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          alert(error.response.data.message);
+          
         } else {
           console.error("Error fetching doctors: ", error);
           alert("Could not fetch available doctors");

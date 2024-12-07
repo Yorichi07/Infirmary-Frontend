@@ -133,9 +133,9 @@ const DoctorCheckIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%]">
+    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] max-lg:min-h-[91svh] max-lg:items-start">
       <div className="w-full px-14 py-10 flex justify-center items-center">
-        <div className="w-full flex flex-col items-center space-y-6">
+        <div className="w-full flex flex-col items-center space-y-6 max-lg:hidden">
           <div className="flex items-center justify-center p-10 border-black border-b-2">
             <p className="text-6xl font-bold">{formatTime(time)}</p>
           </div>
@@ -148,17 +148,17 @@ const DoctorCheckIn = () => {
             />
           </div>
         </div>
-        <div className="w-full px-14">
-          <div className="w-full flex flex-col space-y-2 p-4 bg-black rounded-lg bg-opacity-10 shadow-lg">
+        <div className="w-full px-14 max-lg:px-0 max-lg:min-w-[98svw]">
+          <div className="w-full flex flex-col space-y-2 p-4 max-lg:p-1 bg-black rounded-lg bg-opacity-10 shadow-lg">
             {doctors.map((doctor, index) => (
               <div
                 key={index}
-                className="w-full bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] p-8 rounded-md flex items-center shadow-lg"
+                className="w-full bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] p-8 rounded-md flex items-center shadow-lg max-lg:p-4"
               >
                 <p className="text-white font-semibold text-lg w-2/3">
                   {doctor.name}
                 </p>
-                <div className="flex w-full justify-between">
+                <div className="flex w-full max-lg:w-3/5 justify-between max-lg:flex-col max-lg:gap-4">
                   <button
                     data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${

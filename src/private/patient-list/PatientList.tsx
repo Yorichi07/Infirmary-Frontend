@@ -228,7 +228,7 @@ const PatientList = () => {
   };
 
   return (
-    <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col">
+    <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col max-lg:min-h-[91svh] max-lg:p-0 max-lg:py-4">
       <div className="flex justify-center items-center gap-2">
         <button
           onClick={() => setSelectedButton("Pending")}
@@ -363,7 +363,7 @@ const PatientList = () => {
                                 <div className="flex justify-between">
                                   <div className="form-group">
                                     <label htmlFor="temperature">
-                                      Temperature (in °C)
+                                      Temperature (in °f)
                                     </label>
                                     <input
                                       type="number"

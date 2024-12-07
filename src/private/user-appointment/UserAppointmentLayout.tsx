@@ -11,7 +11,7 @@ const UserAppointmentLayout = ({ children }: { children: React.ReactNode }) => {
     role: "user",
   };
   return (
-    <div className="h-screen">
+    <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">
       <Navbar props={navsetting} />
       {children}
       <div className="w-full flex items-center justify-center bg-white h-[8%] text-[#8F8F8F] border-t border-[gray] font-semibold max-lg:hidden">

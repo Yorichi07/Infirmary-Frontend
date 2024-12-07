@@ -15,7 +15,7 @@ const API_URLS = {
 const DASHBOARD_ROUTES = {
   patient: "/patient-dashboard",
   doctor: "/doctor-dashboard",
-  assistant_doctor: "/assistant-dashboard",
+  assistant_doctor: "/ad-dashboard",
 };
 
 const ROLES = [
