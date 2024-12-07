@@ -8,11 +8,11 @@ import "./SignIn.scss";
 
 const API_URLS = {
   patient:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
+    "http://localhost:8081/api/auth/patient/signin",
   doctor:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
+    "http://localhost:8081/api/auth/doc/signin",
   assistant_doctor:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+    "http://localhost:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -26,6 +26,9 @@ const SignIn = () => {
   const [input, setInput] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [role, setRole] = useState<string>("patient");
+  
+  const [latitude,setLatitude] = useState(-1);
+  const [longitude,setLongitude] = useState(-1);
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
@@ -35,7 +38,18 @@ const SignIn = () => {
     }));
   };
 
+
   const handleRoleChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    if(e.target.value.toString() === "assistant_doctor"){
+        if(!navigator.geolocation) alert("Location Services not Supported");
+
+        navigator.geolocation.getCurrentPosition((pos)=>{
+          setLatitude(pos.coords.latitude);
+          setLongitude(pos.coords.longitude);
+        })
+
+      
+    }
     setRole(e.target.value);
   };
 
@@ -45,8 +59,21 @@ const SignIn = () => {
       DASHBOARD_ROUTES[role as keyof typeof DASHBOARD_ROUTES];
 
     try {
-      const res = await axios.post(apiUrl, input);
-      const { token, email, roles } = res.data;
+      var res = null;
+      if (dashboardRoute == "/assistant-dashboard" ){
+        if(latitude == -1 || longitude == -1) alert("Allow Location Services");
+        res = await axios.post(apiUrl, input,{
+          headers:{
+            "X-Latitude":latitude,
+            "X-Longitude":longitude
+          }
+        });
+        console.log([latitude,longitude])
+      }else{
+        res = await axios.post(apiUrl, input);
+      }
+      console.log(res)
+      const { token, email, roles } = res?.data;
 
       localStorage.setItem("token", token);
       localStorage.setItem("email", email);

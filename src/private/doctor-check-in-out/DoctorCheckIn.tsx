@@ -10,13 +10,23 @@ const DoctorCheckIn = () => {
   const [doctors, setDoctors] = useState<
     Array<{ id: number; name: string; status: string; email: string }>
   >([]);
+  const [latitude,setLatitude] = useState(-1);
+  const [longitude,setLongitude] = useState(-1);
 
   useEffect(() => {
+
+    if(!navigator.geolocation) alert("Location Services not Supported");
+
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      setLatitude(pos.coords.latitude);
+      setLongitude(pos.coords.longitude);
+    })
+
     const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getAllDoctors",
+          "http://localhost:8081/api/AD/getAllDoctors",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -58,16 +68,19 @@ const DoctorCheckIn = () => {
         navigate("/");
         return;
       }
-      const response = await fetch(
-        `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
+      if(latitude == -1 || longitude == -1) alert("Allow Location Services");
+      const response = await axios.get(
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
             Authorization: "Bearer " + token,
+            "X-Latitude":latitude,
+            "X-Longitude":longitude
           },
         }
       );
-      if (!response.ok) {
-        const errorData = await response.json();
+      if (response.status !== 200) {
+        const errorData = await response.data;
         alert(errorData.message || "Failed to check in.");
       } else {
         location.reload();
@@ -89,7 +102,7 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await fetch(
-        `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {
             Authorization: "Bearer " + token,

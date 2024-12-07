@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Calendar } from "@/components/ui/calendar";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const DoctorDashboard = () => {
   const navigate = useNavigate();
@@ -8,10 +9,20 @@ const DoctorDashboard = () => {
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [totalPatients, setTotalPatients] = useState(0);
   const [patientsLeft, setPatientsLeft] = useState(0);
+  const [token,setToken] = useState("No Patient Assigned");
   const [inQueue, setInQueue] = useState(0);
   const [message, setMessage] = useState<string | null>(null);
+  const [latitude,setLatitude] = useState(-1);
+  const [longitude,setLongitude] = useState(-1);
 
   useEffect(() => {
+    if(!navigator.geolocation) alert("Location Services not Supported");
+
+    navigator.geolocation.getCurrentPosition((pos)=>{
+      setLatitude(pos.coords.latitude);
+      setLongitude(pos.coords.longitude);
+    })
+
     const timer = setInterval(() => {
       setTime(new Date());
     }, 1000);
@@ -29,7 +40,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/doctor/total-patient-count",
+        "http://localhost:8081/api/doctor/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -62,18 +73,21 @@ const DoctorDashboard = () => {
         navigate("/");
         return;
       }
-      const response = await fetch(
-        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/doctor/setStatus?isDoctorCheckIn=true",
+      if(latitude == -1 || longitude == -1) alert("Allow Location Services");
+      const response = await axios.get(
+        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=true",
         {
           headers: {
             Authorization: "Bearer " + token,
+            "X-Latitude":latitude,
+            "X-Longitude":longitude
           },
         }
       );
-      if (response.ok) {
+      if (response.status === 200) {
         setMessage("Doctor checked in successfully.");
       } else {
-        const errorData = await response.json();
+        const errorData = await response.data();
         alert(errorData.message || "Failed to check in.");
       }
     } catch (error: any) {
@@ -97,7 +111,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/doctor/setStatus?isDoctorCheckIn=false",
+        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=false",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -123,15 +137,44 @@ const DoctorDashboard = () => {
     }, 2000);
   };
 
+  const fetchTokenNum = async () =>{
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/");
+      return;
+    }
+
+    const response = await axios.get("http://localhost:8081/api/doctor/getCurrentToken",{
+      headers:{
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if(response.status == 200){
+      setToken(response.data)
+      console.log(token)
+    }else{
+      setToken("No Patient Assigned")
+      alert(response.data.message)
+    }
+
+  }
+
   useEffect(() => {
     fetchPatientData();
+    fetchTokenNum();
 
     const interval = setInterval(() => {
       fetchPatientData();
     }, 30000);
 
+    const tokenInterval = setInterval(() => {
+      fetchTokenNum();
+    },30000)
+
     return () => {
       clearInterval(interval);
+      clearInterval(tokenInterval)
     };
   }, []);
 
@@ -144,7 +187,7 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%]">
+    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden">
       <div className="w-full px-14 py-10 flex justify-center items-center">
         <div className="w-full flex flex-col items-center">
           <div className="flex space-x-4">
@@ -196,6 +239,12 @@ const DoctorDashboard = () => {
                 {message}
               </div>
             )}
+            <div
+              className="flex px-10 justify-between items-center py-3 rounded-md">
+              <p className="text-black font-semibold text-xl text-center flex-1">
+                Patient Token Number: {token}
+              </p>
+            </div>
             <button
               className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
               onClick={() => navigate("/patient-details")}

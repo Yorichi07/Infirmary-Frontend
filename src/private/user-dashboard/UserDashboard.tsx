@@ -7,6 +7,7 @@ const UserDashboard = () => {
   const [status, setStatus] = useState({
     appointmentStatus: "",
     doctorName: "",
+    tokenNo:""
   });
   const [userDetails, setUserDetails] = useState({
     email: "",
@@ -35,7 +36,7 @@ const UserDashboard = () => {
       }
 
       try{
-        const res = axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/getAllDetails", {
+        const res = axios.get("http://localhost:8081/api/patient/getAllDetails", {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -46,7 +47,8 @@ const UserDashboard = () => {
       }catch(err:any){
         console.log(err)
         if(err.response.status === 404){
-          window.alert("Set medical details by going to profile icon then click on the profile button and set the neccessary details");
+          navigate("/user-profile")
+          return 0;
         }
       }
 
@@ -60,7 +62,7 @@ const UserDashboard = () => {
         return;
       }
       try {
-        const res = await axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/", {
+        const res = await axios.get("http://localhost:8081/api/patient/", {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -90,7 +92,7 @@ const UserDashboard = () => {
       }
       try {
         const response = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/getStatus",
+          "http://localhost:8081/api/patient/getStatus",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -104,6 +106,7 @@ const UserDashboard = () => {
           doctorName: statusData.Doctor
             ? statusData.DoctorName
             : "Not Appointed",
+          tokenNo: statusData.TokenNo ? statusData.TokenNo : "N/A"
         });
       } catch (error: any) {
         console.log("Error fetching status: ", error);
@@ -133,14 +136,14 @@ const UserDashboard = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%]">
+    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden">
       <div className="w-full px-14 py-10 flex justify-center items-center">
         <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col shadow-xl">
           <div className="bg-white border rounded-md shadow-xl">
             <img
               src={
                 userDetails.imageUrl != null
-                  ? `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/${userDetails.imageUrl}`
+                  ? `http://localhost:8081/${userDetails.imageUrl}`
                   : "/default-user.jpg"
               }
               className="w-63 h-64 object-cover border-2 border-black rounded-md"
@@ -152,6 +155,7 @@ const UserDashboard = () => {
             <p>DOB - {userDetails.dateOfBirth}</p>
             <p>Contact - {userDetails.phoneNumber}</p>
             <p>Blood Group - {userDetails.bloodGroup}</p>
+            <p>Token Number - {status.tokenNo}</p>
           </div>
         </div>
       </div>

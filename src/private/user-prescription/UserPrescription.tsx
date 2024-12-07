@@ -28,9 +28,9 @@ const UserPrescription = () => {
         if (role !== "user") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/getAppointmentPat/${val}`;
+          apiUrl = `http://localhost:8081/api/patient/getAppointmentPat/${val}`;
         } else {
-          apiUrl = "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/getAppointment";
+          apiUrl = "http://localhost:8081/api/patient/getAppointment";
         }
 
         const resp = await axios.get(apiUrl, {
@@ -44,7 +44,7 @@ const UserPrescription = () => {
         const formatData = response.map((rept: any) => ({
           reportId: rept.appointmentId,
           date: rept.date,
-          downloadLink: `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);

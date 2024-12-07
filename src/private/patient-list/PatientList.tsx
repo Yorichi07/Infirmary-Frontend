@@ -48,9 +48,24 @@ const PatientList = () => {
   const [currentPatientEmail, setCurrentPatientEmail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPatient, setFilteredPatient] = useState(patient);
+  const [latitude,setLatitude] = useState(-1);
+  const [longitude,setLongitude] = useState(-1);
+
+
+  useEffect(()=>{
+    
+
+  },[])
 
   useEffect(() => {
-    const fetchList = async () => {
+    if(!navigator.geolocation) alert("Location Services not Supported");
+
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      await fetchList(pos)
+      setLatitude(pos.coords.latitude)
+      setLongitude(pos.coords.longitude)
+    })
+    const fetchList = async (pos:any) => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
@@ -58,12 +73,14 @@ const PatientList = () => {
         }
         const url =
           selectedButton === "Pending"
-            ? "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getPatientQueue"
-            : "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getCompletedQueue";
+            ? "http://localhost:8081/api/AD/getPatientQueue"
+            : "http://localhost:8081/api/AD/getCompletedQueue";
 
         const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,
+            "X-Latitude":pos.coords.latitude,
+            "X-Longitude":pos.coords.longitude
           },
         });
 
@@ -83,7 +100,6 @@ const PatientList = () => {
       }
     };
 
-    fetchList();
   }, [selectedButton]);
 
   useEffect(() => {
@@ -102,12 +118,19 @@ const PatientList = () => {
 
   const getAppointmentDetails = async (email: string) => {
     setCurrentPatientEmail(email);
+
+    if(!navigator.geolocation) alert("Location Services not Supported");
+
+    navigator.geolocation.getCurrentPosition(async (pos) => {
+      setLatitude(pos.coords.latitude)
+      setLongitude(pos.coords.longitude)
+    })
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.get(
-        `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${email}`,
+        `http://localhost:8081/api/AD/getAptForm/${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -131,12 +154,17 @@ const PatientList = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
-
+      if(latitude === -1 || longitude === -1){
+        alert("Enable Location Services");
+        return;
+      }
       const response = await axios.get(
-        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
+        "http://localhost:8081/api/AD/getAvailableDoctors",
         {
           headers: {
             Authorization: `Bearer ${token}`,
+            "X-Latitude":latitude,
+            "X-Longitude":longitude
           },
         }
       );
@@ -158,7 +186,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/submitAppointment",
+        "http://localhost:8081/api/AD/submitAppointment",
         {
           weight: dialogData.weight,
           temperature: dialogData.temperature,
@@ -381,7 +409,7 @@ const PatientList = () => {
                                         const token =
                                           localStorage.getItem("token");
                                         const response = await axios.get(
-                                          `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${pat.email}`,
+                                          `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
                                           {
                                             headers: {
                                               Authorization: `Bearer ${token}`,
@@ -437,7 +465,7 @@ const PatientList = () => {
                           onClick={async () => {
                             try {
                               const resp = await axios.get(
-                                `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/completeAppointment/${pat.email}`,
+                                `http://localhost:8081/api/AD/completeAppointment/${pat.email}`,
                                 {
                                   headers: {
                                     Authorization: `Bearer ${localStorage.getItem(
@@ -459,7 +487,7 @@ const PatientList = () => {
                           onClick={async () => {
                             try {
                               const resp = await axios.get(
-                                `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${pat.email}`,
+                                `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
                                 {
                                   headers: {
                                     Authorization: `Bearer ${localStorage.getItem(
