@@ -78,7 +78,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.get(
-          "http://localhost:8081/api/AD/getAvailableDoctors",
+          "http://192.168.147.176:8081/api/AD/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -107,7 +107,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://localhost:8081/api/appointment/lastAppointmentDate",
+        "http://192.168.147.176:8081/api/appointment/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -154,7 +154,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.post(
-          "http://localhost:8081/api/patient/submitAppointment",
+          "http://192.168.147.176:8081/api/patient/submitAppointment",
           appointmentData,
           {
             headers: {
@@ -191,10 +191,10 @@ const UserAppointment = () => {
   };
 
   return (
-    <div className="h-[83%] pr-4 w-full flex gap-8">
-      <img src="/appointment.jpg" className="w-[60%]" />
+    <div className="h-[83%] w-full flex gap-8 max-lg:min-h-[91%] ">
+      <img src="/appointment.jpg" className="w-[55%] max-lg:hidden" />
 
-      <div className="appointment-container justify-between flex flex-col pt-5 pb-5">
+      <div className="appointment-container justify-between flex flex-col py-5 px-3">
         <div className="appointment-container__content">
           <Form {...form}>
             <form
@@ -365,7 +365,7 @@ const UserAppointment = () => {
             className="save-btn"
             onClick={form.handleSubmit(onSubmit)}
           >
-            Save
+            Submit
           </Button>
         </div>
       </div>

@@ -7,7 +7,7 @@ const UserDashboard = () => {
   const [status, setStatus] = useState({
     appointmentStatus: "",
     doctorName: "",
-    tokenNo:""
+    tokenNo: "",
   });
   const [userDetails, setUserDetails] = useState({
     email: "",
@@ -27,7 +27,6 @@ const UserDashboard = () => {
   };
 
   useEffect(() => {
-
     const getMedicalDetailsStatus = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -35,25 +34,25 @@ const UserDashboard = () => {
         return;
       }
 
-      try{
-        const res = axios.get("http://localhost:8081/api/patient/getAllDetails", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
+      try {
+        const res = axios.get(
+          "http://192.168.147.176:8081/api/patient/getAllDetails",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
-        (await res).data;  
-
-      }catch(err:any){
-        console.log(err)
-        if(err.response.status === 404){
-          navigate("/user-profile")
+        const data = (await res).data;
+      } catch (err: any) {
+        console.log(err);
+        if (err.response.status === 404) {
+          navigate("/user-profile");
           return 0;
         }
       }
-
-    }
-
+    };
 
     const getUser = async () => {
       const token = localStorage.getItem("token");
@@ -62,11 +61,14 @@ const UserDashboard = () => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:8081/api/patient/", {
-          headers: {
-            Authorization: "Bearer " + token,
-          },
-        });
+        const res = await axios.get(
+          "http://192.168.147.176:8081/api/patient/",
+          {
+            headers: {
+              Authorization: "Bearer " + token,
+            },
+          }
+        );
 
         const data = await res.data;
         setUserDetails(data);
@@ -92,7 +94,7 @@ const UserDashboard = () => {
       }
       try {
         const response = await axios.get(
-          "http://localhost:8081/api/patient/getStatus",
+          "http://192.168.147.176:8081/api/patient/getStatus",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -106,7 +108,7 @@ const UserDashboard = () => {
           doctorName: statusData.Doctor
             ? statusData.DoctorName
             : "Not Appointed",
-          tokenNo: statusData.TokenNo ? statusData.TokenNo : "N/A"
+          tokenNo: statusData.TokenNo ? statusData.TokenNo : "N/A",
         });
       } catch (error: any) {
         console.log("Error fetching status: ", error);
@@ -136,23 +138,26 @@ const UserDashboard = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden">
-      <div className="w-full px-14 py-10 flex justify-center items-center">
+    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83svh] overflow-hidden pl-8 pr-8 max-lg:flex-col max-lg:overflow-y-scroll max-lg:gap-5 max-lg:py-5">
+      <div className="w-full flex justify-center items-center">
         <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col shadow-xl">
           <div className="bg-white border rounded-md shadow-xl">
             <img
               src={
                 userDetails.imageUrl != null
-                  ? `http://localhost:8081/${userDetails.imageUrl}`
+                  ? `http://192.168.147.176:8081/${userDetails.imageUrl}`
                   : "/default-user.jpg"
               }
-              className="w-63 h-64 object-cover border-2 border-black rounded-md"
+              className="w-63 h-64 object-cover border-2 border-black"
             />
           </div>
-          <div className="text-center space-y-2 text-[#545555] font-medium">
+          <div className="text-center  space-y-2 text-[#545555] font-semibold">
             <p>{userDetails.name}</p>
             <p>{userDetails.email}</p>
-            <p>DOB - {userDetails.dateOfBirth}</p>
+            <p>
+              DOB -{" "}
+              {new Date(userDetails.dateOfBirth).toLocaleDateString("en-GB")}
+            </p>
             <p>Contact - {userDetails.phoneNumber}</p>
             <p>Blood Group - {userDetails.bloodGroup}</p>
             <p>Token Number - {status.tokenNo}</p>
@@ -160,8 +165,8 @@ const UserDashboard = () => {
         </div>
       </div>
 
-      <div className="w-full px-14 py-10 flex items-center justify-center">
-        <div className="w-full flex flex-col px-10 space-y-8">
+      <div className="w-full flex items-center justify-center">
+        <div className="w-full flex flex-col px-10 space-y-8 max-lg:px-0">
           <div className="shadow-xl bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] p-2 py-4 rounded-md flex flex-col items-center justify-center">
             <p className="text-white font-semibold text-lg text-center">
               Appointment Status
