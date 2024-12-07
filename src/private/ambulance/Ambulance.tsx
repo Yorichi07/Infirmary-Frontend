@@ -9,15 +9,15 @@ import {
 
 const Ambulance = () => {
   return (
-    <div className="h-[83%] pl-10 flex items-center justify-center ">
+    <div className="h-[83svh] pl-10 flex items-center justify-center max-lg:h-[93svh] max-lg:pl-0">
       <img
         src="/Ambulance.png"
-        className="w-[40%]"
+        className="w-[40%] max-lg:hidden"
         alt="emergency png"
       />
 
-      <div className="h-[80%] w-[60%] flex items-center justify-center gap-14">
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200 shadow-xl">
+      <div className="h-[80%] w-[60%] flex items-center justify-center gap-14 max-lg:w-[100%] max-lg:flex-col  max-lg:h-[90%] max-lg:gap-6">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
           <CardHeader>
             <CardTitle>Ram Kumar</CardTitle>
             <CardDescription>Bidholi Campus</CardDescription>
@@ -30,7 +30,7 @@ const Ambulance = () => {
           <p><b>Phone: </b>+91 12345 65846</p>
           </CardFooter>
         </Card>
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200 shadow-xl">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[40%] items-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
           <CardHeader>
             <CardTitle>Shyam Kumar</CardTitle>
             <CardDescription>Kandoli Campus</CardDescription>

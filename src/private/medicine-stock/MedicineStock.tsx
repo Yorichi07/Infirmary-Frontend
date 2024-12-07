@@ -35,11 +35,14 @@ const MedicineStock = () => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://192.168.0.107:8081/api/stock/", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://192.168.147.176:8081/api/stock/",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         setStocks(response.data);
       } catch (error) {
         console.error("Error fetching stock data:", error);
@@ -94,7 +97,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          "http://192.168.0.107:8081/api/stock/addStock",
+          "http://192.168.147.176:8081/api/stock/addStock",
           formattedNewStock,
           {
             headers: {
@@ -117,11 +120,14 @@ const MedicineStock = () => {
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(`http://192.168.0.107:8081/api/stock/${batchNumber}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.delete(
+          `http://192.168.147.176:8081/api/stock/${batchNumber}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         // Update state after deletion
         setStocks((prevStocks) =>
@@ -160,7 +166,7 @@ const MedicineStock = () => {
   }
 
   return (
-    <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col">
+    <div className="bg-[#ECECEC] h-[83svh] p-8 space-y-8 flex flex-col max-lg:h-[93svh] max-lg:p-4">
       {error && <div className="text-red-500 font-medium">{error}</div>}
       <div className="flex space-x-2 items-center">
         {Shared.Search}
@@ -179,7 +185,7 @@ const MedicineStock = () => {
                 <TableHead className="w-[100px] border text-black font-bold text-center">
                   Select
                 </TableHead>
-                <TableHead className="w-[100px] border text-black font-bold text-center">
+                <TableHead className="w-[100px] border text-black font-bold text-center whitespace-nowrap">
                   Batch no.
                 </TableHead>
                 <TableHead className="border text-black font-bold text-center">
@@ -194,7 +200,7 @@ const MedicineStock = () => {
                 <TableHead className="border text-black font-bold text-center">
                   Type
                 </TableHead>
-                <TableHead className="border text-black font-bold text-center">
+                <TableHead className="border text-black font-bold text-center whitespace-nowrap">
                   Expiration Date
                 </TableHead>
                 {/* <TableHead className="border text-black font-bold text-center">
@@ -341,17 +347,17 @@ const MedicineStock = () => {
           </div>
         )}
       </div>
-      <div className="flex items-center justify-between">
+      <div className="flex items-center max-lg:justify-center">
         <div className="flex items-center space-x-8">
           <button
             onClick={handleAddNewRow}
-            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md"
+            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
           >
             Add
             {Shared.SquarePlus}
           </button>
           <button
-            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md"
+            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
             onClick={handleDelete}
           >
             Delete
@@ -359,7 +365,7 @@ const MedicineStock = () => {
           </button>
           <button
             onClick={handleSave}
-            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md"
+            className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
           >
             Save
             {Shared.Save}

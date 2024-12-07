@@ -53,7 +53,7 @@ const Navbar = ({
             {props.role !== "doctor" && props.role !== "ad" ? (
               <div
                 className="flex items-center gap-2 max-lg:items-start max-lg:gap-1 hover:cursor-pointer"
-                onClick={() => navigateTo("/user-profile")}
+                onClick={() => navigateTo("/patient-profile")}
               >
                 <img
                   src="/user-icon.png"

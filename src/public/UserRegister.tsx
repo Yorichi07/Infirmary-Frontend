@@ -151,7 +151,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://192.168.0.107:8081/api/auth/patient/signup", payload)
+          .post("http://192.168.147.176:8081/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });
