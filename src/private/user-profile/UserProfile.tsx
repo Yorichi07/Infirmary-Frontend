@@ -189,7 +189,7 @@ const UserProfile = () => {
         );
         console.log("Form Data Submitted: ", response.data);
         alert("Profile updated successfully");
-        navigate("/user-dashboard");
+        navigate("/patient-dashboard");
       } catch (error: any) {
         console.error("Error submitting form:", error);
         alert(error.response.data.message);
@@ -200,7 +200,7 @@ const UserProfile = () => {
   };
 
   const handleCancel = () => {
-    navigate("/user-dashboard");
+    navigate("/patient-dashboard");
   };
 
   return (

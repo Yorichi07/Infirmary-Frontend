@@ -13,7 +13,7 @@ const API_URLS = {
 };
 
 const DASHBOARD_ROUTES = {
-  patient: "/user-dashboard",
+  patient: "/patient-dashboard",
   doctor: "/doctor-dashboard",
   assistant_doctor: "/assistant-dashboard",
 };

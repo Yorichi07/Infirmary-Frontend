@@ -167,7 +167,7 @@ const UserAppointment = () => {
 
         if (response.status === 200) {
           alert("Appointment submitted successfully");
-          navigate("/user-dashboard");
+          navigate("/patient-dashboard");
         } else {
           console.error("Failed to submit appointment");
           alert("Failed to submit appointment");
@@ -187,7 +187,7 @@ const UserAppointment = () => {
   };
 
   const handleCancel = () => {
-    navigate("/user-dashboard");
+    navigate("/patient-dashboard");
   };
 
   return (
