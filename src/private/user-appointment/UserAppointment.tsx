@@ -186,7 +186,7 @@ const UserAppointment = () => {
   };
 
   return (
-    <div className="h-[83%] w-full flex gap-8 max-lg:min-h-[91%] ">
+    <div className="h-[83svh] w-full flex gap-8 max-lg:h-[93svh]">
       <img src="/appointment.jpg" className="w-[55%] max-lg:hidden" />
 
       <div className="appointment-container justify-between flex flex-col py-5 px-3">

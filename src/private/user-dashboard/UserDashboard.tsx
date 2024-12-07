@@ -48,7 +48,7 @@ const UserDashboard = () => {
       } catch (err: any) {
         console.log(err);
         if (err.response.status === 404) {
-          navigate("/user-profile");
+          navigate("/patient-profile");
           return 0;
         }
       }
@@ -213,7 +213,7 @@ const UserDashboard = () => {
           <div className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
             <button
               className="text-white font-semibold text-lg text-center flex-1"
-              onClick={() => navigateTo("/user-appointment")}
+              onClick={() => navigateTo("/patient-appointment")}
             >
               Schedule an Appointment
             </button>
@@ -221,7 +221,7 @@ const UserDashboard = () => {
           <div className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
             <button
               className="text-white font-semibold text-lg text-center flex-1"
-              onClick={() => navigateTo("/user-prescription")}
+              onClick={() => navigateTo("/patient-prescription")}
             >
               Prescription History
             </button>
