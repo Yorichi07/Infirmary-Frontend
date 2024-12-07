@@ -88,7 +88,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://192.168.147.176:8081/api/prescription/submit",
+        "http://192.168.0.107:8081/api/prescription/submit",
         req,
         {
           headers: {
@@ -112,7 +112,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://192.168.147.176:8081/api/doctor/getPatient",
+          "http://192.168.0.107:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -150,7 +150,7 @@ const PatientDetails = () => {
 
     const fetchMed = async () => {
       try {
-        const resp = await axios.get("http://192.168.147.176:8081/api/stock/available", {
+        const resp = await axios.get("http://192.168.0.107:8081/api/stock/available", {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
@@ -203,7 +203,7 @@ const PatientDetails = () => {
             className="w-[15%] border-black border"
             src={
               ndata?.imageUrl != null
-                ? `http://192.168.147.176:8081/${ndata?.imageUrl}`
+                ? `http://192.168.0.107:8081/${ndata?.imageUrl}`
                 : "/default-user.jpg"
             }
           />

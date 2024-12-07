@@ -35,7 +35,7 @@ const MedicineStock = () => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://192.168.147.176:8081/api/stock/", {
+        const response = await axios.get("http://192.168.0.107:8081/api/stock/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -94,7 +94,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          "http://192.168.147.176:8081/api/stock/addStock",
+          "http://192.168.0.107:8081/api/stock/addStock",
           formattedNewStock,
           {
             headers: {
@@ -117,7 +117,7 @@ const MedicineStock = () => {
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(`http://192.168.147.176:8081/api/stock/${batchNumber}`, {
+        await axios.delete(`http://192.168.0.107:8081/api/stock/${batchNumber}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

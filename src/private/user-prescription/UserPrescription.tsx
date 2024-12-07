@@ -28,9 +28,9 @@ const UserPrescription = () => {
         if (role !== "user") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://192.168.147.176:8081/api/patient/getAppointmentPat/${val}`;
+          apiUrl = `http://192.168.0.107:8081/api/patient/getAppointmentPat/${val}`;
         } else {
-          apiUrl = "http://192.168.147.176:8081/api/patient/getAppointment";
+          apiUrl = "http://192.168.0.107:8081/api/patient/getAppointment";
         }
 
         const resp = await axios.get(apiUrl, {
@@ -44,7 +44,7 @@ const UserPrescription = () => {
         const formatData = response.map((rept: any) => ({
           reportId: rept.appointmentId,
           date: rept.date,
-          downloadLink: `http://192.168.147.176:8081/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://192.168.0.107:8081/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);

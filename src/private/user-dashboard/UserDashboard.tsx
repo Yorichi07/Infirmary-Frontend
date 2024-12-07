@@ -36,7 +36,7 @@ const UserDashboard = () => {
 
       try {
         const res = axios.get(
-          "http://192.168.147.176:8081/api/patient/getAllDetails",
+          "http://192.168.0.107:8081/api/patient/getAllDetails",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -62,7 +62,7 @@ const UserDashboard = () => {
       }
       try {
         const res = await axios.get(
-          "http://192.168.147.176:8081/api/patient/",
+          "http://192.168.0.107:8081/api/patient/",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -94,7 +94,7 @@ const UserDashboard = () => {
       }
       try {
         const response = await axios.get(
-          "http://192.168.147.176:8081/api/patient/getStatus",
+          "http://192.168.0.107:8081/api/patient/getStatus",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -145,7 +145,7 @@ const UserDashboard = () => {
             <img
               src={
                 userDetails.imageUrl != null
-                  ? `http://192.168.147.176:8081/${userDetails.imageUrl}`
+                  ? `http://192.168.0.107:8081/${userDetails.imageUrl}`
                   : "/default-user.jpg"
               }
               className="w-63 h-64 object-cover border-2 border-black"
