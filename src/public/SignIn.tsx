@@ -46,8 +46,7 @@ const SignIn = () => {
           setLocation({
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
-          }),
-        () => alert("Please enable location services.")
+          })
       );
     }
   };

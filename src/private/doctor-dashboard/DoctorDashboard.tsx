@@ -186,7 +186,7 @@ const DoctorDashboard = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden max-lg:min-h-[91svh]">
+    <div className="flex justify-center items-center bg-[#ECECEC] h-[83%] overflow-hidden max-lg:min-h-[100svh]">
       <div className="w-full px-14 py-10 max-lg:py-5 flex justify-center items-center flex-col max-lg:px-0">
         <div className="w-full flex flex-col items-center">
           <div className="flex space-x-4 max-lg:gap-5">
@@ -217,8 +217,8 @@ const DoctorDashboard = () => {
             />
           </div>
         </div>
-        <div className="w-full px-14">
-          <div className="w-full flex flex-col px-10 py-10 space-y-12">
+        <div className="w-full px-14 max-lg:px-8">
+          <div className="w-full flex flex-col px-10 max-lg:px-0 space-y-10 max-lg:py-2">
             <div className="flex w-full justify-between">
               <button
                 className="shadow-lg text-white px-10 py-3 rounded-md font-semibold text-lg text-center bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
