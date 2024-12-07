@@ -28,9 +28,9 @@ const UserPrescription = () => {
         if (role !== "user") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://192.168.147.176:8081/api/patient/getAppointmentPat/${val}`;
+          apiUrl = `http://localhost:8081/api/patient/getAppointmentPat/${val}`;
         } else {
-          apiUrl = "http://192.168.147.176:8081/api/patient/getAppointment";
+          apiUrl = "http://localhost:8081/api/patient/getAppointment";
         }
 
         const resp = await axios.get(apiUrl, {
@@ -44,7 +44,7 @@ const UserPrescription = () => {
         const formatData = response.map((rept: any) => ({
           reportId: rept.appointmentId,
           date: rept.date,
-          downloadLink: `http://192.168.147.176:8081/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);
@@ -65,16 +65,16 @@ const UserPrescription = () => {
   }, []);
 
   return (
-    <div className="h-[83%] flex justify-center">
-      <img src="/prescription.jpg" className="w-[60%]" />
-      <div className="w-[50%] overflow-y-scroll p-5">
+    <div className="h-[83svh] flex justify-center max-lg:h-[93svh]">
+      <img src="/prescription.jpg" className="w-[55%] max-lg:hidden" />
+      <div className="w-[100%] overflow-y-scroll p-5">
         <Table className="border">
           <TableCaption>A list of your recent reports</TableCaption>
           <TableHeader>
             <TableRow>
               <TableHead className="w-[33%] text-center">Report Id</TableHead>
               <TableHead className="w-[33%] text-center">Date</TableHead>
-              <TableHead className="text-center">Download Report</TableHead>
+              <TableHead className="text-center whitespace-nowrap">Download Report</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>

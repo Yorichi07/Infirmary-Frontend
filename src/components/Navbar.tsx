@@ -28,13 +28,13 @@ const Navbar = ({
   };
 
   return (
-    <div className="bg-white shadow-md p-4 flex items-center justify-between h-[9svh] border-b border border-[gray]">
+    <div className="bg-white shadow-md p-4 flex items-center justify-between h-[9svh] border-b border border-[gray] max-lg:h-[7svh]">
       <img
         src="/upes-logo.jpg"
         alt="UPES Logo"
-        className="w-[100px] h-[45px]"
+        className="w-[100px] h-[45px] max-lg:w-[80px] max-lg:h-[35px]"
       />
-      <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline">
+      <div className="capitalize font-semibold text-2xl max-lg:text-lg flex gap-2 items-baseline">
         {props.titleLogo &&
           (typeof props.titleLogo === "string" ? (
             <img src={props.titleLogo} alt="Title Logo" className="w-8" />
@@ -45,7 +45,7 @@ const Navbar = ({
       </div>
       {props.additionalLogo && props.menu ? (
         <Popover>
-          <PopoverTrigger className="text-2xl max-lg:text-xl">
+          <PopoverTrigger className="text-2xl max-lg:text-lg">
             {props.additionalLogo}
           </PopoverTrigger>
           <PopoverContent className="space-y-4 p-4 max-lg:p-2">

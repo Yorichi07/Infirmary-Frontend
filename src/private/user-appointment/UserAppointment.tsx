@@ -78,7 +78,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.get(
-          "http://192.168.147.176:8081/api/AD/getAvailableDoctors",
+          "http://localhost:8081/api/AD/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -107,7 +107,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://192.168.147.176:8081/api/appointment/lastAppointmentDate",
+        "http://localhost:8081/api/appointment/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -154,7 +154,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.post(
-          "http://192.168.147.176:8081/api/patient/submitAppointment",
+          "http://localhost:8081/api/patient/submitAppointment",
           appointmentData,
           {
             headers: {
@@ -191,7 +191,7 @@ const UserAppointment = () => {
   };
 
   return (
-    <div className="h-[83%] w-full flex gap-8 max-lg:min-h-[91%] ">
+    <div className="h-[83svh] w-full flex gap-8 max-lg:h-[93svh]">
       <img src="/appointment.jpg" className="w-[55%] max-lg:hidden" />
 
       <div className="appointment-container justify-between flex flex-col py-5 px-3">

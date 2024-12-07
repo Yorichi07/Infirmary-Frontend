@@ -1,6 +1,6 @@
 .profile-container {
   &__content {
-    height: 83%;
+    height: 83svh;
     padding: 0 0.5rem 0.5rem 0.5rem;
   }
 
@@ -43,7 +43,7 @@
   }
 
   &__footer {
-    height: 8%;
+    height: 8svh;
     display: flex;
     justify-content: right;
     align-items: center;
@@ -67,7 +67,7 @@
   .profile-container{
     &__content{
       padding: 1rem 0;
-      height: auto;
+      height: 93svh;
     }
     &__body{
       padding: 0.5rem;

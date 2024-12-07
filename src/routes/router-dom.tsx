@@ -38,7 +38,7 @@ const router = createBrowserRouter([
     element: <UserRegister></UserRegister>,
   },
   {
-    path: "/user-profile",
+    path: "/patient-profile",
     element: (
       <UserProfileLayout>
         <UserProfile />
@@ -46,7 +46,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/user-appointment",
+    path: "/patient-appointment",
     element: (
       <UserAppointmentLayout>
         <UserAppointment />
@@ -62,7 +62,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/user-prescription",
+    path: "/patient-prescription",
     element: (
       <UserPrescriptionLayout>
         <UserPrescription />

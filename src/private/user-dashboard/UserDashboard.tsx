@@ -36,7 +36,7 @@ const UserDashboard = () => {
 
       try {
         const res = axios.get(
-          "http://192.168.147.176:8081/api/patient/getAllDetails",
+          "http://localhost:8081/api/patient/getAllDetails",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -48,7 +48,7 @@ const UserDashboard = () => {
       } catch (err: any) {
         console.log(err);
         if (err.response.status === 404) {
-          navigate("/user-profile");
+          navigate("/patient-profile");
           return 0;
         }
       }
@@ -62,7 +62,7 @@ const UserDashboard = () => {
       }
       try {
         const res = await axios.get(
-          "http://192.168.147.176:8081/api/patient/",
+          "http://localhost:8081/api/patient/",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -94,7 +94,7 @@ const UserDashboard = () => {
       }
       try {
         const response = await axios.get(
-          "http://192.168.147.176:8081/api/patient/getStatus",
+          "http://localhost:8081/api/patient/getStatus",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -145,7 +145,7 @@ const UserDashboard = () => {
             <img
               src={
                 userDetails.imageUrl != null
-                  ? `http://192.168.147.176:8081/${userDetails.imageUrl}`
+                  ? `http://localhost:8081/${userDetails.imageUrl}`
                   : "/default-user.jpg"
               }
               className="w-63 h-64 object-cover border-2 border-black"
@@ -213,7 +213,7 @@ const UserDashboard = () => {
           <div className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
             <button
               className="text-white font-semibold text-lg text-center flex-1"
-              onClick={() => navigateTo("/user-appointment")}
+              onClick={() => navigateTo("/patient-appointment")}
             >
               Schedule an Appointment
             </button>
@@ -221,7 +221,7 @@ const UserDashboard = () => {
           <div className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md">
             <button
               className="text-white font-semibold text-lg text-center flex-1"
-              onClick={() => navigateTo("/user-prescription")}
+              onClick={() => navigateTo("/patient-prescription")}
             >
               Prescription History
             </button>

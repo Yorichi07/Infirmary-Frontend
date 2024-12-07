@@ -151,7 +151,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://192.168.147.176:8081/api/auth/patient/signup", payload)
+          .post("http://localhost:8081/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });
@@ -207,9 +207,11 @@ const UserRegister = () => {
       <div className="register-container__content">
         <div className="register-container__header">
           <img src="/upes-logo.jpg" alt="UPES Logo" />
-          <div className="title">
-            {Shared.UserPlus}
-            <h1>Patient Registration Form</h1>
+          <div className="flex items-baseline w-full">
+            <div className="title">
+              {Shared.UserPlus}
+              <h1>Patient Registration Form</h1>
+            </div>
           </div>
         </div>
 

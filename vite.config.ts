@@ -11,6 +11,5 @@ export default defineConfig({
   },
   server: {
     host: true,
-    open: "http://192.168.176.1:5173/"
   },
 });
