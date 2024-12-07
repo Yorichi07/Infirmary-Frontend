@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
-  patient: "http://192.168.0.107:8081/api/auth/patient/signin",
-  doctor: "http://192.168.0.107:8081/api/auth/doc/signin",
-  assistant_doctor: "http://192.168.0.107:8081/api/auth/ad/signin",
+  patient: "http://192.168.147.176:8081/api/auth/patient/signin",
+  doctor: "http://192.168.147.176:8081/api/auth/doc/signin",
+  assistant_doctor: "http://192.168.147.176:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {

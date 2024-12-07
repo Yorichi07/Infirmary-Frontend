@@ -1,5 +1,5 @@
 .sign-container {
-  height: 94vh;
+  height: 92svh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
@@ -80,23 +80,21 @@
   font-weight: 600;
   background-color: white;
   color: #8f8f8f;
-  height: 6svh;
+  height: 8svh;
 }
 
 @media only screen and (max-width: 1024px) {
   .sign-container {
     grid-template-columns: 1fr;
     grid-template-areas: "right";
-    min-height: 100svh;
-    min-width: 100svw;
+    height: 100svh;
 
     &__left {
       display: none;
     }
 
     &__right {
-      padding: 0;
-      align-items: center;
+      padding: 1rem;
     }
   }
   .helpline {

@@ -88,7 +88,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://192.168.0.107:8081/api/prescription/submit",
+        "http://192.168.147.176:8081/api/prescription/submit",
         req,
         {
           headers: {
@@ -112,7 +112,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://192.168.0.107:8081/api/doctor/getPatient",
+          "http://192.168.147.176:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -150,11 +150,14 @@ const PatientDetails = () => {
 
     const fetchMed = async () => {
       try {
-        const resp = await axios.get("http://192.168.0.107:8081/api/stock/available", {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
+        const resp = await axios.get(
+          "http://192.168.147.176:8081/api/stock/available",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
 
         const response = resp.data;
         setStock(response);
@@ -196,18 +199,18 @@ const PatientDetails = () => {
   };
 
   return (
-    <div className="h-[83%] p-5 flex flex-col bg-[#f5f5f5]">
-      <div className=" overflow-y-scroll p-5">
-        <div className="flex justify-between mb-5">
+    <div className="h-[83svh] p-5 flex flex-col bg-[#f5f5f5] max-lg:h-[93svh]">
+      <div className=" overflow-y-scroll p-5 max-lg:p-0">
+        <div className="flex justify-between mb-5 max-lg:flex-col max-lg:items-center">
           <img
-            className="w-[15%] border-black border"
+            className="w-[15%] border-black border-[1.5px] max-lg:w-[50%] max-lg:mb-5"
             src={
               ndata?.imageUrl != null
-                ? `http://192.168.0.107:8081/${ndata?.imageUrl}`
+                ? `http://192.168.147.176:8081/${ndata?.imageUrl}`
                 : "/default-user.jpg"
             }
           />
-          <div className="flex flex-col justify-between">
+          <div className="flex flex-col justify-between max-lg:gap-5 max-lg:mb-5 max-lg:w-full">
             <div className="input-field">
               <label>Name:</label>
               <input type="text" value={ndata?.name} disabled />
@@ -229,35 +232,25 @@ const PatientDetails = () => {
               <input type="text" value={ndata?.course} disabled />
             </div>
           </div>
-          <div className="flex flex-col justify-center items-center gap-4 w-[20%]">
-            <Popover>
-              <PopoverTrigger className="history-btn">
-                Medical History
-              </PopoverTrigger>
-              <PopoverContent>{ndata?.medHis}</PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger className="history-btn">
-                Family Medical History
-              </PopoverTrigger>
-              <PopoverContent>{ndata?.famHis}</PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger className="history-btn">Allergies</PopoverTrigger>
-              <PopoverContent>{ndata?.allergies}</PopoverContent>
-            </Popover>
-            <Popover>
-              <PopoverTrigger
-                className="history-btn"
-                onClick={() =>
-                  navigate(`/user-prescription?id=${ndata?.email}`)
-                }
-              >
-                Reports
-              </PopoverTrigger>
-            </Popover>
-          </div>
-          <div className="flex flex-col w-[30%] gap-2">
+          <div className="flex flex-col w-[30%] gap-2 max-lg:w-full max-lg:mb-5">
+            <label className="font-medium">Medical History:</label>
+            <textarea
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+              disabled
+              value={ndata?.medHis}
+            ></textarea>
+            <label className="font-medium">Family History:</label>
+            <textarea
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+              disabled
+              value={ndata?.famHis}
+            ></textarea>
+            <label className="font-medium">Allergies:</label>
+            <textarea
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+              disabled
+              value={ndata?.allergies}
+            ></textarea>
             <label className="font-medium">Reason for Visit:</label>
             <textarea
               className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
@@ -265,16 +258,42 @@ const PatientDetails = () => {
               value={ndata?.reason}
             ></textarea>
           </div>
+          <div className="flex flex-col justify-center items-center gap-4 w-[20%] max-lg:w-[100%]">
+            <Popover>
+              <PopoverTrigger className="history-btn max-lg:hidden">
+                Medical History
+              </PopoverTrigger>
+              <PopoverContent>{ndata?.medHis}</PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger className="history-btn max-lg:hidden">
+                Family Medical History
+              </PopoverTrigger>
+              <PopoverContent>{ndata?.famHis}</PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger className="history-btn max-lg:hidden">
+                Allergies
+              </PopoverTrigger>
+              <PopoverContent>{ndata?.allergies}</PopoverContent>
+            </Popover>
+            <Popover>
+              <PopoverTrigger
+                className="history-btn"
+                onClick={() =>
+                  navigate(`/patient-prescription?id=${ndata?.email}`)
+                }
+              >
+                Reports
+              </PopoverTrigger>
+            </Popover>
+          </div>
         </div>
-        <div className="p-5 flex flex-col justify-center items-center">
-          <div className="bg-[#fdfdfd] p-5 w-[70%] border-black border">
+        <div className="p-5 flex flex-col justify-center items-center max-lg:px-0">
+          <div className="bg-[#fdfdfd] p-5 w-[70%] border-black border max-lg:w-full">
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex center">
-                <img
-                  src="/upes-logo2.jpg"
-                  alt="Logo"
-                  className="w-[50px]"
-                />
+                <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
               </div>
               <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
               <div className="text-[18px]">
