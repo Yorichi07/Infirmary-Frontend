@@ -27,11 +27,21 @@ import PatientDetailsLayout from "@/private/patient-details/PatientDetailsLayout
 import PatientDetails from "@/private/patient-details/PatientDetails";
 import CommonPrescriptionLayout from "@/private/common-prescription/CommonPrescriptionLayout";
 import CommonPrescription from "@/private/common-prescription/CommonPrescription";
+import AdminSignIn from "@/public/AdminSignIn";
+import AdminDashboard from "@/private/admin-dashboard/AdminDashboard";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <SignIn />,
+  },
+  {
+    path: "/admin-portal",
+    element: <AdminSignIn />,
+  },
+  {
+    path: "/admin-dashboard",
+    element: <AdminDashboard />,
   },
   {
     path: "/register",
