@@ -36,7 +36,7 @@ const UserDashboard = () => {
 
       try {
         const res = axios.get(
-          "http://192.168.147.176:8081/api/patient/getAllDetails",
+          "http://192.168.0.107:8081/api/patient/getAllDetails",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -44,7 +44,7 @@ const UserDashboard = () => {
           }
         );
 
-        const data = (await res).data;
+        (await res).data;
       } catch (err: any) {
         console.log(err);
         if (err.response.status === 404) {
@@ -62,7 +62,7 @@ const UserDashboard = () => {
       }
       try {
         const res = await axios.get(
-          "http://192.168.147.176:8081/api/patient/",
+          "http://192.168.0.107:8081/api/patient/",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -94,7 +94,7 @@ const UserDashboard = () => {
       }
       try {
         const response = await axios.get(
-          "http://192.168.147.176:8081/api/patient/getStatus",
+          "http://192.168.0.107:8081/api/patient/getStatus",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -138,14 +138,14 @@ const UserDashboard = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83svh] overflow-hidden pl-8 pr-8 max-lg:flex-col max-lg:overflow-y-scroll max-lg:gap-5 max-lg:py-5">
+    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83svh] overflow-hidden py-2 pl-8 pr-8 max-lg:flex-col max-lg:overflow-y-scroll max-lg:gap-5 max-lg:py-5">
       <div className="w-full flex justify-center items-center">
         <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col shadow-xl">
           <div className="bg-white border rounded-md shadow-xl">
             <img
               src={
                 userDetails.imageUrl != null
-                  ? `http://192.168.147.176:8081/${userDetails.imageUrl}`
+                  ? `http://192.168.0.107:8081/${userDetails.imageUrl}`
                   : "/default-user.jpg"
               }
               className="w-63 h-64 object-cover border-2 border-black"

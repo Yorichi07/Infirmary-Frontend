@@ -86,7 +86,7 @@ const UserProfile = () => {
       }
       try {
         const res = await axios.get(
-          "http://192.168.147.176:8081/api/patient/getAllDetails",
+          "http://192.168.0.107:8081/api/patient/getAllDetails",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -115,7 +115,7 @@ const UserProfile = () => {
         if (error.response && error.response.status === 404) {
           try {
             const resBackup = await axios.get(
-              "http://192.168.147.176:8081/api/patient/",
+              "http://192.168.0.107:8081/api/patient/",
               {
                 headers: {
                   Authorization: "Bearer " + token,
@@ -172,7 +172,7 @@ const UserProfile = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.put(
-          "http://192.168.147.176:8081/api/patient/update",
+          "http://192.168.0.107:8081/api/patient/update",
           {
             currentAddress: data.currentAddress || "",
             medicalHistory: data.medicalHistory || "",
@@ -212,7 +212,7 @@ const UserProfile = () => {
               <Image
                 src={
                   img != null
-                    ? `http://192.168.147.176:8081/${img}`
+                    ? `http://192.168.0.107:8081/${img}`
                     : "/default-user.jpg"
                 }
                 preview

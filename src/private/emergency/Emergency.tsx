@@ -9,15 +9,15 @@ import {
 
 const Emergency = () => {
   return (
-    <div className="h-[83svh] flex items-center justify-center max-lg:flex-col max-lg:h-[93svh]">
+    <div className="min-h-[83svh] flex items-center justify-center max-lg:flex-col max-lg:min-h-[93svh]">
       <img
         src="/emergencyBg.png"
         className="w-[40%] max-lg:hidden"
         alt="emergency png"
       />
 
-      <div className="h-[80%] w-[60%] flex items-center justify-center gap-8 max-lg:w-[100%] max-lg:flex-col  max-lg:h-[90%] max-lg:gap-6">
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
+      <div className="max-lg:py-4 min-h-[80%] min-w-[60%] flex items-center justify-center gap-8 max-lg:min-w-[100%] max-lg:flex-col  max-lg:min-h-[90%] max-lg:gap-6">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 min-h-[100%] min-w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
           <CardHeader>
             <CardTitle>Dr. Ramesh Kumar</CardTitle>
             <CardDescription>Cardiologist</CardDescription>
@@ -31,7 +31,7 @@ const Emergency = () => {
             <p>+91 12345 67891</p>
           </CardFooter>
         </Card>
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 min-h-[100%] min-w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
           <CardHeader>
             <CardTitle>Dr. Anjali Mehta</CardTitle>
             <CardDescription>Pediatrician</CardDescription>
@@ -45,7 +45,7 @@ const Emergency = () => {
             <p>+91 12345 65846</p>
           </CardFooter>
         </Card>
-        <Card className="hover:-translate-y-1 transition ease-in duration-200 h-[100%] w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
+        <Card className="hover:-translate-y-1 transition ease-in duration-200 min-h-[100%] min-w-[30%] items-center text-center flex flex-col justify-center bg-slate-200 shadow-xl max-lg:w-[90%]">
           <CardHeader>
             <CardTitle>Dr. Suresh Gupta</CardTitle>
             <CardDescription>Orthopedic Surgeon</CardDescription>

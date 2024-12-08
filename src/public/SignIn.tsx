@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
-  patient: "http://192.168.147.176:8081/api/auth/patient/signin",
-  doctor: "http://192.168.147.176:8081/api/auth/doc/signin",
-  assistant_doctor: "http://192.168.147.176:8081/api/auth/ad/signin",
+  patient: "http://192.168.0.107:8081/api/auth/patient/signin",
+  doctor: "http://192.168.0.107:8081/api/auth/doc/signin",
+  assistant_doctor: "http://192.168.0.107:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -46,7 +46,7 @@ const SignIn = () => {
           setLocation({
             latitude: pos.coords.latitude,
             longitude: pos.coords.longitude,
-          })
+          }),(err)=>{console.log(err.message)},{enableHighAccuracy:true,maximumAge:2000,timeout:5000}
       );
     }
   };
@@ -55,7 +55,7 @@ const SignIn = () => {
     const apiUrl = API_URLS[role as keyof typeof API_URLS];
     const dashboardRoute =
       DASHBOARD_ROUTES[role as keyof typeof DASHBOARD_ROUTES];
-
+    
     if (
       role === "assistant_doctor" &&
       (location.latitude === -1 || location.longitude === -1)

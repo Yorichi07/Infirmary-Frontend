@@ -11,7 +11,7 @@ const EmergencyLayout = ({ children }: { children: React.ReactNode }) => {
     role: localStorage.getItem("roles"),
   };
   return (
-    <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">
+    <div className="min-h-[100svh]">
       <Navbar props={navsetting} />
       {children}
       <div className="w-full flex items-center justify-center bg-white h-[8svh] text-[#8F8F8F] border-t border-[gray] font-semibold max-lg:hidden">
