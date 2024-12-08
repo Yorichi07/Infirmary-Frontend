@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import axios from "axios";
 import { ChangeEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import "./AdminSignIn.scss";
 
 const AdminSignIn = () => {
   const navigate = useNavigate();

@@ -151,7 +151,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://192.168.147.176:8081/api/auth/patient/signup", payload)
+          .post("http://192.168.176.1:8081/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });
@@ -216,7 +216,7 @@ const UserRegister = () => {
         </div>
 
         <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="h-[91%]">
+          <form onSubmit={form.handleSubmit(onSubmit)} className="min-h-[91%]">
             <div className="register-container__body">
               <div className="image-container">
                 <Image

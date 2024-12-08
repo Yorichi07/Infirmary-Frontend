@@ -1,5 +1,65 @@
+import { useEffect, useState } from "react";
+import { Calendar } from "@/components/ui/calendar";
+import "./AdminDashboard.scss";
+import { useNavigate } from "react-router-dom";
 const AdminDashboard = () => {
-  return <></>;
+  const navigate = useNavigate();
+  const [time, setTime] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date());
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+  const formatTime = (date: Date) => {
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    const isAM = Number(hours) > 12 ? "PM" : "AM";
+    return `${hours}:${minutes}:${seconds} ${isAM}`;
+  };
+  return (
+    <>
+      <div className="admin-dashboard">
+        <div className="admin-dashboard__left">
+          <div className="flex items-center justify-center p-10">
+            <p className="text-4xl font-bold">{formatTime(time)}</p>
+          </div>
+          <div>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="rounded-md border bg-white shadow-lg"
+            />
+          </div>
+        </div>
+        <div className="admin-dashboard__right">
+          <button
+            className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-4 rounded-md w-[70%]"
+            onClick={() => navigate("/register-doctor")}
+          >
+            <p className="text-white font-semibold text-lg text-center flex-1">
+              Add New Doctor
+            </p>
+          </button>
+          <button
+            className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-4 rounded-md w-[70%]"
+            onClick={() => navigate("/register-assistant-doctor")}
+          >
+            <p className="text-white font-semibold text-lg text-center flex-1">
+              Add New Assistant Doctor
+            </p>
+          </button>
+        </div>
+      </div>
+    </>
+  );
 };
 
 export default AdminDashboard;
