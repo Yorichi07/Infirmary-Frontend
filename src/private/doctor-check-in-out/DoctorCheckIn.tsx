@@ -133,7 +133,7 @@ const DoctorCheckIn = () => {
   };
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83svh] max-lg:min-h-[91svh] max-lg:items-start">
+    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83svh] max-lg:min-h-[93svh] max-lg:items-start">
       <div className="w-full px-14 py-10 flex justify-center items-center">
         <div className="w-full flex flex-col items-center space-y-6 max-lg:hidden">
           <div className="flex items-center justify-center p-10 border-black border-b-2">

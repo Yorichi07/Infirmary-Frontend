@@ -15,7 +15,7 @@ const CommonPrescriptionLayout = ({
     role: localStorage.getItem("roles"),
   };
   return (
-    <div className="h-screen">
+    <div className="min-h-[100svh]">
       <Navbar props={navsetting} />
       {children}
       <div className="w-full flex items-center justify-center bg-white h-[8%] text-[#8F8F8F] border-t border-[gray] font-semibold">

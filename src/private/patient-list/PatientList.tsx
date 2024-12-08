@@ -228,7 +228,7 @@ const PatientList = () => {
   };
 
   return (
-    <div className="bg-[#ECECEC] h-[83%] p-8 space-y-8 flex flex-col max-lg:min-h-[91svh] max-lg:p-0 max-lg:py-4">
+    <div className="bg-[#ECECEC] min-h-[83%] p-8 space-y-8 flex flex-col max-lg:min-h-[93svh] max-lg:p-0 max-lg:py-4">
       <div className="flex justify-center items-center gap-2">
         <button
           onClick={() => setSelectedButton("Pending")}

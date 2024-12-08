@@ -166,7 +166,7 @@ const MedicineStock = () => {
   }
 
   return (
-    <div className="bg-[#ECECEC] h-[83svh] p-8 space-y-8 flex flex-col max-lg:h-[93svh] max-lg:p-4">
+    <div className="bg-[#ECECEC] min-h-[83svh] p-8 space-y-8 flex flex-col max-lg:h-[93svh] max-lg:p-4">
       {error && <div className="text-red-500 font-medium">{error}</div>}
       <div className="flex space-x-2 items-center">
         {Shared.Search}

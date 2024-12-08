@@ -94,7 +94,12 @@
     }
 
     &__right {
-      padding: 1rem;
+      padding: 0;
+      align-items: center;
+      justify-content: center;
+    }
+    &__right-content{
+      max-width: 96svw;
     }
   }
   .helpline {
