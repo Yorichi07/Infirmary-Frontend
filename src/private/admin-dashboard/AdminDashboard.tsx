@@ -27,7 +27,7 @@ const AdminDashboard = () => {
     <>
       <div className="admin-dashboard">
         <div className="admin-dashboard__left">
-          <div className="flex items-center justify-center p-10">
+          <div className="flex items-center justify-center p-10 max-lg:p-5">
             <p className="text-4xl font-bold">{formatTime(time)}</p>
           </div>
           <div>
@@ -35,13 +35,13 @@ const AdminDashboard = () => {
               mode="single"
               selected={date}
               onSelect={setDate}
-              className="rounded-md border bg-white shadow-lg"
+              className="rounded-md border bg-white shadow-lg max-lg:hidden"
             />
           </div>
         </div>
         <div className="admin-dashboard__right">
           <button
-            className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-4 rounded-md w-[70%]"
+            className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-4 rounded-md w-[70%] max-lg:px-5"
             onClick={() => navigate("/register-doctor")}
           >
             <p className="text-white font-semibold text-lg text-center flex-1">
@@ -49,7 +49,7 @@ const AdminDashboard = () => {
             </p>
           </button>
           <button
-            className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-4 rounded-md w-[70%]"
+            className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-4 rounded-md w-[70%] max-lg:px-5"
             onClick={() => navigate("/register-assistant-doctor")}
           >
             <p className="text-white font-semibold text-lg text-center flex-1">

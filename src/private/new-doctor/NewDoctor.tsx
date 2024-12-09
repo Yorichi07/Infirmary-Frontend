@@ -82,7 +82,7 @@ const NewDoctor = () => {
         }
         const payload = { ...data, status: false };
         await axios.post(
-          "http://192.168.147.176:8081/api/admin/doctor/signup",
+          "http://localhost:8081/api/admin/doctor/signup",
           payload,
           {
             headers: {
@@ -104,12 +104,9 @@ const NewDoctor = () => {
   };
   return (
     <>
-      <div className="h-[83svh] p-6">
+      <div className="min-h-[83svh] p-6 max-lg:min-h-[93svh]">
         <Form {...form}>
-          <form
-            onSubmit={form.handleSubmit(onSubmit)}
-            className="h-full flex justify-between flex-col gap-8"
-          >
+          <form onSubmit={form.handleSubmit(onSubmit)}>
             <div>
               <FormField
                 control={form.control}
@@ -202,7 +199,7 @@ const NewDoctor = () => {
                 )}
               />
             </div>
-            <div className="flex justify-end items-center gap-4">
+            <div className="flex justify-end items-center gap-4 pt-5">
               <Button
                 type="button"
                 onClick={handleCancel}

@@ -94,7 +94,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://192.168.147.176:8081/api/prescription/submit",
+        "http://localhost:8081/api/prescription/submit",
         req,
         {
           headers: {
@@ -118,7 +118,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://192.168.147.176:8081/api/doctor/getPatient",
+          "http://localhost:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -157,7 +157,7 @@ const PatientDetails = () => {
     const fetchMed = async () => {
       try {
         const resp = await axios.get(
-          "http://192.168.147.176:8081/api/stock/available",
+          "http://localhost:8081/api/stock/available",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -207,7 +207,7 @@ const PatientDetails = () => {
   const handleRelease = async () => {
     try {
       const resp = await axios.get(
-        "http://192.168.147.176:8081/api/doctor/releasePatient",
+        "http://localhost:8081/api/doctor/releasePatient",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -235,7 +235,7 @@ const PatientDetails = () => {
             className="w-[15%] border-black border-[1.5px] max-lg:w-[50%] max-lg:mb-5"
             src={
               ndata?.imageUrl != null
-                ? `http://192.168.147.176:8081/${ndata?.imageUrl}`
+                ? `http://localhost:8081/${ndata?.imageUrl}`
                 : "/default-user.jpg"
             }
           />

@@ -123,7 +123,7 @@ const UserRegister = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: undefined,
-      sapID: 0,
+      sapID: undefined,
       password: undefined,
       confirmPassword: undefined,
       email: undefined,

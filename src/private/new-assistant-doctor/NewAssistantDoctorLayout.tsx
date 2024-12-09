@@ -1,17 +1,40 @@
+import { useEffect, useState } from "react";
 import Shared from "@/Shared";
 import Navbar from "@/components/Navbar";
 
-const NewAssistantDoctorLayout = ({ children }: { children: React.ReactNode }) => {
+const NewAssistantDoctorLayout = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [title, setTitle] = useState("Register New Assistant Doctor");
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1024px)");
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setTitle(e.matches ? "Register New AD" : "Register New Assistant Doctor");
+    };
+
+    setTitle(
+      mediaQuery.matches ? "Register New AD" : "Register New Assistant Doctor"
+    );
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
+
   const navsetting = {
-    title: "Register New Assistant Doctor",
+    title,
     titleLogo: Shared.UserPlus,
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: "admin",
   };
+
   return (
     <>
-      <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">
+      <div className="min-h-[100svh]">
         <Navbar props={navsetting} />
         {children}
         <div className="max-lg:hidden w-full flex items-center justify-center bg-white h-[8svh] text-[#8F8F8F] border-t border-[gray] font-semibold">

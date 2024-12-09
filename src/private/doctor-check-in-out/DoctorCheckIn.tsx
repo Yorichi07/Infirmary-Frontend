@@ -26,7 +26,7 @@ const DoctorCheckIn = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://192.168.147.176:8081/api/AD/getAllDoctors",
+          "http://localhost:8081/api/AD/getAllDoctors",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -70,7 +70,7 @@ const DoctorCheckIn = () => {
       }
       if(latitude == -1 || longitude == -1) alert("Allow Location Services");
       const response = await axios.get(
-        `http://192.168.147.176:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -102,7 +102,7 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await fetch(
-        `http://192.168.147.176:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {
             Authorization: "Bearer " + token,

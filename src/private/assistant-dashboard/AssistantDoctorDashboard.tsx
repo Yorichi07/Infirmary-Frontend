@@ -28,7 +28,7 @@ const AssistantDoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://192.168.147.176:8081/api/doctor/total-patient-count",
+        "http://localhost:8081/api/doctor/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -75,7 +75,7 @@ const AssistantDoctorDashboard = () => {
   }, []);
 
   return (
-    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83%] overflow-hidden max-lg:min-h-[93svh] max-lg:items-start">
+    <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83%] overflow-hidden max-lg:min-h-[93svh] max-lg:items-center">
       <div className="w-full px-14 py-4 max-lg:py-5 flex justify-center items-center max-lg:flex-col max-lg:px-0">
         <div className="w-full flex flex-col items-center">
           <div className="flex space-x-4 max-lg:gap-5">
