@@ -187,12 +187,46 @@ const CommonPrescription = () => {
                     />
                   </td>
                   <td className="w-[15%]">
-                    <input
-                      type="number"
-                      className="bg-[#d5d4df] rounded-lg p-2 text-center"
-                      value={med.dosage}
-                      readOnly
-                    />
+                    <table className="nested-dosage-table w-full">
+                      <thead>
+                        <tr>
+                          <th>Morning</th>
+                          <th>Afternoon</th>
+                          <th>Evening</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input
+                              type="number"
+                              min={0}
+                              className="info-input dosage-morning w-full"
+                              placeholder="0"
+                              readOnly
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              min={0}
+                              className="info-input dosage-afternoon w-full"
+                              placeholder="0"
+                              readOnly
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              min={0}
+                              className="info-input dosage-evening w-full"
+                              placeholder="0"
+                              readOnly
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
                   </td>
                   <td className="w-[15%]">
                     <input
