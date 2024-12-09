@@ -228,7 +228,7 @@ const PatientDetails = () => {
   };
 
   return (
-    <div className="h-[83svh] p-5 flex flex-col bg-[#f5f5f5] max-lg:h-[93svh]">
+    <div className="min-h-[83svh] p-5 flex flex-col bg-[#f5f5f5] max-lg:min-h-[93svh] max-lg:p-2">
       <div className=" overflow-y-scroll p-5 max-lg:p-0">
         <div className="flex justify-between mb-5 max-lg:flex-col max-lg:items-center">
           <img
@@ -319,7 +319,7 @@ const PatientDetails = () => {
           </div>
         </div>
         <div className="p-5 flex flex-col justify-center items-center max-lg:px-0">
-          <div className="bg-[#fdfdfd] p-5 w-[70%] border-black border max-lg:w-full">
+          <div className="bg-[#fdfdfd] p-5 w-[70%] border-black border max-lg:w-full max-lg:p-2">
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex center">
                 <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
@@ -331,7 +331,7 @@ const PatientDetails = () => {
             </div>
             <hr className="border border-black my-[10px]" />
             <div className="my-[20px]">
-              <div className="flex justify-between">
+              <div className="flex justify-between max-lg:flex-col max-lg:gap-4">
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-[10px]">
                     <label className="mr-auto font-medium">Name:</label>
@@ -391,7 +391,7 @@ const PatientDetails = () => {
             </div>
             <div className="mt-5">
               <label className="mb-[10px]">Medicine:</label>
-              <table className="medicine-table">
+              <table className="medicine-table max-lg:max-w-[95svw]">
                 <thead>
                   <tr>
                     <th>S. No.</th>
@@ -527,7 +527,7 @@ const PatientDetails = () => {
               <div className="signature-text">Doctor Name</div>
             </div>
           </div>
-          <div className="flex w-[70%]">
+          <div className="flex w-[70%] max-lg:w-full">
             <Button
               type="button"
               className="px-4 py-5 text-white font-semibold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 w-[50%] rounded-none"
