@@ -178,6 +178,14 @@ const router = createBrowserRouter([
       </CommonPrescriptionLayout>
     ),
   },
+  {
+    path: "/token-page",
+    element: (
+      <MedicineStockLayout>
+        <MedicineStock />
+      </MedicineStockLayout>
+    ),
+  },
 ]);
 
 export default router;
