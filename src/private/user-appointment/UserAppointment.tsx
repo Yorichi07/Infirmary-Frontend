@@ -40,8 +40,6 @@ const UserAppointment = () => {
   const [lastAppointmentDate, setLastAppointmentDate] = useState<string | null>(
     null
   );
-  const [latitude,setLatitude]=useState(-1);
-  const [longitude,setLongitude]=useState(-1);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -55,20 +53,16 @@ const UserAppointment = () => {
   });
 
   useEffect(() => {
-    
-    if(!navigator.geolocation) alert("Allow Location Permissions")
-
-    navigator.geolocation.getCurrentPosition(async (position)=> {
-      setLongitude(position.coords.longitude);
-      setLatitude(position.coords.latitude);
-      fetchDoctors(position)
-    })
-
-    const fetchDoctors = async (pos:any) => {
+    const fetchDoctors = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
           navigate("/");
+          return;
+        }
+
+        if((localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+          alert("Select a location");
           return;
         }
 
@@ -77,8 +71,8 @@ const UserAppointment = () => {
           {
             headers: {
               Authorization: "Bearer " + token,
-              "X-Latitude": pos.coords.latitude,
-              "X-Longitude": pos.coords.longitude
+              "X-Latitude": localStorage.getItem("latitude"),
+              "X-Longitude": localStorage.getItem("longitude")
             },
           }
         );
@@ -96,6 +90,8 @@ const UserAppointment = () => {
         }
       }
     };
+
+    fetchDoctors();
   }, []);
 
   const fetchLastAppointmentDate = async () => {
@@ -143,9 +139,9 @@ const UserAppointment = () => {
           reasonPrefDoctor: data.reasonForPreference || null,
         };
 
-        if(latitude === -1 || longitude === -1) {
-          alert("Allow Location Permissions")
-          return 0;
+        if((localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+          alert("Select a location");
+          return;
         }
 
         const response = await axios.post(
@@ -154,8 +150,8 @@ const UserAppointment = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              "X-Latitude": latitude,
-              "X-Longitude": longitude
+              "X-Latitude": localStorage.getItem("latitude"),
+              "X-Longitude": localStorage.getItem("longitude")
             },
           }
         );

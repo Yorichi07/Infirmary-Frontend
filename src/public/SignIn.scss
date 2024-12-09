@@ -1,10 +1,9 @@
 .sign-container {
-  height: 92svh;
+  min-height: 92svh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "left right";
-  overflow: hidden;
 
   &__left {
     grid-area: left;
@@ -80,14 +79,14 @@
   font-weight: 600;
   background-color: white;
   color: #8f8f8f;
-  height: 8svh;
+  min-height: 8svh;
 }
 
 @media only screen and (max-width: 1024px) {
   .sign-container {
     grid-template-columns: 1fr;
     grid-template-areas: "right";
-    height: 100svh;
+    min-height: 100svh;
 
     &__left {
       display: none;
@@ -99,6 +98,7 @@
       justify-content: center;
     }
     &__right-content{
+      margin: 1rem 0;
       max-width: 96svw;
     }
   }

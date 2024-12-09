@@ -12,18 +12,8 @@ const DoctorDashboard = () => {
   const [token,setToken] = useState("No Patient Assigned");
   const [inQueue, setInQueue] = useState(0);
   const [message, setMessage] = useState<string | null>(null);
-  const [latitude,setLatitude] = useState(-1);
-  const [longitude,setLongitude] = useState(-1);
 
   useEffect(() => {
-    if(!navigator.geolocation) alert("Location Services not Supported");
-
-    navigator.geolocation.watchPosition((pos)=>{
-      setLatitude(pos.coords.latitude);
-      setLongitude(pos.coords.longitude);
-      console.log(pos.coords.accuracy);
-    },(err)=>{console.log(err)},{enableHighAccuracy:true,maximumAge:2000,timeout:5000})
-
     const timer = setInterval(() => {
       setTime(new Date());
     }, 1000);
@@ -74,14 +64,18 @@ const DoctorDashboard = () => {
         navigate("/");
         return;
       }
-      if(latitude == -1 || longitude == -1) alert("Allow Location Services");
+      if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+        alert("Allow Location Services");
+        return;
+      } 
+        
       const response = await axios.get(
         "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=true",
         {
           headers: {
             Authorization: "Bearer " + token,
-            "X-Latitude":latitude,
-            "X-Longitude":longitude
+            "X-Latitude":localStorage.getItem("latitude"),
+            "X-Longitude":localStorage.getItem("longitude")
           },
         }
       );

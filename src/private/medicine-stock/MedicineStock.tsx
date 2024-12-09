@@ -10,8 +10,17 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import Shared from "@/Shared";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Stock {
+  location: any;
   batchNumber: number | string;
   medicineName: string;
   composition: string;
@@ -30,6 +39,20 @@ const MedicineStock = () => {
   const [selectedStocks, setSelectedStocks] = useState<Set<number | string>>(
     new Set()
   );
+  const [location, setLocation] = useState("");
+  const [locations, setLocations] = useState<
+    Array<{locId:string; locationName: string; latitude: string; longitude: string }>
+  >([]);
+
+
+  const handleLocationChange = (value: string) => {
+    const selectedLocation = locations.find(
+      (loc) => loc.locationName === value
+    );
+    if (selectedLocation) {
+      setLocation(selectedLocation.locId);
+    }
+  };
 
   useEffect(() => {
     const fetchStocks = async () => {
@@ -52,6 +75,21 @@ const MedicineStock = () => {
       }
     };
 
+    const fetchLocations = async () => {
+      try {
+        const resp = await axios.get("http://localhost:8081/api/location/");
+        if (resp.status === 200) {
+          const data = resp.data;
+          setLocations(data);
+        } else {
+          alert(resp.data.message);
+        }
+      } catch (err) {
+        alert("Error in fetching locations. Please try again.");
+      }
+    };
+
+    fetchLocations();
     fetchStocks();
   }, []);
 
@@ -64,6 +102,7 @@ const MedicineStock = () => {
       medicineType: "",
       expirationDate: "",
       company: "",
+      location:""
     });
   };
 
@@ -102,12 +141,12 @@ const MedicineStock = () => {
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              "X-Location":location
             },
           }
         );
-
-        setStocks((prevStocks) => [...prevStocks, formattedNewStock]);
         setNewStock(null);
+        window.location.reload();
       } catch (error) {
         console.error("Error adding new stock:", error);
         setError("Failed to add new stock. Please try again.");
@@ -258,6 +297,9 @@ const MedicineStock = () => {
                 <TableHead className="border text-black font-bold text-center">
                   Company
                 </TableHead>
+                <TableHead className="border text-black font-bold text-center">
+                  Location
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -279,6 +321,7 @@ const MedicineStock = () => {
                     {stock.expirationDate}
                   </TableCell>
                   <TableCell className="border">{stock.company}</TableCell>
+                  <TableCell className="border">{stock.location.locationName}</TableCell>
                 </TableRow>
               ))}
 
@@ -336,6 +379,25 @@ const MedicineStock = () => {
                       onChange={(e) => handleInputChange(e, "company")}
                       placeholder="Company"
                     />
+                  </TableCell>
+                  <TableCell className="border">
+                  <Select onValueChange={handleLocationChange}>
+                  <SelectTrigger className="bg-white text-black">
+                    <SelectValue placeholder="Select a location" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white text-black">
+                    <SelectGroup className="h-[4rem] overflow-y-scroll">
+                      {locations.map((loc) => (
+                        <SelectItem
+                          key={loc.locationName}
+                          value={loc.locationName}
+                        >
+                          {loc.locationName}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
                   </TableCell>
                 </TableRow>
               )}

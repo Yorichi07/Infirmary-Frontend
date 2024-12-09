@@ -39,11 +39,7 @@ const Navbar = ({
         className="w-[100px] h-[45px] max-lg:w-[80px] max-lg:h-[35px]"
       />
       <div
-        className={
-          props.role !== "ad"
-            ? "capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline"
-            : "capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline max-lg:hidden"
-        }
+        className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline"
       >
         {props.titleLogo &&
           (typeof props.titleLogo === "string" ? (

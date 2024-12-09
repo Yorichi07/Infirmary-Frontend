@@ -1,14 +1,32 @@
 import Navbar from "@/components/Navbar";
 import Shared from "@/Shared";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 const AssistantDoctorDashboardLayout = ({
   children,
 }: {
   children: React.ReactNode;
 }) => {
+
+  const [title, setTitle] = useState("assistant doctor dashboard");
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 1024px)");
+    const handleMediaChange = (e: MediaQueryListEvent) => {
+      setTitle(e.matches ? "AD dashboard" : "assistant doctor dashboard");
+    };
+
+    setTitle(
+      mediaQuery.matches ? "AD dashboard" : "assistant doctor dashboard"
+    );
+
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
+  }, []);
+
   const navsetting = {
-    title: "assistant doctor dashboard",
+    title: title,
     titleLogo: Shared.DoctorHome,
     additionalLogo: Shared.User,
     menu: true,

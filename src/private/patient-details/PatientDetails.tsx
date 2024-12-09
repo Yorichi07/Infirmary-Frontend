@@ -319,7 +319,7 @@ const PatientDetails = () => {
           </div>
         </div>
         <div className="p-5 flex flex-col justify-center items-center max-lg:px-0">
-          <div className="bg-[#fdfdfd] p-5 w-[70%] border-black border max-lg:w-full max-lg:p-2">
+          <div className="bg-[#fdfdfd] p-5 min-w-[70%] border-black border max-lg:w-full max-lg:p-2">
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex center">
                 <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
@@ -527,7 +527,7 @@ const PatientDetails = () => {
               <div className="signature-text">Doctor Name</div>
             </div>
           </div>
-          <div className="flex w-[70%] max-lg:w-full">
+          <div className="flex min-w-[100%] max-lg:w-full">
             <Button
               type="button"
               className="px-4 py-5 text-white font-semibold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 w-[50%] rounded-none"

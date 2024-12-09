@@ -48,29 +48,20 @@ const PatientList = () => {
   const [currentPatientEmail, setCurrentPatientEmail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPatient, setFilteredPatient] = useState(patient);
-  const [latitude,setLatitude] = useState(-1);
-  const [longitude,setLongitude] = useState(-1);
-
-
-  useEffect(()=>{
-    
-
-  },[])
 
   useEffect(() => {
-    if(!navigator.geolocation) alert("Location Services not Supported");
-
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      await fetchList(pos)
-      setLatitude(pos.coords.latitude)
-      setLongitude(pos.coords.longitude)
-    })
-    const fetchList = async (pos:any) => {
+    const fetchList = async () => {
       try {
         const token = localStorage.getItem("token");
         if (!token) {
           throw new Error("No authentication token found");
         }
+
+        if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+          alert("Select a location");
+          return;
+        }
+
         const url =
           selectedButton === "Pending"
             ? "http://localhost:8081/api/AD/getPatientQueue"
@@ -79,8 +70,8 @@ const PatientList = () => {
         const response = await axios.get(url, {
           headers: {
             Authorization: `Bearer ${token}`,
-            "X-Latitude":pos.coords.latitude,
-            "X-Longitude":pos.coords.longitude
+            "X-Latitude":localStorage.getItem("latitude"),
+            "X-Longitude":localStorage.getItem("longitude")
           },
         });
 
@@ -100,6 +91,8 @@ const PatientList = () => {
       }
     };
 
+    fetchList();
+
   }, [selectedButton]);
 
   useEffect(() => {
@@ -118,13 +111,6 @@ const PatientList = () => {
 
   const getAppointmentDetails = async (email: string) => {
     setCurrentPatientEmail(email);
-
-    if(!navigator.geolocation) alert("Location Services not Supported");
-
-    navigator.geolocation.getCurrentPosition(async (pos) => {
-      setLatitude(pos.coords.latitude)
-      setLongitude(pos.coords.longitude)
-    })
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
@@ -154,8 +140,8 @@ const PatientList = () => {
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
-      if(latitude === -1 || longitude === -1){
-        alert("Enable Location Services");
+      if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+        alert("Select a location");
         return;
       }
       const response = await axios.get(
@@ -163,8 +149,8 @@ const PatientList = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-            "X-Latitude":latitude,
-            "X-Longitude":longitude
+            "X-Latitude":localStorage.getItem("latitude"),
+            "X-Longitude":localStorage.getItem("longitude")
           },
         }
       );

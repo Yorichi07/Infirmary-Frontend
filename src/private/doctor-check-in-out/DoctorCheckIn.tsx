@@ -10,17 +10,8 @@ const DoctorCheckIn = () => {
   const [doctors, setDoctors] = useState<
     Array<{ id: number; name: string; status: string; email: string }>
   >([]);
-  const [latitude,setLatitude] = useState(-1);
-  const [longitude,setLongitude] = useState(-1);
 
   useEffect(() => {
-
-    if(!navigator.geolocation) alert("Location Services not Supported");
-
-    navigator.geolocation.getCurrentPosition((pos)=>{
-      setLatitude(pos.coords.latitude);
-      setLongitude(pos.coords.longitude);
-    })
 
     const fetchDoctors = async () => {
       try {
@@ -68,14 +59,17 @@ const DoctorCheckIn = () => {
         navigate("/");
         return;
       }
-      if(latitude == -1 || longitude == -1) alert("Allow Location Services");
+      if(!(localStorage.getItem("latitude") || localStorage.getItem("longigute"))){ 
+        alert("Allow Location Services");
+        return;
+      }
       const response = await axios.get(
         `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
             Authorization: "Bearer " + token,
-            "X-Latitude":latitude,
-            "X-Longitude":longitude
+            "X-Latitude":localStorage.getItem("latitude"),
+            "X-Longitude":localStorage.getItem("longitude")
           },
         }
       );
@@ -162,7 +156,7 @@ const DoctorCheckIn = () => {
                   <button
                     data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${
-                      doctor.status == "checked-in"
+                      doctor.status !== "checked-in"
                         ? "bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
                         : "bg-[#8F8F8F]"
                     } rounded-md text-white`}
@@ -175,7 +169,7 @@ const DoctorCheckIn = () => {
                   <button
                     data-key={`${doctor.id}`}
                     className={`shadow-lg px-8 py-2 ${
-                      doctor.status == "checked-out"
+                      doctor.status !== "checked-out"
                         ? "bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
                         : "bg-[#8F8F8F]"
                     } rounded-md text-white`}

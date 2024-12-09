@@ -67,7 +67,7 @@ const AssistantDoctorDashboard = () => {
 
     const interval = setInterval(() => {
       fetchPatientData();
-    }, 30000);
+    }, 25000);
 
     return () => {
       clearInterval(interval);

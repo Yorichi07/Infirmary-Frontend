@@ -1,47 +1,77 @@
 import axios from "axios";
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const TokenPage = () =>{
-    const navigate = useNavigate();
-    const [tokenData, setTokenData] = useState<Array<{doctorName:string,PatientToken:string}>>();
+const TokenPage = () => {
+  const navigate = useNavigate();
+  const [tokenData, setTokenData] = useState<
+    Array<{ doctorName: string; PatientToken: string }>
+  >([]);
 
-    useEffect(()=> {
-        if(!localStorage.getItem('token'))  navigate("/")
-        const fetchData = async () =>{
-            try{
-                const data = await axios.get("http://localhost:8081/api/AD/getTokenData",{
-                    headers:{
-                        Authorization:`Bearer ${localStorage.getItem('token')}`
-                    }
-                });
+  useEffect(() => {
+    if (!localStorage.getItem("token")) navigate("/");
 
-                if(data.status === 200){
-                    const resp = data.data;
-                    setTokenData(resp);
-                }else if(data.status === 401){
-                    navigate("/") ;  
-                }
-                else{
-                    alert(data.data.message);
-                }
-            }catch(err){
-                alert("Something Went Wrong");
-            }
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          "http://localhost:8081/api/AD/getTokenData",
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+
+        if (response.status === 200) {
+          setTokenData(response.data);
+        } else if (response.status === 401) {
+          navigate("/");
+        } else {
+          alert(response.data.message);
         }
-        fetchData();
-    },[]);
-    
-    return(
-        <div className="min-h-[83svh]">
-            {
-                tokenData?.map((data)=>(<div>
-                    <div>{data.doctorName}</div>
-                    <div>{data.PatientToken}</div>
-                </div>))
-            }
-        </div>
-    )
-}
+      } catch (err) {
+        alert("Something Went Wrong");
+      }
+    };
 
-export default TokenPage
+    const interval = setInterval(() => {
+      fetchData();
+    }, 30000);
+
+    fetchData(); // Fetch data initially
+
+    return () => {
+      clearInterval(interval);
+    };
+  }, [navigate]);
+
+  return (
+    <div className="min-h-[83svh] flex flex-col items-center justify-start py-4">
+      <table className="table-auto border-collapse border border-gray-400 w-[95%]">
+        <thead>
+          <tr className="bg-gray-300">
+            <th className="border border-gray-400 px-4 py-2">Doctor</th>
+            <th className="border border-gray-400 px-4 py-2">Patient Token</th>
+          </tr>
+        </thead>
+        <tbody>
+          {tokenData?.map((data, index) => (
+            <tr
+              key={index}
+              className={index % 2 === 0 ? "bg-gray-100" : "bg-white"}
+            >
+              <td className="border border-gray-400 px-4 py-2 text-center">
+                {data.doctorName}
+              </td>
+              <td className="border border-gray-400 px-4 py-2 text-center">
+                {data.PatientToken}
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+export default TokenPage;

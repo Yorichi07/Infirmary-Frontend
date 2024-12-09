@@ -34,6 +34,8 @@ import NewDoctorLayout from "@/private/new-doctor/NewDoctorLayout";
 import NewDoctor from "@/private/new-doctor/NewDoctor";
 import NewAssistantDoctorLayout from "@/private/new-assistant-doctor/NewAssistantDoctorLayout";
 import NewAssistantDoctor from "@/private/new-assistant-doctor/NewAssistantDoctor";
+import TokenPageLayout from "@/private/token-page/tokenPageLayout";
+import TokenPage from "@/private/token-page/tokenPage";
 
 const router = createBrowserRouter([
   {
@@ -181,9 +183,9 @@ const router = createBrowserRouter([
   {
     path: "/token-page",
     element: (
-      <MedicineStockLayout>
-        <MedicineStock />
-      </MedicineStockLayout>
+      <TokenPageLayout>
+        <TokenPage></TokenPage>
+      </TokenPageLayout>
     ),
   },
 ]);

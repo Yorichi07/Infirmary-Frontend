@@ -1,5 +1,5 @@
 .sign-container {
-  height: 92svh;
+  min-height: 92svh;
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 1fr;
@@ -86,7 +86,7 @@
   .sign-container {
     grid-template-columns: 1fr;
     grid-template-areas: "right";
-    height: 100svh;
+    min-height: 100svh;
 
     &__left {
       display: none;
