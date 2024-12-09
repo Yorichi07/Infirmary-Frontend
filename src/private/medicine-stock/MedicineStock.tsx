@@ -35,14 +35,11 @@ const MedicineStock = () => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get(
-          "http://localhost:8081/api/stock/",
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        const response = await axios.get("http://localhost:8081/api/stock/", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         setStocks(response.data);
       } catch (error) {
         console.error("Error fetching stock data:", error);
@@ -120,16 +117,12 @@ const MedicineStock = () => {
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(
-          `http://localhost:8081/api/stock/${batchNumber}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await axios.delete(`http://localhost:8081/api/stock/${batchNumber}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
 
-        // Update state after deletion
         setStocks((prevStocks) =>
           prevStocks.filter((stock) => stock.batchNumber !== batchNumber)
         );
@@ -140,7 +133,6 @@ const MedicineStock = () => {
       }
     }
 
-    // Clear selected stocks
     setSelectedStocks(new Set());
   };
 
@@ -203,58 +195,6 @@ const MedicineStock = () => {
                 <TableHead className="border text-black font-bold text-center whitespace-nowrap">
                   Expiration Date
                 </TableHead>
-                {/* <TableHead className="border text-black font-bold text-center">
-                  <div className="flex items-center justify-center space-x-2">
-                    <p>Quantity</p>
-                    <Select>
-                      <SelectTrigger className="w-10">
-                        <img src="/filter.png" alt="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="highToLow">High to Low</SelectItem>
-                        <SelectItem value="lowToHigh">Low to High</SelectItem>
-                        <SelectItem value="outOfStock">Out of Stock</SelectItem>
-                        <SelectItem value="inStock">In Stock</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TableHead> */}
-
-                {/* <TableHead className="border text-black font-bold text-center h-20">
-                  <div className="flex items-center justify-center space-x-2">
-                    <p>Type</p>
-                    <Select>
-                      <SelectTrigger className="w-10">
-                        <img src="/filter.png" alt="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="tablet">Tablet</SelectItem>
-                        <SelectItem value="fluid">Fluid</SelectItem>
-                        <SelectItem value="emulsion">Emulsion</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TableHead> */}
-                {/* <TableHead className="border text-black font-bold text-center">
-                  <div className="flex space-x-2 items-center justify-center">
-                    <p>Expiration Date</p>
-                    <Select>
-                      <SelectTrigger className="w-10">
-                        <img src="/filter.png" alt="" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="newestToOldest">
-                          Newest to Oldest
-                        </SelectItem>
-                        <SelectItem value="oldestToNewest">
-                          Oldest to Newest
-                        </SelectItem>
-                        <SelectItem value="expired">Expired</SelectItem>
-                        <SelectItem value="not-expired">Not Expired</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </TableHead> */}
                 <TableHead className="border text-black font-bold text-center">
                   Company
                 </TableHead>
