@@ -1,15 +1,23 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import axios from "axios";
-import { ChangeEventHandler, useState } from "react";
+import { ChangeEventHandler, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
-  patient: "http://192.168.147.176:8081/api/auth/patient/signin",
-  doctor: "http://192.168.147.176:8081/api/auth/doc/signin",
-  assistant_doctor: "http://192.168.147.176:8081/api/auth/ad/signin",
+  patient: "http://localhost:8081/api/auth/patient/signin",
+  doctor: "http://localhost:8081/api/auth/doc/signin",
+  assistant_doctor: "http://localhost:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -29,8 +37,16 @@ const SignIn = () => {
   const [input, setInput] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [role, setRole] = useState<string>("patient");
-  const [location, setLocation] = useState({ latitude: -1, longitude: -1 });
-  const [locations,setLocations] = useState<Array<{locationName:string,latitude:string,longitude:string}>>([]);
+  const [location, setLocation] = useState<{
+    latitude: string;
+    longitude: string;
+  }>({
+    latitude: "-1",
+    longitude: "-1",
+  });
+  const [locations, setLocations] = useState<
+    Array<{ locationName: string; latitude: string; longitude: string }>
+  >([]);
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
@@ -40,42 +56,30 @@ const SignIn = () => {
   const handleRoleChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const selectedRole = e.target.value;
     setRole(selectedRole);
-    if (role === "assistant_doctor"){
-      try{
-        const resp = await axios.get("http://localhost:8081/api/location/");
-        if(resp.status === 200){
-          const data =  resp.data;
-          setLocations(data);
-          console.log(data);
-        }else{
-          alert(resp.data.message);
-        }
-      }catch(err){
-        alert("Error in fetching locations please try again");
-      }
-
-    }
-
   };
 
-  const handleLocationChange = (data:any) =>{
-    setLocation({
-      latitude:data.target.value[1],
-      longitude:data.target.value[2]
-    })
-  }
+  const handleLocationChange = (value: string) => {
+    const selectedLocation = locations.find(
+      (loc) => loc.locationName === value
+    );
+    if (selectedLocation) {
+      setLocation({
+        latitude: selectedLocation.latitude,
+        longitude: selectedLocation.longitude,
+      });
+    }
+  };
 
   const handleSignIn = async () => {
     const apiUrl = API_URLS[role as keyof typeof API_URLS];
     const dashboardRoute =
       DASHBOARD_ROUTES[role as keyof typeof DASHBOARD_ROUTES];
-    
+
     if (
-      role === "assistant_doctor" && (location.latitude == -1 || location.longitude == -1)
+      role === "assistant_doctor" &&
+      (location.latitude === "-1" || location.longitude === "-1")
     ) {
-      return alert(
-        "Please Select A Location"
-      );
+      return alert("Please select a location.");
     }
 
     try {
@@ -96,6 +100,8 @@ const SignIn = () => {
         "roles",
         roles[0].replace("ROLE_", "").toLowerCase()
       );
+      localStorage.setItem("longitude", location.longitude);
+      localStorage.setItem("latitude", location.latitude);
 
       navigate(dashboardRoute);
     } catch (error: any) {
@@ -106,6 +112,23 @@ const SignIn = () => {
       setErrorMessage(message);
     }
   };
+
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const resp = await axios.get("http://localhost:8081/api/location/");
+        if (resp.status === 200) {
+          const data = resp.data;
+          setLocations(data);
+        } else {
+          alert(resp.data.message);
+        }
+      } catch (err) {
+        alert("Error in fetching locations. Please try again.");
+      }
+    };
+    fetchLocations();
+  }, []);
 
   return (
     <>
@@ -150,7 +173,7 @@ const SignIn = () => {
             </div>
             <form>
               {["email", "password"].map((field) => (
-                <div key={field} className="input">
+                <div key={field}>
                   <Label htmlFor={field}>
                     {field.charAt(0).toUpperCase() + field.slice(1)}
                   </Label>
@@ -164,23 +187,26 @@ const SignIn = () => {
                   />
                 </div>
               ))}
-              {role === "assistant_doctor" && (
-                <div className="input">
-                  <Label htmlFor="location">Location</Label>
-                  <select
-                    id="location"
-                    onChange={handleLocationChange}
-                    className="bg-white text-black w-full p-2 border border-gray-300"
-                  >
-                    <option value="">Select a location</option>
-                    {locations.map((loc) => (
-                      <option key={loc.locationName} value={[loc.locationName,loc.latitude,loc.longitude]}>
-                        {loc.locationName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              )}
+              <div>
+                <Label htmlFor="location">Location</Label>
+                <Select onValueChange={handleLocationChange}>
+                  <SelectTrigger className="bg-white text-black">
+                    <SelectValue placeholder="Select a location" />
+                  </SelectTrigger>
+                  <SelectContent className="bg-white text-black">
+                    <SelectGroup className="h-[4rem] overflow-y-scroll">
+                      {locations.map((loc) => (
+                        <SelectItem
+                          key={loc.locationName}
+                          value={loc.locationName}
+                        >
+                          {loc.locationName}
+                        </SelectItem>
+                      ))}
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+              </div>
             </form>
 
             {errorMessage && (

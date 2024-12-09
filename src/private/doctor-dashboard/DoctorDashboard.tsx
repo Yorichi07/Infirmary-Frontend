@@ -41,7 +41,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://192.168.147.176:8081/api/doctor/total-patient-count",
+        "http://localhost:8081/api/doctor/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -76,7 +76,7 @@ const DoctorDashboard = () => {
       }
       if(latitude == -1 || longitude == -1) alert("Allow Location Services");
       const response = await axios.get(
-        "http://192.168.147.176:8081/api/doctor/setStatus?isDoctorCheckIn=true",
+        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=true",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -112,7 +112,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://192.168.147.176:8081/api/doctor/setStatus?isDoctorCheckIn=false",
+        "http://localhost:8081/api/doctor/setStatus?isDoctorCheckIn=false",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -145,7 +145,7 @@ const DoctorDashboard = () => {
       return;
     }
 
-    const response = await axios.get("http://192.168.147.176:8081/api/doctor/getCurrentToken",{
+    const response = await axios.get("http://localhost:8081/api/doctor/getCurrentToken",{
       headers:{
         Authorization: `Bearer ${token}`
       }

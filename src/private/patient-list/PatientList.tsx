@@ -73,8 +73,8 @@ const PatientList = () => {
         }
         const url =
           selectedButton === "Pending"
-            ? "http://192.168.147.176:8081/api/AD/getPatientQueue"
-            : "http://192.168.147.176:8081/api/AD/getCompletedQueue";
+            ? "http://localhost:8081/api/AD/getPatientQueue"
+            : "http://localhost:8081/api/AD/getCompletedQueue";
 
         const response = await axios.get(url, {
           headers: {
@@ -130,7 +130,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.get(
-        `http://192.168.147.176:8081/api/AD/getAptForm/${email}`,
+        `http://localhost:8081/api/AD/getAptForm/${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -159,7 +159,7 @@ const PatientList = () => {
         return;
       }
       const response = await axios.get(
-        "http://192.168.147.176:8081/api/AD/getAvailableDoctors",
+        "http://localhost:8081/api/AD/getAvailableDoctors",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -186,7 +186,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://192.168.147.176:8081/api/AD/submitAppointment",
+        "http://localhost:8081/api/AD/submitAppointment",
         {
           weight: dialogData.weight,
           temperature: dialogData.temperature,
@@ -228,7 +228,7 @@ const PatientList = () => {
   };
 
   return (
-    <div className="bg-[#ECECEC] min-h-[83%] p-8 space-y-8 flex flex-col max-lg:min-h-[93svh] max-lg:p-0 max-lg:py-4">
+    <div className="bg-[#ECECEC] min-h-[83%] p-8 space-y-8 flex flex-col max-lg:min-h-[93svh] max-lg:p-4 max-lg:py-4">
       <div className="flex justify-center items-center gap-2">
         <button
           onClick={() => setSelectedButton("Pending")}
@@ -264,7 +264,7 @@ const PatientList = () => {
         <Table className="bg-white rounded-md">
           <TableHeader>
             <TableRow className="h-20">
-              <TableHead className="w-[100px] border text-black font-bold text-center">
+              <TableHead className="border text-black font-bold text-center">
                 S.No.
               </TableHead>
               <TableHead className="border text-black font-bold text-center">
@@ -409,7 +409,7 @@ const PatientList = () => {
                                         const token =
                                           localStorage.getItem("token");
                                         const response = await axios.get(
-                                          `http://192.168.147.176:8081/api/AD/rejectAppointment?email=${pat.email}`,
+                                          `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
                                           {
                                             headers: {
                                               Authorization: `Bearer ${token}`,
@@ -465,7 +465,7 @@ const PatientList = () => {
                           onClick={async () => {
                             try {
                               const resp = await axios.get(
-                                `http://192.168.147.176:8081/api/AD/completeAppointment/${pat.email}`,
+                                `http://localhost:8081/api/AD/completeAppointment/${pat.email}`,
                                 {
                                   headers: {
                                     Authorization: `Bearer ${localStorage.getItem(
@@ -487,7 +487,7 @@ const PatientList = () => {
                           onClick={async () => {
                             try {
                               const resp = await axios.get(
-                                `http://192.168.147.176:8081/api/AD/rejectAppointment?email=${pat.email}`,
+                                `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
                                 {
                                   headers: {
                                     Authorization: `Bearer ${localStorage.getItem(

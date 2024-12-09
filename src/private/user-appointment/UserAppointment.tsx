@@ -73,7 +73,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.get(
-          "http://192.168.147.176:8081/api/AD/getAvailableDoctors",
+          "http://localhost:8081/api/AD/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -102,7 +102,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://192.168.147.176:8081/api/appointment/lastAppointmentDate",
+        "http://localhost:8081/api/appointment/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -149,7 +149,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.post(
-          "http://192.168.147.176:8081/api/patient/submitAppointment",
+          "http://localhost:8081/api/patient/submitAppointment",
           appointmentData,
           {
             headers: {
