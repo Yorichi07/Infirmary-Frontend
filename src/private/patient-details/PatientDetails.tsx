@@ -71,11 +71,9 @@ const PatientDetails = () => {
     for (const meds in medLst) {
       medAry.push({
         medicine: medLst[parseInt(meds)],
-        dosage: {
-          M: (dosgM[parseInt(meds)] as HTMLInputElement).value,
-          A: (dosgA[parseInt(meds)] as HTMLInputElement).value,
-          E: (dosgE[parseInt(meds)] as HTMLInputElement).value,
-        },
+        dosageMorning: (dosgM[parseInt(meds)] as HTMLInputElement).value,
+        dosageAfternoon: (dosgA[parseInt(meds)] as HTMLInputElement).value,
+        dosageEvening: (dosgE[parseInt(meds)] as HTMLInputElement).value,
         duration: (dur[parseInt(meds)] as HTMLInputElement).value,
         suggestion: (sugs[parseInt(meds)] as HTMLInputElement).value,
       });

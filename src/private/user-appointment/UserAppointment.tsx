@@ -61,7 +61,7 @@ const UserAppointment = () => {
           return;
         }
 
-        if((localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+        if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
           alert("Select a location");
           return;
         }
@@ -139,7 +139,7 @@ const UserAppointment = () => {
           reasonPrefDoctor: data.reasonForPreference || null,
         };
 
-        if((localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+        if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
           alert("Select a location");
           return;
         }
