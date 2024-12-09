@@ -98,3 +98,20 @@
   color: #333;
   margin-top: 5px; /* Space between image and text */
 }
+
+.nested-dosage-table {
+  border-collapse: collapse;
+}
+
+.nested-dosage-table th,
+.nested-dosage-table td {
+  border: 1px solid #ccc;
+  text-align: center;
+  padding: 5px;
+}
+
+.nested-dosage-table input {
+  width: 100%;
+  text-align: center;
+  box-sizing: border-box;
+}

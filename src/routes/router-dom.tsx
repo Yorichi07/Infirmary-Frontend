@@ -27,11 +27,46 @@ import PatientDetailsLayout from "@/private/patient-details/PatientDetailsLayout
 import PatientDetails from "@/private/patient-details/PatientDetails";
 import CommonPrescriptionLayout from "@/private/common-prescription/CommonPrescriptionLayout";
 import CommonPrescription from "@/private/common-prescription/CommonPrescription";
+import AdminSignIn from "@/public/AdminSignIn";
+import AdminDashboard from "@/private/admin-dashboard/AdminDashboard";
+import AdminDashboardLayout from "@/private/admin-dashboard/AdminDashboardLayout";
+import NewDoctorLayout from "@/private/new-doctor/NewDoctorLayout";
+import NewDoctor from "@/private/new-doctor/NewDoctor";
+import NewAssistantDoctorLayout from "@/private/new-assistant-doctor/NewAssistantDoctorLayout";
+import NewAssistantDoctor from "@/private/new-assistant-doctor/NewAssistantDoctor";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <SignIn />,
+  },
+  {
+    path: "/admin-portal",
+    element: <AdminSignIn />,
+  },
+  {
+    path: "/admin-dashboard",
+    element: (
+      <AdminDashboardLayout>
+        <AdminDashboard></AdminDashboard>
+      </AdminDashboardLayout>
+    ),
+  },
+  {
+    path: "/register-doctor",
+    element: (
+      <NewDoctorLayout>
+        <NewDoctor></NewDoctor>
+      </NewDoctorLayout>
+    ),
+  },
+  {
+    path: "/register-assistant-doctor",
+    element: (
+      <NewAssistantDoctorLayout>
+        <NewAssistantDoctor></NewAssistantDoctor>
+      </NewAssistantDoctorLayout>
+    ),
   },
   {
     path: "/register",

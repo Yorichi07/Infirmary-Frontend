@@ -7,9 +7,9 @@ import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 
 const API_URLS = {
-  patient: "http://192.168.0.107:8081/api/auth/patient/signin",
-  doctor: "http://192.168.0.107:8081/api/auth/doc/signin",
-  assistant_doctor: "http://192.168.0.107:8081/api/auth/ad/signin",
+  patient: "http://192.168.147.176:8081/api/auth/patient/signin",
+  doctor: "http://192.168.147.176:8081/api/auth/doc/signin",
+  assistant_doctor: "http://192.168.147.176:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -30,6 +30,7 @@ const SignIn = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [role, setRole] = useState<string>("patient");
   const [location, setLocation] = useState({ latitude: -1, longitude: -1 });
+  const [locations,setLocations] = useState<Array<{locationName:string,latitude:string,longitude:string}>>([]);
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
@@ -39,17 +40,30 @@ const SignIn = () => {
   const handleRoleChange: ChangeEventHandler<HTMLInputElement> = async (e) => {
     const selectedRole = e.target.value;
     setRole(selectedRole);
+    if (role === "assistant_doctor"){
+      try{
+        const resp = await axios.get("http://localhost:8081/api/location/");
+        if(resp.status === 200){
+          const data =  resp.data;
+          setLocations(data);
+          console.log(data);
+        }else{
+          alert(resp.data.message);
+        }
+      }catch(err){
+        alert("Error in fetching locations please try again");
+      }
 
-    if (selectedRole === "assistant_doctor" && navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (pos) =>
-          setLocation({
-            latitude: pos.coords.latitude,
-            longitude: pos.coords.longitude,
-          }),(err)=>{console.log(err.message)},{enableHighAccuracy:true,maximumAge:2000,timeout:5000}
-      );
     }
+
   };
+
+  const handleLocationChange = (data:any) =>{
+    setLocation({
+      latitude:data.target.value[1],
+      longitude:data.target.value[2]
+    })
+  }
 
   const handleSignIn = async () => {
     const apiUrl = API_URLS[role as keyof typeof API_URLS];
@@ -57,11 +71,10 @@ const SignIn = () => {
       DASHBOARD_ROUTES[role as keyof typeof DASHBOARD_ROUTES];
     
     if (
-      role === "assistant_doctor" &&
-      (location.latitude === -1 || location.longitude === -1)
+      role === "assistant_doctor" && (location.latitude == -1 || location.longitude == -1)
     ) {
       return alert(
-        "Allow Location Services to sign in as an Assistant Doctor."
+        "Please Select A Location"
       );
     }
 
@@ -151,6 +164,23 @@ const SignIn = () => {
                   />
                 </div>
               ))}
+              {role === "assistant_doctor" && (
+                <div className="input">
+                  <Label htmlFor="location">Location</Label>
+                  <select
+                    id="location"
+                    onChange={handleLocationChange}
+                    className="bg-white text-black w-full p-2 border border-gray-300"
+                  >
+                    <option value="">Select a location</option>
+                    {locations.map((loc) => (
+                      <option key={loc.locationName} value={[loc.locationName,loc.latitude,loc.longitude]}>
+                        {loc.locationName}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+              )}
             </form>
 
             {errorMessage && (

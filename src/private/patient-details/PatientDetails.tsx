@@ -62,14 +62,20 @@ const PatientDetails = () => {
       suggestion: any;
     }>();
 
-    const dosg = document.querySelectorAll(".dosage");
+    const dosgM = document.querySelectorAll(".dosage-morning");
+    const dosgA = document.querySelectorAll(".dosage-afternoon");
+    const dosgE = document.querySelectorAll(".dosage-evening");
     const dur = document.querySelectorAll(".duration");
     const sugs = document.querySelectorAll(".suggestion");
 
     for (const meds in medLst) {
       medAry.push({
         medicine: medLst[parseInt(meds)],
-        dosage: (dosg[parseInt(meds)] as HTMLInputElement).value,
+        dosage: {
+          M: (dosgM[parseInt(meds)] as HTMLInputElement).value,
+          A: (dosgA[parseInt(meds)] as HTMLInputElement).value,
+          E: (dosgE[parseInt(meds)] as HTMLInputElement).value,
+        },
         duration: (dur[parseInt(meds)] as HTMLInputElement).value,
         suggestion: (sugs[parseInt(meds)] as HTMLInputElement).value,
       });
@@ -88,7 +94,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://192.168.0.107:8081/api/prescription/submit",
+        "http://192.168.147.176:8081/api/prescription/submit",
         req,
         {
           headers: {
@@ -112,7 +118,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://192.168.0.107:8081/api/doctor/getPatient",
+          "http://192.168.147.176:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -151,7 +157,7 @@ const PatientDetails = () => {
     const fetchMed = async () => {
       try {
         const resp = await axios.get(
-          "http://192.168.0.107:8081/api/stock/available",
+          "http://192.168.147.176:8081/api/stock/available",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -198,6 +204,29 @@ const PatientDetails = () => {
     }
   };
 
+  const handleRelease = async () => {
+    try {
+      const resp = await axios.get(
+        "http://192.168.147.176:8081/api/doctor/releasePatient",
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+
+      window.alert(resp.data.message || "Patient released successfully");
+      navigate(-1);
+    } catch (err: any) {
+      if (err.response && err.response.data && err.response.data.message) {
+        alert(err.response.data.message);
+      } else {
+        alert("An error occurred while releasing the patient.");
+      }
+      console.error(err);
+    }
+  };
+
   return (
     <div className="h-[83svh] p-5 flex flex-col bg-[#f5f5f5] max-lg:h-[93svh]">
       <div className=" overflow-y-scroll p-5 max-lg:p-0">
@@ -206,7 +235,7 @@ const PatientDetails = () => {
             className="w-[15%] border-black border-[1.5px] max-lg:w-[50%] max-lg:mb-5"
             src={
               ndata?.imageUrl != null
-                ? `http://192.168.0.107:8081/${ndata?.imageUrl}`
+                ? `http://192.168.147.176:8081/${ndata?.imageUrl}`
                 : "/default-user.jpg"
             }
           />
@@ -233,21 +262,21 @@ const PatientDetails = () => {
             </div>
           </div>
           <div className="flex flex-col w-[30%] gap-2 max-lg:w-full max-lg:mb-5">
-            <label className="font-medium">Medical History:</label>
+            <label className="font-medium  lg:hidden">Medical History:</label>
             <textarea
-              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
               disabled
               value={ndata?.medHis}
             ></textarea>
-            <label className="font-medium">Family History:</label>
+            <label className="font-medium  lg:hidden">Family History:</label>
             <textarea
-              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
               disabled
               value={ndata?.famHis}
             ></textarea>
-            <label className="font-medium">Allergies:</label>
+            <label className="font-medium  lg:hidden">Allergies:</label>
             <textarea
-              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
               disabled
               value={ndata?.allergies}
             ></textarea>
@@ -296,7 +325,7 @@ const PatientDetails = () => {
                 <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
               </div>
               <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
-              <div className="text-[18px]">
+              <div className="text-[18px] font-medium ">
                 {new Date().toLocaleDateString()}
               </div>
             </div>
@@ -415,12 +444,44 @@ const PatientDetails = () => {
                           </SelectContent>
                         </Select>
                       </td>
-                      <td className="w-[15%]">
-                        <input
-                          type="number"
-                          min={1}
-                          className="small-input dosage w-full"
-                        />
+                      <td className="w-[25%]">
+                        <table className="nested-dosage-table w-full">
+                          <thead>
+                            <tr>
+                              <th>Morning</th>
+                              <th>Afternoon</th>
+                              <th>Evening</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr>
+                              <td>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  className="small-input dosage-morning w-full"
+                                  placeholder="0"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  className="small-input dosage-afternoon w-full"
+                                  placeholder="0"
+                                />
+                              </td>
+                              <td>
+                                <input
+                                  type="number"
+                                  min={0}
+                                  className="small-input dosage-evening w-full"
+                                  placeholder="0"
+                                />
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
                       </td>
                       <td className="w-[16%]">
                         <input
@@ -466,13 +527,22 @@ const PatientDetails = () => {
               <div className="signature-text">Doctor Name</div>
             </div>
           </div>
-          <Button
-            type="button"
-            className="rounded-none rounded-b-lg w-[70%]"
-            onClick={handleSubmit}
-          >
-            Submit
-          </Button>
+          <div className="flex w-[70%]">
+            <Button
+              type="button"
+              className="px-4 py-5 text-white font-semibold bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 w-[50%] rounded-none"
+              onClick={handleRelease}
+            >
+              Release Patient
+            </Button>
+            <Button
+              type="button"
+              className="px-4 py-5 text-white font-semibold bg-gradient-to-r from-green-600 to-green-700 hover:from-green-700 hover:to-green-800 w-[50%] rounded-none"
+              onClick={handleSubmit}
+            >
+              Submit
+            </Button>
+          </div>
         </div>
       </div>
     </div>

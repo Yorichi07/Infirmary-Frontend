@@ -18,10 +18,11 @@ const DoctorDashboard = () => {
   useEffect(() => {
     if(!navigator.geolocation) alert("Location Services not Supported");
 
-    navigator.geolocation.getCurrentPosition((pos)=>{
+    navigator.geolocation.watchPosition((pos)=>{
       setLatitude(pos.coords.latitude);
       setLongitude(pos.coords.longitude);
-    })
+      console.log(pos.coords.accuracy);
+    },(err)=>{console.log(err)},{enableHighAccuracy:true,maximumAge:2000,timeout:5000})
 
     const timer = setInterval(() => {
       setTime(new Date());
@@ -40,7 +41,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://192.168.0.107:8081/api/doctor/total-patient-count",
+        "http://192.168.147.176:8081/api/doctor/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -75,7 +76,7 @@ const DoctorDashboard = () => {
       }
       if(latitude == -1 || longitude == -1) alert("Allow Location Services");
       const response = await axios.get(
-        "http://192.168.0.107:8081/api/doctor/setStatus?isDoctorCheckIn=true",
+        "http://192.168.147.176:8081/api/doctor/setStatus?isDoctorCheckIn=true",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -111,7 +112,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://192.168.0.107:8081/api/doctor/setStatus?isDoctorCheckIn=false",
+        "http://192.168.147.176:8081/api/doctor/setStatus?isDoctorCheckIn=false",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -144,7 +145,7 @@ const DoctorDashboard = () => {
       return;
     }
 
-    const response = await axios.get("http://192.168.0.107:8081/api/doctor/getCurrentToken",{
+    const response = await axios.get("http://192.168.147.176:8081/api/doctor/getCurrentToken",{
       headers:{
         Authorization: `Bearer ${token}`
       }
@@ -239,9 +240,12 @@ const DoctorDashboard = () => {
               </div>
             )}
             <div
-              className="flex px-10 justify-between items-center py-3 rounded-md">
+              className="flex flex-col px-10 justify-between items-center py-3 rounded-md">
               <p className="text-black font-semibold text-xl text-center flex-1">
-                Patient Token Number: {token}
+                Patient Token Number
+              </p>
+              <p>
+                {token}
               </p>
             </div>
             <button
