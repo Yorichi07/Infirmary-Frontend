@@ -82,7 +82,7 @@ const NewDoctor = () => {
         }
         const payload = { ...data, status: false };
         await axios.post(
-          "http://localhost:8081/api/admin/doctor/signup",
+          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/admin/doctor/signup",
           payload,
           {
             headers: {

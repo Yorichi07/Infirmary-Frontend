@@ -18,7 +18,7 @@ const AdminSignIn = () => {
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   const handleSignIn = async () => {
-    const apiUrl = "http://localhost:8081/api/auth/admin/signin";
+    const apiUrl = "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/admin/signin";
     const dashboardRoute = "/admin-dashboard";
 
     try {

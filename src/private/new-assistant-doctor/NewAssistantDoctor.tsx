@@ -65,7 +65,7 @@ const NewAssistantDoctor = () => {
           return;
         }
         const payload = { ...data, status: false };
-        await axios.post("http://localhost:8081/api/admin/AD/signup", payload, {
+        await axios.post("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/admin/AD/signup", payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
