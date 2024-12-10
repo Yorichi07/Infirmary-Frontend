@@ -171,7 +171,7 @@ const UserRegister = () => {
 
   const handleSchoolChange = (school: keyof typeof programOptions) => {
     setAvailablePrograms(programOptions[school] || []);
-    form.setValue("program", "");
+    form.setValue("program", undefined);
   };
 
   const handleCancel = () => {
