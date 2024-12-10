@@ -28,30 +28,42 @@ const formSchema = z.object({
   height: z
     .string()
     .regex(/^\d*$/, "Height must be a numeric value")
-    .refine(
-      (value) =>
-        value === "" || (parseInt(value) >= 100 && parseInt(value) <= 300),
-      {
-        message: "Height must be between 100 and 300 cm",
-      }
-    ),
+    .refine((value) => value.trim() !== "", { message: "Required" })
+    .refine((value) => parseInt(value) >= 100 && parseInt(value) <= 300, {
+      message: "Height must be between 100 and 300 cm",
+    }),
 
   weight: z
     .string()
     .regex(/^\d*$/, "Weight must be a numeric value")
-    .refine(
-      (value) =>
-        value === "" || (parseInt(value) >= 1 && parseInt(value) <= 500),
-      {
-        message: "Weight must be between 1 and 500 kg",
-      }
-    ),
-  gender: z.string(),
-  bloodGroup: z.string(),
-  medicalHistory: z.string(),
-  familyMedicalHistory: z.string(),
-  allergies: z.string(),
-  currentAddress: z.string(),
+    .refine((value) => value.trim() !== "", { message: "Required" })
+    .refine((value) => parseInt(value) >= 1 && parseInt(value) <= 500, {
+      message: "Weight must be between 1 and 500 kg",
+    }),
+
+  medicalHistory: z
+    .string()
+    .refine((value) => value.trim() !== "", {
+      message: "Required",
+    }),
+
+  familyMedicalHistory: z
+    .string()
+    .refine((value) => value.trim() !== "", {
+      message: "Required",
+    }),
+
+  allergies: z
+    .string()
+    .refine((value) => value.trim() !== "", {
+      message: "Required",
+    }),
+
+  currentAddress: z
+    .string()
+    .refine((value) => value.trim() !== "", {
+      message: "Required",
+    }),
 });
 
 const UserProfile = () => {
@@ -151,8 +163,9 @@ const UserProfile = () => {
             alert(error.response.data.message);
           }
 
-          alert("Set Height, Weight, Family History, Medical History, Allergies and Current Address");
-
+          alert(
+            "Set Height, Weight, Family History, Medical History, Allergies and Current Address"
+          );
         } else {
           console.log(error);
           alert(error.response.data.message);
@@ -447,10 +460,7 @@ const UserProfile = () => {
             >
               Cancel
             </Button>
-            <Button
-              type="submit"
-              className="save-btn text-white"
-            >
+            <Button type="submit" className="save-btn text-white">
               Submit
             </Button>
           </div>

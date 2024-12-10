@@ -71,16 +71,13 @@ const SignIn = () => {
   };
 
   const handleSignIn = async () => {
+    if (location.latitude === "-1" || location.longitude === "-1") {
+      return alert("Please select a location.");
+    }
+
     const apiUrl = API_URLS[role as keyof typeof API_URLS];
     const dashboardRoute =
       DASHBOARD_ROUTES[role as keyof typeof DASHBOARD_ROUTES];
-
-    if (
-      role === "assistant_doctor" &&
-      (location.latitude === "-1" || location.longitude === "-1")
-    ) {
-      return alert("Please select a location.");
-    }
 
     try {
       const headers =

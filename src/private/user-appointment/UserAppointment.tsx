@@ -61,7 +61,12 @@ const UserAppointment = () => {
           return;
         }
 
-        if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+        if (
+          !(
+            localStorage.getItem("latitude") ||
+            localStorage.getItem("longitude")
+          )
+        ) {
           alert("Select a location");
           return;
         }
@@ -72,7 +77,7 @@ const UserAppointment = () => {
             headers: {
               Authorization: "Bearer " + token,
               "X-Latitude": localStorage.getItem("latitude"),
-              "X-Longitude": localStorage.getItem("longitude")
+              "X-Longitude": localStorage.getItem("longitude"),
             },
           }
         );
@@ -83,7 +88,6 @@ const UserAppointment = () => {
         setDoctors(doctorList);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
-          
         } else {
           console.error("Error fetching doctors: ", error);
           alert("Could not fetch available doctors");
@@ -125,7 +129,6 @@ const UserAppointment = () => {
   const { isValid } = form.formState;
 
   const onSubmit = async (data: any) => {
-
     if (isValid) {
       try {
         const token = localStorage.getItem("token");
@@ -139,7 +142,12 @@ const UserAppointment = () => {
           reasonPrefDoctor: data.reasonForPreference || null,
         };
 
-        if(!(localStorage.getItem("latitude") || localStorage.getItem("longitude"))){
+        if (
+          !(
+            localStorage.getItem("latitude") ||
+            localStorage.getItem("longitude")
+          )
+        ) {
           alert("Select a location");
           return;
         }
@@ -151,7 +159,7 @@ const UserAppointment = () => {
             headers: {
               Authorization: `Bearer ${token}`,
               "X-Latitude": localStorage.getItem("latitude"),
-              "X-Longitude": localStorage.getItem("longitude")
+              "X-Longitude": localStorage.getItem("longitude"),
             },
           }
         );
@@ -319,20 +327,20 @@ const UserAppointment = () => {
                     <FormItem className="form-item">
                       <FormLabel>Reason for Preference?</FormLabel>
                       <FormControl>
-                        {
-                            form.getValues("preferredDoctor") ? (<Textarea
+                        {form.getValues("preferredDoctor") ? (
+                          <Textarea
                             id="reasonForPref"
                             placeholder="Enter reason for preference (if preferred)"
                             {...field}
-                            
-                          />):(<Textarea
+                          />
+                        ) : (
+                          <Textarea
                             id="reasonForPref"
                             placeholder="Enter reason for preference (if preferred)"
                             {...field}
                             disabled
-                          />)
-                        }
-                        
+                          />
+                        )}
                       </FormControl>
                       <FormMessage />
                     </FormItem>

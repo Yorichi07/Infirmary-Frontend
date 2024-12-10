@@ -71,7 +71,8 @@ const formSchema = z
         /^[a-zA-Z0-9_ ]+$/,
         "Name can only contain letters, numbers, underscores, and spaces"
       ),
-    sapID: z.string().regex(/^\d+$/, "Sap ID must be a valid number"),
+      sapID: z.string().length(9, "Invalid Sap ID"),
+
     password: z
       .string()
       .min(8, "Password must be at least 8 characters long")
@@ -85,9 +86,9 @@ const formSchema = z
     confirmPassword: z.string(),
     email: z.string().email("Invalid email address"),
     school: z.enum(schoolOptions, {
-      required_error: "Please select a valid school",
+      required_error: "Invalid school",
     }),
-    program: z.string().min(1, "Please select a program"),
+    program: z.string().min(1, "Invalid program"),
     dateOfBirth: z
       .date()
       .max(new Date(), "Date of birth cannot be in the future"),
@@ -100,11 +101,11 @@ const formSchema = z
     gender: z
       .enum(["Male", "Female", "Other"])
       .refine((value) => value !== undefined, {
-        message: "Please select a gender",
+        message: "Invalid gender",
       }),
 
     bloodGroup: z.enum(bloodGroup, {
-      required_error: "Please select a valid blood group",
+      required_error: "Invalid blood group",
     }),
   })
   .refine((data) => data.password === data.confirmPassword, {
@@ -123,12 +124,12 @@ const UserRegister = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: undefined,
-      sapID: "",
+      sapID: "00000000",
       password: undefined,
       confirmPassword: undefined,
       email: undefined,
       school: undefined,
-      program: "",
+      program: undefined,
       dateOfBirth: undefined,
       emergencyContact: undefined,
       phoneNumber: undefined,
@@ -198,7 +199,7 @@ const UserRegister = () => {
 
   useEffect(() => {
     if (form.watch("school") === "Guest") {
-      form.setValue("sapID", "00000000");
+      form.setValue("sapID", "000000000");
     }
   }, [form.watch("school")]);
 
