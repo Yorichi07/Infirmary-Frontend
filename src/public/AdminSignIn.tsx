@@ -5,10 +5,12 @@ import axios from "axios";
 import { ChangeEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminSignIn.scss";
+import Shared from "@/Shared";
 
 const AdminSignIn = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
+  const [showPassword, setShowPassword] = useState(false);
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
@@ -56,21 +58,39 @@ const AdminSignIn = () => {
               <h1>Admin Sign in</h1>
             </div>
             <form>
-              {["email", "password"].map((field) => (
-                <div key={field} className="input">
-                  <Label htmlFor={field}>
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                  </Label>
+            <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  value={input.email}
+                  onChange={onInputChange}
+                  className="bg-white text-black"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
                   <Input
-                    type={field}
-                    id={field}
-                    placeholder={field}
-                    value={input[field as keyof typeof input]}
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Password"
+                    value={input.password}
                     onChange={onInputChange}
-                    className="bg-white text-black"
+                    className="bg-white text-black pr-10"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showPassword ? Shared.Eye : Shared.SlashEye}
+                  </button>
                 </div>
-              ))}
+              </div>
             </form>
 
             {errorMessage && (

@@ -13,6 +13,8 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { z } from "zod";
 import axios from "axios";
+import Shared from "@/Shared";
+import { useState } from "react";
 const formSchema = z
   .object({
     name: z
@@ -43,6 +45,8 @@ const formSchema = z
 
 const NewAssistantDoctor = () => {
   const navigate = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const form = useForm({
     resolver: zodResolver(formSchema),
@@ -65,11 +69,15 @@ const NewAssistantDoctor = () => {
           return;
         }
         const payload = { ...data, status: false };
-        await axios.post("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/admin/AD/signup", payload, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await axios.post(
+          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/admin/AD/signup",
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         alert("Registration successful");
         navigate("/admin-dashboard");
       } catch (error: any) {
@@ -125,16 +133,27 @@ const NewAssistantDoctor = () => {
                   <FormItem className="mt-3">
                     <FormLabel>Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Enter password"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Enter password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword((prev) => !prev)}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                          aria-label="Toggle password visibility"
+                        >
+                          {showPassword ? Shared.Eye : Shared.SlashEye}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>
                 )}
               />
+
               <FormField
                 control={form.control}
                 name="confirmPassword"
@@ -142,11 +161,23 @@ const NewAssistantDoctor = () => {
                   <FormItem className="mt-3">
                     <FormLabel>Confirm Password</FormLabel>
                     <FormControl>
-                      <Input
-                        type="password"
-                        placeholder="Confirm password"
-                        {...field}
-                      />
+                      <div className="relative">
+                        <Input
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Confirm password"
+                          {...field}
+                        />
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setShowConfirmPassword((prev) => !prev)
+                          }
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                          aria-label="Toggle password visibility"
+                        >
+                          {showConfirmPassword ? Shared.Eye : Shared.SlashEye}
+                        </button>
+                      </div>
                     </FormControl>
                     <FormMessage />
                   </FormItem>

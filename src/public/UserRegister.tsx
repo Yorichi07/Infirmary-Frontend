@@ -71,7 +71,7 @@ const formSchema = z
         /^[a-zA-Z0-9_ ]+$/,
         "Name can only contain letters, numbers, underscores, and spaces"
       ),
-      sapID: z.string().length(9, "Invalid Sap ID"),
+    sapID: z.string().length(9, "Invalid Sap ID"),
 
     password: z
       .string()
@@ -117,6 +117,8 @@ const UserRegister = () => {
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const [bs64Img, setBs64Img] = useState<string | null>(null);
   const [availablePrograms, setAvailablePrograms] = useState<string[]>([]);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const navigate = useNavigate();
 
@@ -152,7 +154,10 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", payload)
+          .post(
+            "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signup",
+            payload
+          )
           .then((res) => {
             return res.data;
           });
@@ -261,16 +266,27 @@ const UserRegister = () => {
                         <FormItem className="mt-3">
                           <FormLabel>Password</FormLabel>
                           <FormControl>
-                            <Input
-                              type="password"
-                              placeholder="Enter password"
-                              {...field}
-                            />
+                            <div className="relative">
+                              <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder="Enter password"
+                                {...field}
+                              />
+                              <button
+                                type="button"
+                                onClick={() => setShowPassword((prev) => !prev)}
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                aria-label="Toggle password visibility"
+                              >
+                                {showPassword ? Shared.Eye : Shared.SlashEye}
+                              </button>
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="confirmPassword"
@@ -278,11 +294,25 @@ const UserRegister = () => {
                         <FormItem className="mt-3">
                           <FormLabel>Confirm Password</FormLabel>
                           <FormControl>
-                            <Input
-                              type="password"
-                              placeholder="Confirm password"
-                              {...field}
-                            />
+                            <div className="relative">
+                              <Input
+                                type={showConfirmPassword ? "text" : "password"}
+                                placeholder="Confirm password"
+                                {...field}
+                              />
+                              <button
+                                type="button"
+                                onClick={() =>
+                                  setShowConfirmPassword((prev) => !prev)
+                                }
+                                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                aria-label="Toggle password visibility"
+                              >
+                                {showConfirmPassword
+                                  ? Shared.Eye
+                                  : Shared.SlashEye}
+                              </button>
+                            </div>
                           </FormControl>
                           <FormMessage />
                         </FormItem>

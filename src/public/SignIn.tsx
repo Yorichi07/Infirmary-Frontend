@@ -13,11 +13,15 @@ import axios from "axios";
 import { ChangeEventHandler, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
+import Shared from "@/Shared";
 
 const API_URLS = {
-  patient: "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
-  doctor: "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
-  assistant_doctor: "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+  patient:
+    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
+  doctor:
+    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
+  assistant_doctor:
+    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -36,6 +40,7 @@ const SignIn = () => {
   const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState<string>("patient");
   const [location, setLocation] = useState<{
     latitude: string;
@@ -113,7 +118,9 @@ const SignIn = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/");
+        const resp = await axios.get(
+          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/"
+        );
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
@@ -169,21 +176,39 @@ const SignIn = () => {
               </h1>
             </div>
             <form>
-              {["email", "password"].map((field) => (
-                <div key={field}>
-                  <Label htmlFor={field}>
-                    {field.charAt(0).toUpperCase() + field.slice(1)}
-                  </Label>
+              <div>
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  type="email"
+                  id="email"
+                  placeholder="Email"
+                  value={input.email}
+                  onChange={onInputChange}
+                  className="bg-white text-black"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="password">Password</Label>
+                <div className="relative">
                   <Input
-                    type={field}
-                    id={field}
-                    placeholder={field}
-                    value={input[field as keyof typeof input]}
+                    type={showPassword ? "text" : "password"}
+                    id="password"
+                    placeholder="Password"
+                    value={input.password}
                     onChange={onInputChange}
-                    className="bg-white text-black"
+                    className="bg-white text-black pr-10"
                   />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                    aria-label="Toggle password visibility"
+                  >
+                    {showPassword ? Shared.Eye : Shared.SlashEye}
+                  </button>
                 </div>
-              ))}
+              </div>
               <div>
                 <Label htmlFor="location">Location</Label>
                 <Select onValueChange={handleLocationChange}>
