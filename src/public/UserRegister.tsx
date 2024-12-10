@@ -123,7 +123,7 @@ const UserRegister = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: undefined,
-      sapID: 0,
+      sapID: "0",
       password: undefined,
       confirmPassword: undefined,
       email: undefined,
@@ -198,7 +198,7 @@ const UserRegister = () => {
 
   useEffect(() => {
     if (form.watch("school") === "Guest") {
-      form.setValue("sapID", 0);
+      form.setValue("sapID", "0");
     }
   }, [form.watch("school")]);
 
