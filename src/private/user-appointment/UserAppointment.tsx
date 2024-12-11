@@ -27,11 +27,17 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 
 const formSchema = z.object({
-  reason: z.string(),
+  reason: z.string().nonempty("Reason for appointment is required."),
   followUp: z.enum(["Yes", "No"]),
   lastAppointmentDate: z.string().optional(),
   preferredDoctor: z.string().optional(),
-  reasonForPreference: z.string().optional(),
+  reasonForPreference: z
+    .string()
+    .optional()
+    .refine((value) => value === undefined || value.trim().length > 0, {
+      message:
+        "Reason for preference is required when a preferred doctor is selected.",
+    }),
 });
 
 const UserAppointment = () => {
@@ -88,6 +94,7 @@ const UserAppointment = () => {
         setDoctors(doctorList);
       } catch (error) {
         if (axios.isAxiosError(error) && error.response) {
+          /* empty */
         } else {
           console.error("Error fetching doctors: ", error);
           alert("Could not fetch available doctors");
@@ -327,20 +334,12 @@ const UserAppointment = () => {
                     <FormItem className="form-item">
                       <FormLabel>Reason for Preference?</FormLabel>
                       <FormControl>
-                        {form.getValues("preferredDoctor") ? (
-                          <Textarea
-                            id="reasonForPref"
-                            placeholder="Enter reason for preference (if preferred)"
-                            {...field}
-                          />
-                        ) : (
-                          <Textarea
-                            id="reasonForPref"
-                            placeholder="Enter reason for preference (if preferred)"
-                            {...field}
-                            disabled
-                          />
-                        )}
+                        <Textarea
+                          id="reasonForPref"
+                          placeholder="Enter reason for preference (if preferred)"
+                          {...field}
+                          disabled={!form.getValues("preferredDoctor")}
+                        />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
