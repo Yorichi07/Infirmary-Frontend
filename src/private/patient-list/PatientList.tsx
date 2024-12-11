@@ -349,12 +349,13 @@ const PatientList = () => {
                                 <div className="flex justify-between">
                                   <div className="form-group">
                                     <label htmlFor="temperature">
-                                      Temperature (in °f)
+                                      Temperature (in °C)
                                     </label>
                                     <input
                                       type="number"
                                       id="temperature"
                                       name="temperature"
+                                      min={0}
                                       className="form-input"
                                       placeholder="Enter temperature"
                                       value={dialogData.temperature}
@@ -374,6 +375,7 @@ const PatientList = () => {
                                       type="number"
                                       id="weight"
                                       name="weight"
+                                      min={0}
                                       className="form-input"
                                       placeholder="Enter weight"
                                       value={dialogData.weight}

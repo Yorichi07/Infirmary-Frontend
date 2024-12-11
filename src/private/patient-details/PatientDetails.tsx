@@ -38,6 +38,8 @@ const PatientDetails = () => {
     email: string;
     imageUrl: string;
     docName: string;
+    height: string;
+    weight: string;
   }>();
   const [stock, setStock] = useState<
     Array<{ batchNumber: number; medicineName: string; quantity: number }>
@@ -140,6 +142,8 @@ const PatientDetails = () => {
           email: response.patient.email,
           imageUrl: response.patient.imageUrl,
           docName: response.docName,
+          height: response.medicalDetails.height,
+          weight: response.medicalDetails.weight,
         };
         setNdata(formatData);
       } catch (err: any) {
@@ -251,7 +255,7 @@ const PatientDetails = () => {
               <input type="text" value={ndata?.sex} disabled />
             </div>
             <div className="input-field">
-              <label>ID:</label>
+              <label>SAP Id:</label>
               <input type="text" value={ndata?.id} disabled />
             </div>
             <div className="input-field">
@@ -259,10 +263,21 @@ const PatientDetails = () => {
               <input type="text" value={ndata?.course} disabled />
             </div>
           </div>
-          <div className="flex flex-col w-[30%] gap-2 max-lg:w-full max-lg:mb-5">
+          <div className="flex flex-col w-[30%] gap-3 max-lg:w-full max-lg:mb-5">
+            <div className="gap-5 flex flex-col">
+              <div className="input-field">
+                <label>Height (in cm):</label>
+                <input type="text w-full" value={ndata?.height} disabled />
+              </div>
+              <div className="input-field">
+                <label>Weight (in kg):</label>
+                <input type="text" value={ndata?.weight} disabled />
+              </div>
+            </div>
+
             <label className="font-medium  lg:hidden">Medical History:</label>
             <textarea
-              className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
+              className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
               disabled
               value={ndata?.medHis}
             ></textarea>
@@ -316,8 +331,8 @@ const PatientDetails = () => {
             </Popover>
           </div>
         </div>
-        <div className="p-5 flex flex-col justify-center items-center max-lg:px-0">
-          <div className="bg-[#fdfdfd] p-5 min-w-[70%] border-black border max-lg:w-full max-lg:p-2">
+        <div className="flex flex-col justify-center items-center max-lg:px-0">
+          <div className="bg-[#fdfdfd] p-5 min-w-[100%] border-black border max-lg:w-full max-lg:p-2">
             <div className="flex items-center justify-between mb-[10px]">
               <div className="flex center">
                 <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
