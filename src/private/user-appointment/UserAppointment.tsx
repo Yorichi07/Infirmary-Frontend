@@ -34,10 +34,14 @@ const formSchema = z.object({
   reasonForPreference: z
     .string()
     .optional()
-    .refine((value) => value === undefined || value.trim().length > 0, {
-      message:
-        "Reason for preference is required when a preferred doctor is selected.",
-    }),
+    .refine(
+      (value) =>
+        value === undefined || value.trim().length > 0 || value != "none",
+      {
+        message:
+          "Reason for preference is required when a preferred doctor is selected.",
+      }
+    ),
 });
 
 const UserAppointment = () => {
@@ -78,7 +82,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
+          "http://localhost:8081/api/AD/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -109,7 +113,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/appointment/lastAppointmentDate",
+        "http://localhost:8081/api/appointment/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -160,7 +164,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.post(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/submitAppointment",
+          "http://localhost:8081/api/patient/submitAppointment",
           appointmentData,
           {
             headers: {

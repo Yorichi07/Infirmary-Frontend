@@ -17,11 +17,11 @@ import Shared from "@/Shared";
 
 const API_URLS = {
   patient:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
+    "http://localhost:8081/api/auth/patient/signin",
   doctor:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/doc/signin",
+    "http://localhost:8081/api/auth/doc/signin",
   assistant_doctor:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+    "http://localhost:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -119,7 +119,7 @@ const SignIn = () => {
     const fetchLocations = async () => {
       try {
         const resp = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/"
+          "http://localhost:8081/api/location/"
         );
         if (resp.status === 200) {
           const data = resp.data;

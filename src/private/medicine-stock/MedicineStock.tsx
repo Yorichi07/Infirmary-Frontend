@@ -58,7 +58,7 @@ const MedicineStock = () => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/stock/", {
+        const response = await axios.get("http://localhost:8081/api/stock/", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -74,7 +74,7 @@ const MedicineStock = () => {
 
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/");
+        const resp = await axios.get("http://localhost:8081/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
@@ -133,7 +133,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/stock/addStock",
+          "http://localhost:8081/api/stock/addStock",
           formattedNewStock,
           {
             headers: {
@@ -156,7 +156,7 @@ const MedicineStock = () => {
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(`http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/stock/${batchNumber}`, {
+        await axios.delete(`http://localhost:8081/api/stock/${batchNumber}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
