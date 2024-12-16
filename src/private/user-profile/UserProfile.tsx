@@ -27,7 +27,7 @@ const formSchema = z.object({
   emergencyContact: z.string(),
   height: z
     .string()
-    .regex(/^\d*$/, "Height must be a numeric value")
+    .regex(/^\d*(\.\d+)?$/, "Height must be a numeric value")
     .refine((value) => value.trim() !== "", { message: "Required" })
     .refine((value) => parseInt(value) >= 100 && parseInt(value) <= 300, {
       message: "Height must be between 100 and 300 cm",
@@ -35,35 +35,27 @@ const formSchema = z.object({
 
   weight: z
     .string()
-    .regex(/^\d*$/, "Weight must be a numeric value")
+    .regex(/^\d*(\.\d+)?$/, "Height must be a numeric value")
     .refine((value) => value.trim() !== "", { message: "Required" })
     .refine((value) => parseInt(value) >= 1 && parseInt(value) <= 500, {
       message: "Weight must be between 1 and 500 kg",
     }),
 
-  medicalHistory: z
-    .string()
-    .refine((value) => value.trim() !== "", {
-      message: "Required",
-    }),
+  medicalHistory: z.string().refine((value) => value.trim() !== "", {
+    message: "Required",
+  }),
 
-  familyMedicalHistory: z
-    .string()
-    .refine((value) => value.trim() !== "", {
-      message: "Required",
-    }),
+  familyMedicalHistory: z.string().refine((value) => value.trim() !== "", {
+    message: "Required",
+  }),
 
-  allergies: z
-    .string()
-    .refine((value) => value.trim() !== "", {
-      message: "Required",
-    }),
+  allergies: z.string().refine((value) => value.trim() !== "", {
+    message: "Required",
+  }),
 
-  currentAddress: z
-    .string()
-    .refine((value) => value.trim() !== "", {
-      message: "Required",
-    }),
+  currentAddress: z.string().refine((value) => value.trim() !== "", {
+    message: "Required",
+  }),
 });
 
 const UserProfile = () => {
@@ -111,7 +103,11 @@ const UserProfile = () => {
         form.setValue("patientId", data.email || "");
         form.setValue("school", data.school || "");
         form.setValue("program", data.program || "");
-        form.setValue("dateOfBirth", data.dateOfBirth || "");
+
+        const dob = new Date(data.dateOfBirth);
+        const formattedDOB = dob.toLocaleDateString("en-GB");
+        form.setValue("dateOfBirth", formattedDOB || "");
+
         form.setValue("emergencyContact", data.emergencyContact || "");
         form.setValue("height", `${data.height}` || "");
         form.setValue("weight", `${data.weight}` || "");
@@ -140,7 +136,11 @@ const UserProfile = () => {
             form.setValue("patientId", dataBackup.email || "");
             form.setValue("school", dataBackup.school || "");
             form.setValue("program", dataBackup.program || "");
-            form.setValue("dateOfBirth", dataBackup.dateOfBirth || "");
+
+            const dobBackup = new Date(dataBackup.dateOfBirth);
+            const formattedDOBBackup = dobBackup.toLocaleDateString("en-GB");
+            form.setValue("dateOfBirth", formattedDOBBackup || "");
+
             form.setValue(
               "emergencyContact",
               dataBackup.emergencyContact || ""

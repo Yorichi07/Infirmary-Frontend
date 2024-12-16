@@ -90,8 +90,16 @@ const formSchema = z
     }),
     program: z.string().min(1, "Invalid program"),
     dateOfBirth: z
-      .date()
-      .max(new Date(), "Date of birth cannot be in the future"),
+      .string()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Invalid date format")
+      .refine(
+        (dateString) => {
+          const inputDate = new Date(dateString);
+          const today = new Date();
+          return inputDate <= today;
+        },
+        { message: "Date of birth cannot be in the future" }
+      ),
     emergencyContact: z
       .string()
       .regex(/^\d{10}$/, "Emergency contact must be a 10-digit number"),
@@ -147,17 +155,11 @@ const UserRegister = () => {
       try {
         const payload = {
           ...data,
-          dateOfBirth: data.dateOfBirth
-            ? new Date(data.dateOfBirth).toISOString().split("T")[0]
-            : undefined,
           img: bs64Img,
         };
 
         await axios
-          .post(
-            "http://localhost:8081/api/auth/patient/signup",
-            payload
-          )
+          .post("http://localhost:8081/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });
@@ -173,7 +175,6 @@ const UserRegister = () => {
       alert("Please fill in required details before submitting!");
     }
   };
-
   const handleSchoolChange = (school: keyof typeof programOptions) => {
     setAvailablePrograms(programOptions[school] || []);
     form.setValue("program", undefined);
@@ -328,16 +329,7 @@ const UserRegister = () => {
                             <Input
                               type="date"
                               placeholder="Select date of birth"
-                              value={
-                                field.value
-                                  ? new Date(field.value)
-                                      .toISOString()
-                                      .substring(0, 10)
-                                  : ""
-                              }
-                              onChange={(e) =>
-                                field.onChange(new Date(e.target.value))
-                              }
+                              {...field}
                             />
                           </FormControl>
                           <FormMessage />

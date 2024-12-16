@@ -26,24 +26,6 @@ import { RadioButton } from "primereact/radiobutton";
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const formSchema = z.object({
-  reason: z.string().nonempty("Reason for appointment is required."),
-  followUp: z.enum(["Yes", "No"]),
-  lastAppointmentDate: z.string().optional(),
-  preferredDoctor: z.string().optional(),
-  reasonForPreference: z
-    .string()
-    .optional()
-    .refine(
-      (value) =>
-        value === undefined || value.trim().length > 0 || value != "none",
-      {
-        message:
-          "Reason for preference is required when a preferred doctor is selected.",
-      }
-    ),
-});
-
 const UserAppointment = () => {
   const navigate = useNavigate();
   const [doctors, setDoctors] = useState<{ id: string; name: string }[]>([]);
@@ -51,13 +33,21 @@ const UserAppointment = () => {
     null
   );
 
+  const formSchema = z.object({
+    reason: z.string().nonempty("Reason for appointment is required."),
+    followUp: z.enum(["Yes", "No"]),
+    lastAppointmentDate: z.string().optional(),
+    preferredDoctor: z.string().optional(),
+    reasonForPreference: z.string().optional(),
+  });
+
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
       lastAppointmentDate: "",
       followUp: "No",
       preferredDoctor: undefined,
-      reasonForPreference: "",
+      reasonForPreference: undefined,
       reason: undefined,
     },
   });
@@ -137,10 +127,21 @@ const UserAppointment = () => {
     }
   };
 
-  const { isValid } = form.formState;
-
   const onSubmit = async (data: any) => {
-    if (isValid) {
+    if (data.preferredDoctor && data.preferredDoctor !== "none") {
+      if (
+        !data.reasonForPreference ||
+        data.reasonForPreference.trim().length === 0
+      ) {
+        form.setError("reasonForPreference", {
+          type: "manual",
+          message:
+            "Reason for preference is required when a preferred doctor is selected.",
+        });
+        return;
+      }
+    }
+    if (form.formState.isValid) {
       try {
         const token = localStorage.getItem("token");
 
