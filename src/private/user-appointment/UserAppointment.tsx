@@ -127,6 +127,7 @@ const UserAppointment = () => {
     }
   };
 
+  const { isValid } = form.formState;
   const onSubmit = async (data: any) => {
     if (data.preferredDoctor && data.preferredDoctor !== "none") {
       if (
@@ -141,7 +142,7 @@ const UserAppointment = () => {
         return;
       }
     }
-    if (form.formState.isValid) {
+    if (isValid) {
       try {
         const token = localStorage.getItem("token");
 
