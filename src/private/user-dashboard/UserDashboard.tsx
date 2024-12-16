@@ -1,6 +1,9 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Terminal } from "lucide-react";
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const UserDashboard = () => {
   const navigate = useNavigate();
@@ -21,12 +24,16 @@ const UserDashboard = () => {
     imageUrl: "",
     password: "",
   });
+  const [showDoctorAlert, setShowDoctorAlert] = useState(false);
 
   const navigateTo = (path: string) => {
     navigate(path);
   };
 
   useEffect(() => {
+
+    localStorage.setItem("doctorAlertShow","false");
+
     const getMedicalDetailsStatus = async () => {
       const token = localStorage.getItem("token");
       if (!token) {
@@ -43,7 +50,6 @@ const UserDashboard = () => {
             },
           }
         );
-
         (await res).data;
       } catch (err: any) {
         console.log(err);
@@ -61,14 +67,11 @@ const UserDashboard = () => {
         return;
       }
       try {
-        const res = await axios.get(
-          "http://localhost:8081/api/patient/",
-          {
-            headers: {
-              Authorization: "Bearer " + token,
-            },
-          }
-        );
+        const res = await axios.get("http://localhost:8081/api/patient/", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
 
         const data = await res.data;
         setUserDetails(data);
@@ -110,6 +113,14 @@ const UserDashboard = () => {
             : "Not Appointed",
           tokenNo: statusData.TokenNo ? statusData.TokenNo : "N/A",
         });
+        if (!statusData.Doctor) localStorage.setItem("doctorAlertShow","false");
+
+        const doctorAlertShow = localStorage.getItem("doctorAlertShow");
+
+        if (statusData.Doctor && (statusData.DoctorName !== status.doctorName) && (doctorAlertShow === "false")) {
+          playAlertSound();
+          setShowDoctorAlert(true);
+        }
       } catch (error: any) {
         console.log("Error fetching status: ", error);
         if (
@@ -122,6 +133,11 @@ const UserDashboard = () => {
           alert("Couldn't fetch appointment details, please try again later.");
         }
       }
+    };
+
+    const playAlertSound = () => {
+      const sound = new Audio("/doctor-appointed-alert-sound.wav");
+      sound.play();
     };
 
     const initFunc = async () => {
@@ -139,6 +155,29 @@ const UserDashboard = () => {
 
   return (
     <div className="flex justify-center items-center bg-[#ECECEC] min-h-[83svh] overflow-hidden py-2 pl-8 pr-8 max-lg:flex-col max-lg:overflow-y-scroll max-lg:gap-5 max-lg:py-5">
+      {showDoctorAlert && (
+        <div className="fixed inset-0 z-50 bg-black bg-opacity-50 flex justify-center items-center">
+          <div className="bg-white p-4 rounded-lg shadow-xl w-3/4 max-w-md">
+            <Alert>
+              <Terminal className="h-4 w-4" />
+              <AlertTitle>Heads up!</AlertTitle>
+              <AlertDescription>
+                A doctor has been assigned to you.
+              </AlertDescription>
+            </Alert>
+            <button
+              className="mt-4 w-full py-2 bg-gradient-to-r from-red-500 to-red-600 text-white rounded-md"
+              onClick={() => {
+                setShowDoctorAlert(false); 
+                localStorage.setItem("doctorAlertShow","true");
+              }}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+
       <div className="w-full flex justify-center items-center">
         <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col shadow-xl">
           <div className="bg-white border rounded-md shadow-xl">
@@ -199,7 +238,7 @@ const UserDashboard = () => {
             </p>
             <div className="shadow-xl bg-[#E0E0E0] flex justify-center items-center text-[#797979] font-semibold  rounded-lg w-1/2">
               {status.doctorName !== "Not Appointed" ? (
-                <div className="p-4 bg-[#1F60C0] text-white w-full rounded-md justify-center flex shadow-md">
+                <div className="p-4 bg-[#E0E0E0] text-[#797979] font-bold text-[1.1rem] w-full rounded-md justify-center flex shadow-md">
                   {status.doctorName}
                 </div>
               ) : (
