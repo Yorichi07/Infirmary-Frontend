@@ -196,27 +196,38 @@ const DoctorCheckIn = () => {
                   <div className="flex w-full max-lg:w-3/5 justify-between max-lg:flex-col max-lg:gap-4">
                     <button
                       data-key={`${doctor.id}`}
-                      className={`shadow-lg px-8 py-2 ${
-                        doctor.status !== "checked-in"
-                          ? "bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
-                          : "bg-[#8F8F8F]"
-                      } rounded-md text-white`}
+                      disabled={doctor.status === "checked-in"}
+                      className={`shadow-lg px-8 py-2 rounded-md text-white ${
+                        doctor.status === "checked-in"
+                          ? "bg-[#8F8F8F] cursor-not-allowed"
+                          : "bg-gradient-to-r from-[#2FC800] to-[#009534] hover:brightness-110"
+                      }`}
                       onClick={(event: any) => {
-                        handleCheckIn(event);
+                        if (doctor.status !== "checked-in")
+                          handleCheckIn(event);
                       }}
                     >
-                      Check-In
+                      {doctor.status === "checked-in"
+                        ? "Checked-In"
+                        : "Check-In"}
                     </button>
+
                     <button
                       data-key={`${doctor.id}`}
-                      className={`shadow-lg px-8 py-2 ${
-                        doctor.status !== "checked-out"
-                          ? "bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
-                          : "bg-[#8F8F8F]"
-                      } rounded-md text-white`}
-                      onClick={(event: any) => handleCheckOut(event)}
+                      disabled={doctor.status === "checked-out"}
+                      className={`shadow-lg px-8 py-2 rounded-md text-white ${
+                        doctor.status === "checked-out"
+                          ? "bg-[#8F8F8F] cursor-not-allowed"
+                          : "bg-gradient-to-r from-[#E00000] to-[#7E0000] hover:brightness-110"
+                      }`}
+                      onClick={(event: any) => {
+                        if (doctor.status !== "checked-out")
+                          handleCheckOut(event);
+                      }}
                     >
-                      Check-Out
+                      {doctor.status === "checked-out"
+                        ? "Checked-Out"
+                        : "Check-Out"}
                     </button>
                   </div>
                 </div>

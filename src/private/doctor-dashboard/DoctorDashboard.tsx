@@ -15,6 +15,9 @@ const DoctorDashboard = () => {
   const [patientsLeft, setPatientsLeft] = useState(0);
   const [token, setToken] = useState("No Patient Assigned");
   const [inQueue, setInQueue] = useState(0);
+  const [status, setStatus] = useState<
+    "check-in" | "check-out" | "checked-in" | "checked-out"
+  >("check-out");
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -99,6 +102,7 @@ const DoctorDashboard = () => {
         }
       );
       if (response.status === 200) {
+        setStatus("checked-in");
         toast({
           title: "Success",
           description: "Doctor checked in successfully.",
@@ -141,6 +145,7 @@ const DoctorDashboard = () => {
         }
       );
       if (response.ok) {
+        setStatus("checked-out");
         toast({
           title: "Success",
           description: "Doctor checked out successfully.",
@@ -235,7 +240,9 @@ const DoctorDashboard = () => {
               </div>
               <div className="w-[3px] my-4 bg-black max-lg:hidden"></div>
               <div className="text-center bg-black bg-opacity-10 px-12 py-6 rounded-lg shadow-lg max-lg:p-0 max-lg:bg-opacity-0 max-lg:shadow-none">
-                <p className="font-semibold text-xl whitespace-nowrap">In Queue</p>
+                <p className="font-semibold text-xl whitespace-nowrap">
+                  In Queue
+                </p>
                 <p className="text-lg">{inQueue}</p>
               </div>
               <div className="w-[3px] my-4 bg-black max-lg:hidden"></div>
@@ -262,16 +269,26 @@ const DoctorDashboard = () => {
             <div className="w-full flex flex-col px-10 max-lg:px-0 space-y-10 max-lg:py-2">
               <div className="flex w-full justify-between">
                 <button
-                  className="shadow-lg text-white px-10 py-3 rounded-md font-semibold text-lg text-center bg-gradient-to-r from-[#2FC800] gap-2 to-[#009534]"
+                  className={`shadow-lg text-white px-10 py-3 rounded-md font-semibold text-lg ${
+                    status === "checked-in"
+                      ? "bg-gray-800 cursor-not-allowed"
+                      : "bg-gradient-to-r from-[#2FC800] to-[#009534] hover:bg-green-600"
+                  }`}
                   onClick={handleCheckIn}
+                  disabled={status === "checked-in"}
                 >
-                  Check-In
+                  {status === "checked-in" ? "Checked-In" : "Check-In"}
                 </button>
                 <button
-                  className="shadow-lg text-white px-10 py-3 rounded-md font-semibold text-lg text-center bg-gradient-to-r from-[#E00000] gap-2 to-[#7E0000]"
+                  className={`shadow-lg text-white px-10 py-3 rounded-md font-semibold text-lg ${
+                    status === "checked-out"
+                      ? "bg-gray-800 cursor-not-allowed"
+                      : "bg-gradient-to-r from-[#E00000] to-[#7E0000] hover:bg-red-600"
+                  }`}
                   onClick={handleCheckOut}
+                  disabled={status === "checked-out"}
                 >
-                  Check-Out
+                  {status === "checked-out" ? "Checked-Out" : "Check-Out"}
                 </button>
               </div>
               <div className="flex flex-col px-10 justify-between items-center py-3 rounded-md">
