@@ -14,7 +14,7 @@ const TokenPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getTokenData",
+          "http://localhost:8081/api/AD/getTokenData",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -46,7 +46,7 @@ const TokenPage = () => {
   }, [navigate]);
 
   return (
-    <div className="min-h-[83svh] flex flex-col items-center justify-start py-4">
+    <div className="min-h-[84svh] flex flex-col items-center justify-start py-4">
       <table className="table-auto border-collapse border border-gray-400 w-[95%]">
         <thead>
           <tr className="bg-gray-300">

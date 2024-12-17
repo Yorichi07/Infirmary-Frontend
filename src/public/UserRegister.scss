@@ -11,7 +11,7 @@
     background: white;
     border-radius: 1rem;
     height: 100%;
-    padding: 0.5rem;
+    padding: 0.5rem 0.5rem 1rem 0.5rem;
     width: 100%;
   }
 
@@ -46,7 +46,7 @@
   &__body {
     display: flex;
     gap: 1rem;
-    padding: 1.5rem;
+    padding: 1rem;
     height: 92%;
 
     .image-container {
@@ -79,6 +79,7 @@
         column-gap: 2rem;
         grid-template-areas: "left right";
         height: 100%;
+        padding: 0 0 1rem 0
       }
 
       &__left {

@@ -1,6 +1,9 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Select,
   SelectContent,
@@ -16,12 +19,9 @@ import "./SignIn.scss";
 import Shared from "@/Shared";
 
 const API_URLS = {
-  patient:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
-  doctor:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/doctor/signin",
-  assistant_doctor:
-    "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+  patient: "http://localhost:8081/api/auth/patient/signin",
+  doctor: "http://localhost:8081/api/auth/doctor/signin",
+  assistant_doctor: "http://localhost:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -37,9 +37,9 @@ const ROLES = [
 ];
 
 const SignIn = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const [showPassword, setShowPassword] = useState(false);
   const [role, setRole] = useState<string>("patient");
   const [location, setLocation] = useState<{
@@ -77,7 +77,12 @@ const SignIn = () => {
 
   const handleSignIn = async () => {
     if (location.latitude === "-1" || location.longitude === "-1") {
-      return alert("Please select a location.");
+      return toast({
+        variant: "destructive",
+        title: "Location Missing",
+        description: "Please select a location.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
 
     const apiUrl = API_URLS[role as keyof typeof API_URLS];
@@ -105,30 +110,52 @@ const SignIn = () => {
       localStorage.setItem("longitude", location.longitude);
       localStorage.setItem("latitude", location.latitude);
 
-      navigate(dashboardRoute);
+      toast({
+        variant: "default",
+        title: "Login Successful",
+        description: `Welcome back, ${role.replace("_", " ")}!`,
+      });
+
+      setTimeout(() => {
+        navigate(dashboardRoute);
+      }, 1000);
     } catch (error: any) {
       const message =
         error.response?.status === 401
           ? "Incorrect email or password. Please try again."
           : error.response?.data?.message || "An error occurred.";
-      setErrorMessage(message);
+
+      toast({
+        variant: "destructive",
+        title: "Sign In Failed",
+        description: message,
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
   };
 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/"
-        );
+        const resp = await axios.get("http://localhost:8081/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
         } else {
-          alert(resp.data.message);
+          toast({
+            variant: "destructive",
+            title: "Fetch Error",
+            description: resp.data.message,
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
         }
       } catch (err) {
-        alert("Error in fetching locations. Please try again.");
+        toast({
+          variant: "destructive",
+          title: "Network Error",
+          description: "Error in fetching locations. Please try again.",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
     };
     fetchLocations();
@@ -136,17 +163,18 @@ const SignIn = () => {
 
   return (
     <>
+      <Toaster />
       <div className="sign-container">
         <div className="sign-container__left"></div>
         <div className="sign-container__right">
           <div className="sign-container__right-content">
             <img src="/upes-logo.jpg" alt="UPES Logo" />
-            <h1 className="text-2xl font-medium pb-3 whitespace-nowrap">
+            <h1 className="text-2xl font-medium pb-4 whitespace-nowrap">
               Welcome to UPES Infirmary Portal
             </h1>
             <div className="sign-container__right-header">
               <p className="font-medium pb-1">Login as:</p>
-              <div className="flex w-full pb-5">
+              <div className="flex w-full pb-4">
                 {ROLES.map(({ value, label }) => (
                   <label
                     key={value}
@@ -231,11 +259,7 @@ const SignIn = () => {
               </div>
             </form>
 
-            {errorMessage && (
-              <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
-            )}
-
-            <div className="gap-5 flex flex-col w-full">
+            <div className="gap-4 flex flex-col w-full">
               <Button className="sign-in-btn" onClick={handleSignIn}>
                 Sign In
               </Button>
@@ -257,9 +281,9 @@ const SignIn = () => {
         </div>
       </div>
       <div className="helpline">
-        Energy Acres, Bidholi: Tel: +91-135-2770137, 2776053, 2776054, 2776091
-        &nbsp; | &nbsp; Knowledge Acres, Kandoli: Tel: +91-135-2770137, 2776053,
-        2776054, 2776091
+        <b>Energy Acres, Bidholi : </b>&nbsp;+91-135-2770137, 2776053, 2776054,
+        2776091 &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
+        &nbsp;+91-135-2770137, 2776053, 2776054, 2776091
       </div>
     </>
   );

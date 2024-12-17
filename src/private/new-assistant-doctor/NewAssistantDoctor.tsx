@@ -70,7 +70,7 @@ const NewAssistantDoctor = () => {
         }
         const payload = { ...data, status: false };
         await axios.post(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/admin/AD/signup",
+          "http://localhost:8081/api/admin/AD/signup",
           payload,
           {
             headers: {
@@ -92,7 +92,7 @@ const NewAssistantDoctor = () => {
   };
   return (
     <>
-      <div className="min-h-[83svh] p-6 max-lg:min-h-[93svh]">
+      <div className="min-h-[84svh] p-6 max-lg:min-h-[93svh]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div>
