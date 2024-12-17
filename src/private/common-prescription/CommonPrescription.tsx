@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import jsPDF from "jspdf";
 import html2canvas from "html2canvas";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 
 const CommonPrescription = () => {
+  const { toast } = useToast();
   const [ndata, setNdata] = useState<{
     name: string;
     id: string;
@@ -82,10 +86,20 @@ const CommonPrescription = () => {
           setDiagnosis(data.diagnosis);
           setDietaryRemarks(data.dietaryRemarks);
           setTestNeeded(data.testNeeded);
+
+          toast({
+            title: "Data Loaded Successfully",
+            description: "Prescription details have been fetched.",
+          });
         } catch (error: any) {
-          alert(
-            error.response?.data?.message || "Error fetching prescription data."
-          );
+          toast({
+            variant: "destructive",
+            title: "Error Fetching Data",
+            description:
+              error.response?.data?.message ||
+              "Error occurred while fetching prescription data.",
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
           console.error("Error fetching prescription data:", error);
         }
       }
@@ -98,236 +112,253 @@ const CommonPrescription = () => {
     const content = document.getElementById("content");
     if (!content) return;
 
-    const pdf = new jsPDF("p", "mm", "a4");
-    const pageHeight = pdf.internal.pageSize.height;
-    const pageWidth = pdf.internal.pageSize.width;
+    try {
+      const pdf = new jsPDF("p", "mm", "a4");
+      const pageHeight = pdf.internal.pageSize.height;
+      const pageWidth = pdf.internal.pageSize.width;
 
-    const canvas = await html2canvas(content, {
-      scale: 2,
-    });
+      const canvas = await html2canvas(content, {
+        scale: 2,
+      });
 
-    const imgData = canvas.toDataURL("image/png");
-    const imgWidth = pageWidth;
-    const imgHeight = (canvas.height * imgWidth) / canvas.width;
+      const imgData = canvas.toDataURL("image/png");
+      const imgWidth = pageWidth;
+      const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let position = 0;
+      let position = 0;
 
-    while (position < imgHeight) {
-      pdf.addImage(
-        imgData,
-        "PNG",
-        0,
-        position > 0 ? 10 : 0,
-        imgWidth,
-        imgHeight - position > pageHeight ? pageHeight : imgHeight - position
-      );
-      position += pageHeight;
-      if (position < imgHeight) {
-        pdf.addPage();
+      while (position < imgHeight) {
+        pdf.addImage(
+          imgData,
+          "PNG",
+          0,
+          position > 0 ? 10 : 0,
+          imgWidth,
+          imgHeight - position > pageHeight ? pageHeight : imgHeight - position
+        );
+        position += pageHeight;
+        if (position < imgHeight) {
+          pdf.addPage();
+        }
       }
-    }
 
-    pdf.save("prescription.pdf");
+      pdf.save("prescription.pdf");
+      toast({
+        title: "PDF Downloaded",
+        description: "Prescription PDF has been saved successfully.",
+      });
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Error Generating PDF",
+        description: "Something went wrong while generating the PDF.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+      console.error("Error generating PDF:", error);
+    }
   };
 
   return (
-    <div className="p-5 flex flex-col justify-center items-center h-[83%] max-lg:p-0">
-      <div
-        id="content"
-        className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll max-lg:w-full"
-      >
-        <div className="flex items-center justify-between mb-[10px]">
-          <div className="flex center">
-            <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
+    <>
+      <Toaster />
+      <div className="bg-[#ECECEC] p-5 flex flex-col justify-center items-center min-h-[84svh] max-lg:p-0 max-lg:min-h-[93svh]">
+        <div
+          id="content"
+          className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll max-lg:w-full"
+        >
+          <div className="flex items-center justify-between mb-[10px]">
+            <div className="flex center">
+              <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
+            </div>
+            <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
+            <div className="text-[18px]">{new Date().toLocaleDateString()}</div>
           </div>
-          <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
-          <div className="text-[18px]">{new Date().toLocaleDateString()}</div>
-        </div>
 
-        <hr className="border border-black my-[10px]" />
-        <div className="my-[20px]">
-          <div className="flex justify-between max-lg:flex-col max-lg:gap-4">
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-[10px]">
-                <label className="mr-auto font-medium">Name:</label>
-                <input
-                  type="text"
-                  value={ndata?.name}
-                  className="info-input"
-                  readOnly
-                />
+          <hr className="border border-black my-[10px]" />
+          <div className="my-[20px]">
+            <div className="flex justify-between max-lg:flex-col max-lg:gap-4">
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-[10px]">
+                  <label className="mr-auto font-medium">Name:</label>
+                  <input
+                    type="text"
+                    value={ndata?.name}
+                    className="info-input"
+                    readOnly
+                  />
+                </div>
+                <div className="flex items-center gap-[10px]">
+                  <label className="mr-auto font-medium">ID:</label>
+                  <input
+                    type="text"
+                    value={ndata?.id}
+                    className="info-input"
+                    readOnly
+                  />
+                </div>
               </div>
-              <div className="flex items-center gap-[10px]">
-                <label className="mr-auto font-medium">ID:</label>
-                <input
-                  type="text"
-                  value={ndata?.id}
-                  className="info-input"
-                  readOnly
-                />
+              <div className="flex flex-col gap-4">
+                <div className="flex items-center gap-[10px]">
+                  <label className="font-medium mr-auto">Age:</label>
+                  <input
+                    type="text"
+                    value={ndata?.age}
+                    className="info-input"
+                    readOnly
+                  />
+                </div>
+                <div className="flex items-center gap-[10px]">
+                  <label className="font-medium mr-auto">School:</label>
+                  <input
+                    type="text"
+                    value={ndata?.course}
+                    className="info-input"
+                    readOnly
+                  />
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-4">
-              <div className="flex items-center gap-[10px]">
-                <label className="font-medium mr-auto">Age:</label>
-                <input
-                  type="text"
-                  value={ndata?.age}
-                  className="info-input"
-                  readOnly
-                />
-              </div>
-              <div className="flex items-center gap-[10px]">
-                <label className="font-medium mr-auto">School:</label>
-                <input
-                  type="text"
-                  value={ndata?.course}
-                  className="info-input"
-                  readOnly
-                />
-              </div>
-            </div>
-            <div>
-              <div className="flex items-center justify-center gap-[10px]">
-                <label className="font-medium mr-auto">Sex:</label>
-                <input
-                  type="text"
-                  value={ndata?.sex}
-                  className="info-input"
-                  readOnly
-                />
+              <div>
+                <div className="flex items-center justify-center gap-[10px]">
+                  <label className="font-medium mr-auto">Sex:</label>
+                  <input
+                    type="text"
+                    value={ndata?.sex}
+                    className="info-input"
+                    readOnly
+                  />
+                </div>
               </div>
             </div>
           </div>
-        </div>
 
-        <hr className="border border-black my-[10px]" />
-        <div className="mt-5">
-          <label>Diagnosis:</label>
-          <textarea
-            className="w-full h-[150px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none "
-            value={diagnosis}
-            readOnly
-          />
-        </div>
+          <hr className="border border-black my-[10px]" />
+          <div className="mt-5">
+            <label>Diagnosis:</label>
+            <textarea
+              className="w-full h-[150px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none "
+              value={diagnosis}
+              readOnly
+            />
+          </div>
 
-        <div className="mt-5">
-          <label>Medicine:</label>
-          <table className="medicine-table">
-            <thead>
-              <tr>
-                <th className="whitespace-nowrap">S. No.</th>
-                <th>Medicine</th>
-                <th>Dosage (/day)</th>
-                <th className="whitespace-nowrap">Duration (Days)</th>
-                <th>Suggestions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {ndata.meds.map((med, index) => (
-                <tr key={index} className="text-center">
-                  <td>{index + 1}</td>
-                  <td className="w-[25%]">
-                    <input
-                      className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
-                      value={med.name}
-                      readOnly
-                    />
-                  </td>
-                  <td className="w-[15%]">
-                    <table className="nested-dosage-table w-full">
-                      <thead>
-                        <tr>
-                          <th>Morning</th>
-                          <th>Afternoon</th>
-                          <th>Evening</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>
-                            <input
-                              type="number"
-                              min={0}
-                              className="info-input dosage-morning w-full"
-                              placeholder="0"
-                              value={med.dosageMorning}
-                              readOnly
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              min={0}
-                              className="info-input dosage-afternoon w-full"
-                              value={med.dosageAfternoon}
-                              readOnly
-                            />
-                          </td>
-                          <td>
-                            <input
-                              type="number"
-                              min={0}
-                              className="info-input dosage-evening w-full"
-                              value={med.dosageEvening}
-                              readOnly
-                            />
-                          </td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </td>
-                  <td className="w-[15%]">
-                    <input
-                      type="number"
-                      className="bg-[#d5d4df] rounded-lg p-2 text-center"
-                      value={med.duration}
-                      readOnly
-                    />
-                  </td>
-                  <td>
-                    <textarea
-                      className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
-                      value={med.suggestion}
-                      readOnly
-                    />
-                  </td>
+          <div className="mt-5">
+            <label>Medicine:</label>
+            <table className="medicine-table">
+              <thead>
+                <tr>
+                  <th className="whitespace-nowrap">S. No.</th>
+                  <th>Medicine</th>
+                  <th>Dosage (/day)</th>
+                  <th className="whitespace-nowrap">Duration (Days)</th>
+                  <th>Suggestions</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {ndata.meds.map((med, index) => (
+                  <tr key={index} className="text-center">
+                    <td>{index + 1}</td>
+                    <td className="w-[25%]">
+                      <input
+                        className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                        value={med.name}
+                        readOnly
+                      />
+                    </td>
+                    <td className="w-[15%]">
+                      <table className="nested-dosage-table w-full">
+                        <thead>
+                          <tr>
+                            <th>Morning</th>
+                            <th>Afternoon</th>
+                            <th>Evening</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>
+                              <input
+                                type="number"
+                                min={0}
+                                className="info-input dosage-morning w-full"
+                                placeholder="0"
+                                value={med.dosageMorning}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                min={0}
+                                className="info-input dosage-afternoon w-full"
+                                value={med.dosageAfternoon}
+                                readOnly
+                              />
+                            </td>
+                            <td>
+                              <input
+                                type="number"
+                                min={0}
+                                className="info-input dosage-evening w-full"
+                                value={med.dosageEvening}
+                                readOnly
+                              />
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </td>
+                    <td className="w-[15%]">
+                      <input
+                        type="number"
+                        className="bg-[#d5d4df] rounded-lg p-2 text-center"
+                        value={med.duration}
+                        readOnly
+                      />
+                    </td>
+                    <td>
+                      <textarea
+                        className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                        value={med.suggestion}
+                        readOnly
+                      />
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-        <div className="mt-5">
-          <label>Dietary Recommendations:</label>
-          <textarea
-            className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
-            value={dietaryRemarks}
-            readOnly
-          />
-        </div>
+          <div className="mt-5">
+            <label>Dietary Recommendations:</label>
+            <textarea
+              className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
+              value={dietaryRemarks}
+              readOnly
+            />
+          </div>
 
-        <div className="mt-5">
-          <label>Tests Needed:</label>
-          <textarea
-            className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
-            value={testNeeded}
-            readOnly
-          />
-        </div>
+          <div className="mt-5">
+            <label>Tests Needed:</label>
+            <textarea
+              className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
+              value={testNeeded}
+              readOnly
+            />
+          </div>
 
-        <div className="flex flex-col items-end mt-10">
-          <span className="">{doctorName}</span>
-          <div className="signature-text">Doctor Name</div>
+          <div className="flex flex-col items-end mt-10">
+            <span className="">{doctorName}</span>
+            <div className="signature-text">Doctor Name</div>
+          </div>
         </div>
+        <button
+          onClick={generatePdf}
+          className="mt-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded hover:from-blue-600 hover:to-blue-800 max-lg:my-2"
+        >
+          Download as PDF
+        </button>
       </div>
-      <button
-        onClick={generatePdf}
-        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 max-lg:my-2"
-      >
-        Download as PDF
-      </button>
-    </div>
+    </>
   );
 };
 
