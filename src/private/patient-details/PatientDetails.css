@@ -37,7 +37,6 @@
   border: 1px solid #ddd;
   padding: 8px;
   background-color: #d5d4df;
-  width: ;
 }
 
 .medicine-table {
@@ -79,6 +78,13 @@
   display: flex;
   justify-content: space-between;
   margin: 20px;
+}
+
+@media only screen and (max-width: 1024px) {
+  .table-actions {
+    margin-left: 0px;
+    margin-right: 0px;
+  }
 }
 
 .add-btn,

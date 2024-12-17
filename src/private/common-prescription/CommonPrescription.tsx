@@ -94,29 +94,34 @@ const CommonPrescription = () => {
     fetchData();
   }, []);
 
-  
   const generatePdf = async () => {
     const content = document.getElementById("content");
     if (!content) return;
 
     const pdf = new jsPDF("p", "mm", "a4");
-    const pageHeight = pdf.internal.pageSize.height; // A4 height in mm
+    const pageHeight = pdf.internal.pageSize.height;
     const pageWidth = pdf.internal.pageSize.width;
 
-    // Render the content to a canvas
     const canvas = await html2canvas(content, {
-      scale: 2, // Improves the resolution
+      scale: 2,
     });
 
     const imgData = canvas.toDataURL("image/png");
-    const imgWidth = pageWidth; // Fit to page width
-    const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
+    const imgWidth = pageWidth;
+    const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
-    let position = 0; // Start position for content in PDF
+    let position = 0;
 
     while (position < imgHeight) {
-      pdf.addImage(imgData, "PNG", 0, position > 0 ? 10 : 0, imgWidth, imgHeight - position > pageHeight ? pageHeight : imgHeight - position);
-      position += pageHeight; // Move to the next page
+      pdf.addImage(
+        imgData,
+        "PNG",
+        0,
+        position > 0 ? 10 : 0,
+        imgWidth,
+        imgHeight - position > pageHeight ? pageHeight : imgHeight - position
+      );
+      position += pageHeight;
       if (position < imgHeight) {
         pdf.addPage();
       }
@@ -126,198 +131,199 @@ const CommonPrescription = () => {
   };
 
   return (
-    <div className="p-5 flex flex-col justify-center items-center h-[83%]">
+    <div className="p-5 flex flex-col justify-center items-center h-[83%] max-lg:p-0">
       <div
         id="content"
-        className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll"
-      ><div className="flex items-center justify-between mb-[10px]">
-      <div className="flex center">
-        <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
-      </div>
-      <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
-      <div className="text-[18px]">{new Date().toLocaleDateString()}</div>
-    </div>
-
-    <hr className="border border-black my-[10px]" />
-    <div className="my-[20px]">
-      <div className="flex justify-between">
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-[10px]">
-            <label className="mr-auto font-medium">Name:</label>
-            <input
-              type="text"
-              value={ndata?.name}
-              className="info-input"
-              readOnly
-            />
+        className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll max-lg:w-full"
+      >
+        <div className="flex items-center justify-between mb-[10px]">
+          <div className="flex center">
+            <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
           </div>
-          <div className="flex items-center gap-[10px]">
-            <label className="mr-auto font-medium">ID:</label>
-            <input
-              type="text"
-              value={ndata?.id}
-              className="info-input"
-              readOnly
-            />
-          </div>
+          <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
+          <div className="text-[18px]">{new Date().toLocaleDateString()}</div>
         </div>
-        <div className="flex flex-col gap-4">
-          <div className="flex items-center gap-[10px]">
-            <label className="font-bold mr-auto">Age:</label>
-            <input
-              type="text"
-              value={ndata?.age}
-              className="info-input"
-              readOnly
-            />
-          </div>
-          <div className="flex items-center gap-[10px]">
-            <label className="font-bold mr-auto">School:</label>
-            <input
-              type="text"
-              value={ndata?.course}
-              className="info-input"
-              readOnly
-            />
-          </div>
-        </div>
-        <div>
-          <div className="flex items-center justify-center gap-[10px]">
-            <label className="font-bold mr-auto">Sex:</label>
-            <input
-              type="text"
-              value={ndata?.sex}
-              className="info-input"
-              readOnly
-            />
-          </div>
-        </div>
-      </div>
-    </div>
 
-    <hr className="border border-black my-[10px]" />
-    <div className="mt-5">
-      <label>Diagnosis:</label>
-      <textarea
-        className="w-full h-[150px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
-        value={diagnosis}
-        readOnly
-      />
-    </div>
-
-    <div className="mt-5">
-      <label>Medicine:</label>
-      <table className="medicine-table">
-        <thead>
-          <tr>
-            <th>S. No.</th>
-            <th>Medicine</th>
-            <th>Dosage (per day)</th>
-            <th>Duration (in Days)</th>
-            <th>Suggestions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {ndata.meds.map((med, index) => (
-            <tr key={index} className="text-center">
-              <td>{index + 1}</td>
-              <td className="w-[25%]">
+        <hr className="border border-black my-[10px]" />
+        <div className="my-[20px]">
+          <div className="flex justify-between max-lg:flex-col max-lg:gap-4">
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-[10px]">
+                <label className="mr-auto font-medium">Name:</label>
                 <input
-                  className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
-                  value={med.name}
+                  type="text"
+                  value={ndata?.name}
+                  className="info-input"
                   readOnly
                 />
-              </td>
-              <td className="w-[15%]">
-                <table className="nested-dosage-table w-full">
-                  <thead>
-                    <tr>
-                      <th>Morning</th>
-                      <th>Afternoon</th>
-                      <th>Evening</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>
-                        <input
-                          type="number"
-                          min={0}
-                          className="info-input dosage-morning w-full"
-                          placeholder="0"
-                          value={med.dosageMorning}
-                          readOnly
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="number"
-                          min={0}
-                          className="info-input dosage-afternoon w-full"
-                          value={med.dosageAfternoon}
-                          readOnly
-                        />
-                      </td>
-                      <td>
-                        <input
-                          type="number"
-                          min={0}
-                          className="info-input dosage-evening w-full"
-                          value={med.dosageEvening}
-                          readOnly
-                        />
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </td>
-              <td className="w-[15%]">
+              </div>
+              <div className="flex items-center gap-[10px]">
+                <label className="mr-auto font-medium">ID:</label>
                 <input
-                  type="number"
-                  className="bg-[#d5d4df] rounded-lg p-2 text-center"
-                  value={med.duration}
+                  type="text"
+                  value={ndata?.id}
+                  className="info-input"
                   readOnly
                 />
-              </td>
-              <td>
-                <textarea
-                  className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
-                  value={med.suggestion}
+              </div>
+            </div>
+            <div className="flex flex-col gap-4">
+              <div className="flex items-center gap-[10px]">
+                <label className="font-medium mr-auto">Age:</label>
+                <input
+                  type="text"
+                  value={ndata?.age}
+                  className="info-input"
                   readOnly
                 />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
+              </div>
+              <div className="flex items-center gap-[10px]">
+                <label className="font-medium mr-auto">School:</label>
+                <input
+                  type="text"
+                  value={ndata?.course}
+                  className="info-input"
+                  readOnly
+                />
+              </div>
+            </div>
+            <div>
+              <div className="flex items-center justify-center gap-[10px]">
+                <label className="font-medium mr-auto">Sex:</label>
+                <input
+                  type="text"
+                  value={ndata?.sex}
+                  className="info-input"
+                  readOnly
+                />
+              </div>
+            </div>
+          </div>
+        </div>
 
-    <div className="mt-5">
-      <label>Dietary Recommendations:</label>
-      <textarea
-        className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
-        value={dietaryRemarks}
-        readOnly
-      />
-    </div>
+        <hr className="border border-black my-[10px]" />
+        <div className="mt-5">
+          <label>Diagnosis:</label>
+          <textarea
+            className="w-full h-[150px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none "
+            value={diagnosis}
+            readOnly
+          />
+        </div>
 
-    <div className="mt-5">
-      <label>Tests Needed:</label>
-      <textarea
-        className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
-        value={testNeeded}
-        readOnly
-      />
-    </div>
+        <div className="mt-5">
+          <label>Medicine:</label>
+          <table className="medicine-table">
+            <thead>
+              <tr>
+                <th className="whitespace-nowrap">S. No.</th>
+                <th>Medicine</th>
+                <th>Dosage (/day)</th>
+                <th className="whitespace-nowrap">Duration (Days)</th>
+                <th>Suggestions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {ndata.meds.map((med, index) => (
+                <tr key={index} className="text-center">
+                  <td>{index + 1}</td>
+                  <td className="w-[25%]">
+                    <input
+                      className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                      value={med.name}
+                      readOnly
+                    />
+                  </td>
+                  <td className="w-[15%]">
+                    <table className="nested-dosage-table w-full">
+                      <thead>
+                        <tr>
+                          <th>Morning</th>
+                          <th>Afternoon</th>
+                          <th>Evening</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>
+                            <input
+                              type="number"
+                              min={0}
+                              className="info-input dosage-morning w-full"
+                              placeholder="0"
+                              value={med.dosageMorning}
+                              readOnly
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              min={0}
+                              className="info-input dosage-afternoon w-full"
+                              value={med.dosageAfternoon}
+                              readOnly
+                            />
+                          </td>
+                          <td>
+                            <input
+                              type="number"
+                              min={0}
+                              className="info-input dosage-evening w-full"
+                              value={med.dosageEvening}
+                              readOnly
+                            />
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </td>
+                  <td className="w-[15%]">
+                    <input
+                      type="number"
+                      className="bg-[#d5d4df] rounded-lg p-2 text-center"
+                      value={med.duration}
+                      readOnly
+                    />
+                  </td>
+                  <td>
+                    <textarea
+                      className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                      value={med.suggestion}
+                      readOnly
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
 
-    <div className="flex flex-col items-end mt-10">
-      <span className="">{doctorName}</span>
-      <div className="signature-text">Doctor Name</div>
-    </div>
+        <div className="mt-5">
+          <label>Dietary Recommendations:</label>
+          <textarea
+            className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
+            value={dietaryRemarks}
+            readOnly
+          />
+        </div>
+
+        <div className="mt-5">
+          <label>Tests Needed:</label>
+          <textarea
+            className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
+            value={testNeeded}
+            readOnly
+          />
+        </div>
+
+        <div className="flex flex-col items-end mt-10">
+          <span className="">{doctorName}</span>
+          <div className="signature-text">Doctor Name</div>
+        </div>
       </div>
       <button
         onClick={generatePdf}
-        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700"
+        className="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 max-lg:my-2"
       >
         Download as PDF
       </button>

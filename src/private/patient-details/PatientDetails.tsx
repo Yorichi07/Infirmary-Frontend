@@ -365,7 +365,7 @@ const PatientDetails = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                   <div className="flex items-center gap-[10px]">
-                    <label className="font-bold mr-auto">Age:</label>
+                    <label className="font-medium mr-auto">Age:</label>
                     <input
                       type="text"
                       value={ndata?.age}
@@ -373,7 +373,7 @@ const PatientDetails = () => {
                     />
                   </div>
                   <div className="flex items-center gap-[10px]">
-                    <label className="font-bold mr-auto">School:</label>
+                    <label className="font-medium mr-auto">School:</label>
                     <input
                       type="text"
                       value={ndata?.course}
@@ -383,7 +383,7 @@ const PatientDetails = () => {
                 </div>
                 <div>
                   <div className="flex items-center justify-center gap-[10px]">
-                    <label className="font-bold mr-auto">Sex:</label>
+                    <label className="font-medium mr-auto">Sex:</label>
                     <input
                       type="text"
                       value={ndata?.sex}
@@ -407,10 +407,10 @@ const PatientDetails = () => {
               <table className="medicine-table max-lg:max-w-[95svw]">
                 <thead>
                   <tr>
-                    <th>S. No.</th>
+                    <th className="whitespace-nowrap">S. No.</th>
                     <th>Medicine</th>
                     <th>Dosage (/day)</th>
-                    <th>Duration (Days)</th>
+                    <th className="whitespace-nowrap">Duration (Days)</th>
                     <th>Suggestions</th>
                   </tr>
                 </thead>
@@ -510,7 +510,7 @@ const PatientDetails = () => {
                   ))}
                 </tbody>
               </table>
-              <div className="table-actions">
+              <div className="table-actions max-lg:mx-0">
                 <button className="add-btn" onClick={addRow}>
                   Add
                 </button>
