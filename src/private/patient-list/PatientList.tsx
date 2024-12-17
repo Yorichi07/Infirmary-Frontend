@@ -259,7 +259,7 @@ const PatientList = () => {
               <TableHead className="border text-black font-bold text-center">
                 SAP ID
               </TableHead>
-              <TableHead className="border text-black font-bold text-center">
+              <TableHead className="border text-black font-bold text-center whitespace-nowrap">
                 Reason for visit
               </TableHead>
               <TableHead className="border text-black font-bold text-center">
@@ -272,8 +272,8 @@ const PatientList = () => {
               filteredPatient.map((pat, index) => (
                 <TableRow className="text-center" key={index}>
                   <TableCell className="border">{index + 1}</TableCell>
-                  <TableCell className="border">{pat.name}</TableCell>
-                  <TableCell className="border">{pat.email}</TableCell>
+                  <TableCell className="border whitespace-nowrap">{pat.name}</TableCell>
+                  <TableCell className="border whitespace-nowrap">{pat.email}</TableCell>
                   <TableCell className="border">{pat.reason}</TableCell>
                   <TableCell className="border flex items-center justify-center">
                     {selectedButton === "Pending" ? (
@@ -348,7 +348,7 @@ const PatientList = () => {
 
                                 <div className="flex justify-between">
                                   <div className="form-group">
-                                    <label htmlFor="temperature">
+                                    <label htmlFor="temperature" className="whitespace-nowrap">
                                       Current Temperature (in °F)
                                     </label>
                                     <input
