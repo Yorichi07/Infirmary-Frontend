@@ -42,10 +42,10 @@ const CommonPrescription = () => {
 
       const apiUrl =
         role === "doctor"
-          ? `http://localhost:8081/api/doctor/getPrescription/${val}`
+          ? `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/doctor/getPrescription/${val}`
           : role === "ad"
-          ? `http://localhost:8081/api/AD/getPrescription/${val}`
-          : `http://localhost:8081/api/patient/getPrescription/${val}`;
+          ? `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getPrescription/${val}`
+          : `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/patient/getPrescription/${val}`;
 
       if (apiUrl) {
         try {

@@ -28,7 +28,7 @@ const AssistantDoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/AD/total-patient-count",
+        "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,

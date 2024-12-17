@@ -62,7 +62,7 @@ const MedicineStock = () => {
 
         if(role === "ad") role = role.toUpperCase();
 
-        const response = await axios.get(`http://localhost:8081/api/${role}/stock/`, {
+        const response = await axios.get(`http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/${role}/stock/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -78,7 +78,7 @@ const MedicineStock = () => {
 
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://localhost:8081/api/location/");
+        const resp = await axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
@@ -140,7 +140,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://localhost:8081/api/${role}/stock/addStock`,
+          `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -167,7 +167,7 @@ const MedicineStock = () => {
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(`http://localhost:8081/api/${role}/stock/${batchNumber}`, {
+        await axios.delete(`http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
