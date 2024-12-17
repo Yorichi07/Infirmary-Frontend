@@ -19,7 +19,7 @@ const API_URLS = {
   patient:
     "http://localhost:8081/api/auth/patient/signin",
   doctor:
-    "http://localhost:8081/api/auth/doc/signin",
+    "http://localhost:8081/api/auth/doctor/signin",
   assistant_doctor:
     "http://localhost:8081/api/auth/ad/signin",
 };

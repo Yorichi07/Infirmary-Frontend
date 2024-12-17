@@ -72,7 +72,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.get(
-          "http://localhost:8081/api/AD/getAvailableDoctors",
+          "http://localhost:8081/api/patient/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -103,7 +103,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://localhost:8081/api/appointment/lastAppointmentDate",
+        "http://localhost:8081/api/patient/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,

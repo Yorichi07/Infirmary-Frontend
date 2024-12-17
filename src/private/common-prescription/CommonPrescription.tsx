@@ -41,9 +41,11 @@ const CommonPrescription = () => {
       const val = url.substring(url.indexOf("?") + 4);
 
       const apiUrl =
-        role === "user"
-          ? `http://localhost:8081/api/patient/getPrescription/${val}`
-          : `http://localhost:8081/api/prescription/getPrescription/${val}`;
+        role === "doctor"
+          ? `http://localhost:8081/api/doctor/getPrescription/${val}`
+          : role === "ad"
+          ? `http://localhost:8081/api/AD/getPrescription/${val}`
+          : `http://localhost:8081/api/patient/getPrescription/${val}`;
 
       if (apiUrl) {
         try {

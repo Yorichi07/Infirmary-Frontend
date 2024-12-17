@@ -28,7 +28,7 @@ const UserPrescription = () => {
         if (role !== "patient") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://localhost:8081/api/patient/getAppointmentPat/${val}`;
+          apiUrl = `http://localhost:8081/api/doctor/getAppointmentPat/${val}`;
         } else {
           apiUrl = "http://localhost:8081/api/patient/getAppointment";
         }

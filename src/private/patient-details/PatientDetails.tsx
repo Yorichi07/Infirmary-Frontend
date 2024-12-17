@@ -94,7 +94,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://localhost:8081/api/prescription/submit",
+        "http://localhost:8081/api/doctor/prescription/submit",
         req,
         {
           headers: {
@@ -159,7 +159,7 @@ const PatientDetails = () => {
     const fetchMed = async () => {
       try {
         const resp = await axios.get(
-          "http://localhost:8081/api/stock/available",
+          `http://localhost:8081/api/doctor/stock/available`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,

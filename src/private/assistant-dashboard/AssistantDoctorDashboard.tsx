@@ -28,7 +28,7 @@ const AssistantDoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://localhost:8081/api/doctor/total-patient-count",
+        "http://localhost:8081/api/AD/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,

@@ -58,7 +58,11 @@ const MedicineStock = () => {
     const fetchStocks = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get("http://localhost:8081/api/stock/", {
+        let role = localStorage.getItem("roles");
+
+        if(role === "ad") role = role.toUpperCase();
+
+        const response = await axios.get(`http://localhost:8081/api/${role}/stock/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -124,6 +128,9 @@ const MedicineStock = () => {
     if (newStock) {
       try {
         const token = localStorage.getItem("token");
+        let role = localStorage.getItem("roles");
+
+        if(role === "ad") role = role.toUpperCase();
 
         const formattedNewStock = {
           ...newStock,
@@ -133,7 +140,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          "http://localhost:8081/api/stock/addStock",
+          `http://localhost:8081/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -153,10 +160,14 @@ const MedicineStock = () => {
 
   const handleDelete = async () => {
     const token = localStorage.getItem("token");
+    let role = localStorage.getItem("roles");
+
+    if(role === "ad") role = role.toUpperCase();
+
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(`http://localhost:8081/api/stock/${batchNumber}`, {
+        await axios.delete(`http://localhost:8081/api/${role}/stock/${batchNumber}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
