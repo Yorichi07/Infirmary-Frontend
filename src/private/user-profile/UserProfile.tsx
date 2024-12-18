@@ -7,6 +7,9 @@ import { z } from "zod";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useNavigate } from "react-router-dom";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 import {
   Form,
   FormField,
@@ -60,6 +63,7 @@ const formSchema = z.object({
 
 const UserProfile = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const form = useForm({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -160,19 +164,28 @@ const UserProfile = () => {
             setImg(dataBackup.imageUrl);
           } catch (backupError) {
             console.log("Error during backup request:", backupError);
-            alert(error.response.data.message);
+            toast({
+              title: "Error",
+              description:
+                error.response.data.message || "Something went wrong!",
+              variant: "destructive",
+              action: <ToastAction altText="Try again">Try again</ToastAction>,
+            });
           }
-
-          alert(
-            "Set Height, Weight, Family History, Medical History, Allergies and Current Address"
-          );
+          toast({
+            description:
+              "Set Height, Weight, Family History, Medical History, Allergies, and Current Address.",
+          });
         } else {
-          console.log(error);
-          alert(error.response.data.message);
+          toast({
+            title: "Error",
+            description: error.response.data.message || "Something went wrong!",
+            variant: "destructive",
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
         }
       }
     };
-
     getUserDetails();
   }, []);
 
@@ -201,14 +214,31 @@ const UserProfile = () => {
           }
         );
         console.log("Form Data Submitted: ", response.data);
-        alert("Profile updated successfully");
-        navigate("/patient-dashboard");
+        toast({
+          title: "Success",
+          description: "Profile updated successfully",
+        });
+        setTimeout(() => {
+          navigate("/patient-dashboard");
+        }, 1000);
       } catch (error: any) {
         console.error("Error submitting form:", error);
-        alert(error.response.data.message);
+        toast({
+          title: "Error",
+          description:
+            error.response.data.message || "Failed to update profile.",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
+      toast({
+        title: "Validation Error",
+        description: "Please fix the errors in the form.",
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
   };
 
@@ -217,256 +247,266 @@ const UserProfile = () => {
   };
 
   return (
-    <div className="profile-container__content">
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="h-[100%]">
-          <div className="profile-container__body">
-            <div className="image-container">
-              <Image
-                src={
-                  img != null
-                    ? `http://localhost:8081/${img}`
-                    : "/default-user.jpg"
-                }
-                preview
-                style={{
-                  border: "1.5px solid black",
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center",
-                }}
-                className="shadow-xl"
-              />
-            </div>
-            <div className="patient-details">
-              <div className="patient-details__top">
-                <div className="patient-details__left">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Name" {...field} disabled />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="school"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>School</FormLabel>
-                        <FormControl>
-                          <Input placeholder="School" {...field} disabled />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="dateOfBirth"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Date of Birth</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Date of Birth"
-                            {...field}
-                            disabled
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="height"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Height (cm)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter height" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="gender"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Gender</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Gender" {...field} disabled />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="medicalHistory"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Medical History</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Enter medical history"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="allergies"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Allergies</FormLabel>
-                        <FormControl>
-                          <Textarea placeholder="Enter allergies" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-                <div className="patient-details__right">
-                  <FormField
-                    control={form.control}
-                    name="patientId"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Patient Id</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Patient Id" {...field} disabled />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="program"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Program</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Program" {...field} disabled />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="emergencyContact"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Emergency Contact</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Enter emergency contact"
-                            {...field}
-                            disabled
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="weight"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Weight (kg)</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Enter weight" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+    <>
+      <Toaster />
+      <div className="profile-container__content">
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="h-[100%]">
+            <div className="profile-container__body">
+              <div className="image-container">
+                <Image
+                  src={
+                    img != null
+                      ? `http://localhost:8081/${img}`
+                      : "/default-user.jpg"
+                  }
+                  preview
+                  style={{
+                    border: "1.5px solid black",
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                  className="shadow-xl"
+                />
+              </div>
+              <div className="patient-details">
+                <div className="patient-details__top">
+                  <div className="patient-details__left">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Name</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Name" {...field} disabled />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="school"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>School</FormLabel>
+                          <FormControl>
+                            <Input placeholder="School" {...field} disabled />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="dateOfBirth"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Date of Birth</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Date of Birth"
+                              {...field}
+                              disabled
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="height"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Height (cm)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter height" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Gender</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Gender" {...field} disabled />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="medicalHistory"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Medical History</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Enter medical history"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="allergies"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Allergies</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Enter allergies"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+                  <div className="patient-details__right">
+                    <FormField
+                      control={form.control}
+                      name="patientId"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Patient Id</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Patient Id"
+                              {...field}
+                              disabled
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="program"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Program</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Program" {...field} disabled />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="emergencyContact"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Emergency Contact</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Enter emergency contact"
+                              {...field}
+                              disabled
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="weight"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Weight (kg)</FormLabel>
+                          <FormControl>
+                            <Input placeholder="Enter weight" {...field} />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="bloodGroup"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Blood Group</FormLabel>
-                        <FormControl>
-                          <Input
-                            placeholder="Blood group"
-                            {...field}
-                            disabled
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="familyMedicalHistory"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Family Medical History</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Enter family medical history"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="currentAddress"
-                    render={({ field }) => (
-                      <FormItem className="mt-3">
-                        <FormLabel>Current Address</FormLabel>
-                        <FormControl>
-                          <Textarea
-                            placeholder="Enter your current address"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                      name="bloodGroup"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Blood Group</FormLabel>
+                          <FormControl>
+                            <Input
+                              placeholder="Blood group"
+                              {...field}
+                              disabled
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="familyMedicalHistory"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Family Medical History</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Enter family medical history"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="currentAddress"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Current Address</FormLabel>
+                          <FormControl>
+                            <Textarea
+                              placeholder="Enter your current address"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="profile-container__footer">
-            <Button
-              type="button"
-              onClick={handleCancel}
-              variant="secondary"
-              className="back-btn"
-            >
-              Cancel
-            </Button>
-            <Button type="submit" className="save-btn text-white">
-              Submit
-            </Button>
-          </div>
-        </form>
-      </Form>
-    </div>
+            <div className="profile-container__footer">
+              <Button
+                type="button"
+                onClick={handleCancel}
+                variant="secondary"
+                className="back-btn"
+              >
+                Cancel
+              </Button>
+              <Button type="submit" className="save-btn text-white">
+                Submit
+              </Button>
+            </div>
+          </form>
+        </Form>
+      </div>
+    </>
   );
 };
 

@@ -4,7 +4,9 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-
+import { toast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 import { Image } from "primereact/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -135,6 +137,7 @@ const UserRegister = () => {
     defaultValues: {
       name: undefined,
       sapID: "000000000",
+      sapID: "000000000",
       password: undefined,
       confirmPassword: undefined,
       email: undefined,
@@ -159,7 +162,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://localhost:8081/api/auth/patient/signup", payload)
+          .post("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });
@@ -168,13 +171,25 @@ const UserRegister = () => {
         navigate("/");
       } catch (error: any) {
         console.error("Error submitting form: ", error);
-        alert(error?.response?.data?.message || "Registration failed");
+        toast({
+          title: "Registration Failed",
+          description:
+            error?.response?.data?.message || "Something went wrong.",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);
-      alert("Please fill in required details before submitting!");
+      toast({
+        title: "Validation Error",
+        description: "Please fill in required details before submitting.",
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
   };
+
   const handleSchoolChange = (school: keyof typeof programOptions) => {
     setAvailablePrograms(programOptions[school] || []);
     form.setValue("program", undefined);
@@ -190,7 +205,12 @@ const UserRegister = () => {
     if (!file) return;
 
     if (file.size > 1048576) {
-      alert("File Size should be less than 1MB");
+      toast({
+        title: "File Too Large",
+        description: "File size should be less than 1MB.",
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
       event.target.value = "";
       return;
     }
@@ -210,339 +230,349 @@ const UserRegister = () => {
   }, [form.watch("school")]);
 
   return (
-    <div className="register-container">
-      <div className="register-container__content">
-        <div className="register-container__header">
-          <img src="/upes-logo.jpg" alt="UPES Logo" />
-          <div className="flex items-baseline w-full">
-            <div className="title">
-              {Shared.UserPlus}
-              <h1>Patient Registration Form</h1>
+    <>
+      <Toaster />
+      <div className="register-container">
+        <div className="register-container__content">
+          <div className="register-container__header">
+            <img src="/upes-logo.jpg" alt="UPES Logo" />
+            <div className="flex items-baseline w-full">
+              <div className="title">
+                {Shared.UserPlus}
+                <h1>Patient Registration Form</h1>
+              </div>
             </div>
           </div>
-        </div>
 
-        <Form {...form}>
-          <form onSubmit={form.handleSubmit(onSubmit)} className="min-h-[91%]">
-            <div className="register-container__body">
-              <div className="image-container">
-                <Image
-                  src={uploadedImage || "/default-user.jpg"}
-                  alt="Profile Picture"
-                  preview
-                  style={{
-                    border: "1.5px solid black",
-                    width: "100%",
-                  }}
-                />
-                <input
-                  type="file"
-                  accept="image/*"
-                  onChange={handleImageUpload}
-                  id="upload-image"
-                  style={{ display: "none" }}
-                />
-                <label htmlFor="upload-image">Upload Image</label>
-              </div>
-              <div className="patient-details">
-                <div className="patient-details__top">
-                  <div className="patient-details__left">
-                    <FormField
-                      control={form.control}
-                      name="name"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Name</FormLabel>
-                          <FormControl>
-                            <Input placeholder="Enter name" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="password"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
+          <Form {...form}>
+            <form
+              onSubmit={form.handleSubmit(onSubmit)}
+              className="min-h-[91%]"
+            >
+              <div className="register-container__body">
+                <div className="image-container">
+                  <Image
+                    src={uploadedImage || "/default-user.jpg"}
+                    alt="Profile Picture"
+                    preview
+                    style={{
+                      border: "1.5px solid black",
+                      width: "100%",
+                    }}
+                  />
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    id="upload-image"
+                    style={{ display: "none" }}
+                  />
+                  <label htmlFor="upload-image">Upload Image</label>
+                </div>
+                <div className="patient-details">
+                  <div className="patient-details__top">
+                    <div className="patient-details__left">
+                      <FormField
+                        control={form.control}
+                        name="name"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Name</FormLabel>
+                            <FormControl>
+                              <Input placeholder="Enter your name" {...field} />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="password"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Password</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  type={showPassword ? "text" : "password"}
+                                  placeholder="Enter your password"
+                                  {...field}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setShowPassword((prev) => !prev)
+                                  }
+                                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                  aria-label="Toggle password visibility"
+                                >
+                                  {showPassword ? Shared.Eye : Shared.SlashEye}
+                                </button>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="confirmPassword"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Confirm Password</FormLabel>
+                            <FormControl>
+                              <div className="relative">
+                                <Input
+                                  type={
+                                    showConfirmPassword ? "text" : "password"
+                                  }
+                                  placeholder="Confirm password"
+                                  {...field}
+                                />
+                                <button
+                                  type="button"
+                                  onClick={() =>
+                                    setShowConfirmPassword((prev) => !prev)
+                                  }
+                                  className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
+                                  aria-label="Toggle password visibility"
+                                >
+                                  {showConfirmPassword
+                                    ? Shared.Eye
+                                    : Shared.SlashEye}
+                                </button>
+                              </div>
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Date of Birth</FormLabel>
+                            <FormControl>
                               <Input
-                                type={showPassword ? "text" : "password"}
-                                placeholder="Enter password"
+                                type="date"
+                                placeholder="Select date of birth"
                                 {...field}
                               />
-                              <button
-                                type="button"
-                                onClick={() => setShowPassword((prev) => !prev)}
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
-                                aria-label="Toggle password visibility"
-                              >
-                                {showPassword ? Shared.Eye : Shared.SlashEye}
-                              </button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="confirmPassword"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Confirm Password</FormLabel>
-                          <FormControl>
-                            <div className="relative">
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="gender"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Gender</FormLabel>
+                            <Select
+                              {...field}
+                              onValueChange={(value) => field.onChange(value)}
+                              value={field.value}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select gender" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup className="h-[5rem] overflow-y-scroll">
+                                  <SelectItem value="Male">Male</SelectItem>
+                                  <SelectItem value="Female">Female</SelectItem>
+                                  <SelectItem value="Other">Other</SelectItem>
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="bloodGroup"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Blood Group</FormLabel>
+                            <Select
+                              {...field}
+                              onValueChange={(value) => field.onChange(value)}
+                              value={field.value}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select blood group" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup className="h-max-[8rem] overflow-y-scroll">
+                                  {bloodGroup.map((group) => (
+                                    <SelectItem key={group} value={group}>
+                                      {group}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                    <div className="patient-details__right">
+                      <FormField
+                        control={form.control}
+                        name="sapID"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>SapId</FormLabel>
+                            <FormControl>
                               <Input
-                                type={showConfirmPassword ? "text" : "password"}
-                                placeholder="Confirm password"
+                                type="number"
+                                placeholder="Enter your Id"
+                                {...field}
+                                disabled={form.watch("school") === "Guest"}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Email</FormLabel>
+                            <FormControl>
+                              <Input
+                                type="email"
+                                placeholder="Enter your email"
                                 {...field}
                               />
-                              <button
-                                type="button"
-                                onClick={() =>
-                                  setShowConfirmPassword((prev) => !prev)
-                                }
-                                className="absolute right-2 top-1/2 transform -translate-y-1/2 text-gray-600"
-                                aria-label="Toggle password visibility"
-                              >
-                                {showConfirmPassword
-                                  ? Shared.Eye
-                                  : Shared.SlashEye}
-                              </button>
-                            </div>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Date of Birth</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="date"
-                              placeholder="Select date of birth"
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="school"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>School</FormLabel>
+                            <Select
                               {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="gender"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Gender</FormLabel>
-                          <Select
-                            {...field}
-                            onValueChange={(value) => field.onChange(value)}
-                            value={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select gender" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup className="h-[5rem] overflow-y-scroll">
-                                <SelectItem value="Male">Male</SelectItem>
-                                <SelectItem value="Female">Female</SelectItem>
-                                <SelectItem value="Other">Other</SelectItem>
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="bloodGroup"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Blood Group</FormLabel>
-                          <Select
-                            {...field}
-                            onValueChange={(value) => field.onChange(value)}
-                            value={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select blood group" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup className="h-max-[8rem] overflow-y-scroll">
-                                {bloodGroup.map((group) => (
-                                  <SelectItem key={group} value={group}>
-                                    {group}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                  <div className="patient-details__right">
-                    <FormField
-                      control={form.control}
-                      name="sapID"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>SapId</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="number"
-                              placeholder="Enter your Id"
-                              {...field}
-                              disabled={form.watch("school") === "Guest"}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Email</FormLabel>
-                          <FormControl>
-                            <Input
-                              type="email"
-                              placeholder="Enter your email"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="school"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>School</FormLabel>
-                          <Select
-                            {...field}
-                            onValueChange={(value) => {
-                              field.onChange(value);
-                              handleSchoolChange(
-                                value as keyof typeof programOptions
-                              );
-                            }}
-                            value={field.value}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select school" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup className="h-max-[8rem] overflow-y-scroll">
-                                {Object.keys(programOptions).map((school) => (
-                                  <SelectItem key={school} value={school}>
-                                    {school}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                              onValueChange={(value) => {
+                                field.onChange(value);
+                                handleSchoolChange(
+                                  value as keyof typeof programOptions
+                                );
+                              }}
+                              value={field.value}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select school" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup className="h-max-[8rem] overflow-y-scroll">
+                                  {Object.keys(programOptions).map((school) => (
+                                    <SelectItem key={school} value={school}>
+                                      {school}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
 
-                    <FormField
-                      control={form.control}
-                      name="program"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Program</FormLabel>
-                          <Select
-                            {...field}
-                            onValueChange={(value) => field.onChange(value)}
-                            value={field.value}
-                            disabled={!availablePrograms.length}
-                          >
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select program" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectGroup className="h-max-[8rem] overflow-y-scroll">
-                                {availablePrograms.map((program) => (
-                                  <SelectItem key={program} value={program}>
-                                    {program}
-                                  </SelectItem>
-                                ))}
-                              </SelectGroup>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="phoneNumber"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Phone Number</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter your phone number"
+                      <FormField
+                        control={form.control}
+                        name="program"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Program</FormLabel>
+                            <Select
                               {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                    <FormField
-                      control={form.control}
-                      name="emergencyContact"
-                      render={({ field }) => (
-                        <FormItem className="mt-3">
-                          <FormLabel>Emergency Contact</FormLabel>
-                          <FormControl>
-                            <Input
-                              placeholder="Enter emergency contact"
-                              {...field}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
+                              onValueChange={(value) => field.onChange(value)}
+                              value={field.value}
+                              disabled={!availablePrograms.length}
+                            >
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select program" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectGroup className="h-max-[8rem] overflow-y-scroll">
+                                  {availablePrograms.map((program) => (
+                                    <SelectItem key={program} value={program}>
+                                      {program}
+                                    </SelectItem>
+                                  ))}
+                                </SelectGroup>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="phoneNumber"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Phone Number</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your phone number"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                      <FormField
+                        control={form.control}
+                        name="emergencyContact"
+                        render={({ field }) => (
+                          <FormItem className="mt-3">
+                            <FormLabel>Emergency Contact</FormLabel>
+                            <FormControl>
+                              <Input
+                                placeholder="Enter your emergency contact"
+                                {...field}
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="register-container__footer">
-              <Button
-                type="button"
-                onClick={handleCancel}
-                variant="secondary"
-                className="cancel-btn"
-              >
-                Cancel
-              </Button>
-              <Button type="submit" className="save-btn text-white">
-                Submit
-              </Button>
-            </div>
-          </form>
-        </Form>
+              <div className="register-container__footer">
+                <Button
+                  type="button"
+                  onClick={handleCancel}
+                  variant="secondary"
+                  className="cancel-btn"
+                >
+                  Cancel
+                </Button>
+                <Button type="submit" className="save-btn text-white">
+                  Submit
+                </Button>
+              </div>
+            </form>
+          </Form>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

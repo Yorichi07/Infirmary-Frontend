@@ -1,7 +1,7 @@
 .sign-container {
   min-height: 92svh;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.3fr 1fr;
   grid-template-rows: 1fr;
   grid-template-areas: "left right";
 
@@ -11,6 +11,7 @@
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    border-right: 2px solid black;
   }
 
   &__right {
@@ -23,7 +24,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding: 0 4rem;
+    padding: 1rem 4rem;
 
     &-content {
       display: flex;
@@ -53,7 +54,6 @@
       h1 {
         font-weight: bold;
         font-size: 2rem;
-        margin-bottom: 0.5rem;
       }
     }
 
@@ -75,10 +75,9 @@
   align-items: center;
   justify-content: center;
   width: 100%;
-  border: 1px solid gray;
-  font-weight: 600;
+  border: 1px solid black;
   background-color: white;
-  color: #8f8f8f;
+  color: black;
   min-height: 8svh;
 }
 
@@ -97,7 +96,7 @@
       align-items: center;
       justify-content: center;
     }
-    &__right-content{
+    &__right-content {
       margin: 1rem 0;
       max-width: 96svw;
     }

@@ -9,7 +9,7 @@ import {
 
 const Ambulance = () => {
   return (
-    <div className="h-[83svh] pl-10 flex items-center justify-center max-lg:h-[93svh] max-lg:pl-0">
+    <div className="min-h-[84svh] pl-10 flex items-center justify-center max-lg:min-h-[93svh] max-lg:pl-0">
       <img
         src="/Ambulance.png"
         className="w-[40%] max-lg:hidden"

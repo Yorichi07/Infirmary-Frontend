@@ -6,8 +6,12 @@ import { ChangeEventHandler, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AdminSignIn.scss";
 import Shared from "@/Shared";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 
 const AdminSignIn = () => {
+  const { toast } = useToast();
   const navigate = useNavigate();
   const [input, setInput] = useState({ email: "", password: "" });
   const [showPassword, setShowPassword] = useState(false);
@@ -17,9 +21,16 @@ const AdminSignIn = () => {
     setInput((prev) => ({ ...prev, [id]: value }));
   };
 
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
   const handleSignIn = async () => {
+    if (location.latitude === "-1" || location.longitude === "-1") {
+      return toast({
+        variant: "destructive",
+        title: "Location Missing",
+        description: "Please select a location.",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
+
     const apiUrl = "http://localhost:8081/api/auth/admin/signin";
     const dashboardRoute = "/admin-dashboard";
 
@@ -34,18 +45,33 @@ const AdminSignIn = () => {
         roles[0].replace("ROLE_", "").toLowerCase()
       );
 
-      navigate(dashboardRoute);
+      toast({
+        variant: "default",
+        title: "Login Successful",
+        description: `Welcome back, Admin!`,
+      });
+
+      setTimeout(() => {
+        navigate(dashboardRoute);
+      }, 1000);
     } catch (error: any) {
       const message =
         error.response?.status === 401
           ? "Incorrect email or password. Please try again."
           : error.response?.data?.message || "An error occurred.";
-      setErrorMessage(message);
+
+      toast({
+        variant: "destructive",
+        title: "Sign In Failed",
+        description: message,
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
   };
 
   return (
     <>
+      <Toaster />
       <div className="sign-container">
         <div className="sign-container__left"></div>
         <div className="sign-container__right">
@@ -58,7 +84,7 @@ const AdminSignIn = () => {
               <h1>Admin Sign in</h1>
             </div>
             <form>
-            <div>
+              <div>
                 <Label htmlFor="email">Email</Label>
                 <Input
                   type="email"
@@ -93,10 +119,6 @@ const AdminSignIn = () => {
               </div>
             </form>
 
-            {errorMessage && (
-              <p className="text-red-500 text-sm mb-2">{errorMessage}</p>
-            )}
-
             <div className="gap-5 flex flex-col w-full">
               <Button className="sign-in-btn" onClick={handleSignIn}>
                 Sign In
@@ -106,9 +128,9 @@ const AdminSignIn = () => {
         </div>
       </div>
       <div className="helpline">
-        Energy Acres, Bidholi: Tel: +91-135-2770137, 2776053, 2776054, 2776091
-        &nbsp; | &nbsp; Knowledge Acres, Kandoli: Tel: +91-135-2770137, 2776053,
-        2776054, 2776091
+        <b>Energy Acres, Bidholi : </b>&nbsp;+91-135-2770137, 2776053, 2776054,
+        2776091 &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
+        &nbsp;+91-135-2770137, 2776053, 2776054, 2776091
       </div>
     </>
   );

@@ -92,7 +92,7 @@ const NewAssistantDoctor = () => {
   };
   return (
     <>
-      <div className="min-h-[83svh] p-6 max-lg:min-h-[93svh]">
+      <div className="min-h-[84svh] p-6 max-lg:min-h-[93svh]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
             <div>
