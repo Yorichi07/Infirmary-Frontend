@@ -22,15 +22,6 @@ const AdminSignIn = () => {
   };
 
   const handleSignIn = async () => {
-    if (location.latitude === "-1" || location.longitude === "-1") {
-      return toast({
-        variant: "destructive",
-        title: "Location Missing",
-        description: "Please select a location.",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-    }
-
     const apiUrl = "http://localhost:8081/api/auth/admin/signin";
     const dashboardRoute = "/admin-dashboard";
 
