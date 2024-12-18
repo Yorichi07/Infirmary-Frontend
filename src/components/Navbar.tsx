@@ -49,7 +49,7 @@ const Navbar = ({
       </div>
       {props.additionalLogo && props.menu ? (
         <Popover>
-          <PopoverTrigger className="text-2xl max-lg:text-lg w-[100px] flex items-center justify-end">
+          <PopoverTrigger className="text-2xl max-lg:text-lg min-lg:w-[100px] max-lg:w-[60px] flex items-center justify-end">
             {props.additionalLogo}
           </PopoverTrigger>
           <PopoverContent className="space-y-2 p-2 max-lg:p-2">
@@ -86,7 +86,7 @@ const Navbar = ({
       ) : (
         <Link
           to={`/${props.role}-dashboard`}
-          className="text-base max-lg:text-sm flex items-center justify-end min-lg:w-[100px]"
+          className="text-base max-lg:text-sm flex items-center justify-end min-lg:w-[100px] max-lg:w-[60px]"
         >
           {props.additionalLogo}
         </Link>
