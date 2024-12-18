@@ -74,8 +74,8 @@ const PatientList = () => {
 
       const url =
         selectedButton === "Pending"
-          ? "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPatientQueue"
-          : "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getCompletedQueue";
+          ? "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPatientQueue"
+          : "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getCompletedQueue";
 
       const response = await axios.get(url, {
         headers: {
@@ -126,7 +126,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.get(
-        `http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${email}`,
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${email}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -164,7 +164,7 @@ const PatientList = () => {
         return;
       }
       const response = await axios.get(
-        "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
+        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -192,7 +192,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/submitAppointment",
+        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/submitAppointment",
         {
           weight: dialogData.weight,
           temperature: dialogData.temperature,
@@ -244,7 +244,7 @@ const PatientList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${email}`,
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -263,7 +263,7 @@ const PatientList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/completeAppointment/${email}`,
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/completeAppointment/${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -476,7 +476,7 @@ const PatientList = () => {
                                           const token =
                                             localStorage.getItem("token");
                                           const response = await axios.get(
-                                            `http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${pat.email}`,
+                                            `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${pat.email}`,
                                             {
                                               headers: {
                                                 Authorization: `Bearer ${token}`,
