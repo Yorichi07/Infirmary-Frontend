@@ -120,17 +120,22 @@ const PatientList = () => {
   }, [searchQuery, patient]);
 
   const getAppointmentDetails = async (email: string) => {
-    setCurrentPatientEmail(email);
+    const modifiedEmail = email.replace(/@.*?\./g, (match) =>
+      match.replace(/\./g, ",")
+    );
+    setCurrentPatientEmail(modifiedEmail);
+
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${email}`,
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${modifiedEmail}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },timeout:10000
+          },
+          timeout: 10000,
         }
       );
 
@@ -170,7 +175,7 @@ const PatientList = () => {
             Authorization: `Bearer ${token}`,
             "X-Latitude": localStorage.getItem("latitude"),
             "X-Longitude": localStorage.getItem("longitude"),
-          }
+          },
         }
       );
 
