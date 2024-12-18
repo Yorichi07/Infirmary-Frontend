@@ -98,7 +98,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://localhost:8081/api/doctor/prescription/submit",
+        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/prescription/submit",
         req,
         {
           headers: {
@@ -127,7 +127,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://localhost:8081/api/doctor/getPatient",
+          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -179,7 +179,7 @@ const PatientDetails = () => {
 
       try {
         const resp = await axios.get(
-          `http://localhost:8081/api/doctor/stock/available`,
+          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/stock/available`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -234,7 +234,7 @@ const PatientDetails = () => {
   const handleRelease = async () => {
     try {
       const resp = await axios.get(
-        "http://localhost:8081/api/doctor/releasePatient",
+        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/releasePatient",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -269,7 +269,7 @@ const PatientDetails = () => {
               className="w-[15%] border-black border-[1.5px] max-lg:w-[50%] max-lg:mb-5"
               src={
                 ndata?.imageUrl != null
-                  ? `http://localhost:8081/${ndata?.imageUrl}`
+                  ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
                   : "/default-user.jpg"
               }
             />
