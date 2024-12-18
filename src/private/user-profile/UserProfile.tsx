@@ -173,6 +173,7 @@ const UserProfile = () => {
             });
           }
           toast({
+            title: "Required!",
             description:
               "Set Height, Weight, Family History, Medical History, Allergies, and Current Address.",
           });
@@ -344,13 +345,13 @@ const UserProfile = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="medicalHistory"
+                      name="currentAddress"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Medical History</FormLabel>
+                          <FormLabel>Current Address</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Enter medical history"
+                              placeholder="Enter your current address"
                               {...field}
                             />
                           </FormControl>
@@ -456,13 +457,13 @@ const UserProfile = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="familyMedicalHistory"
+                      name="medicalHistory"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Family Medical History</FormLabel>
+                          <FormLabel>Medical History</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Enter family medical history"
+                              placeholder="Enter medical history"
                               {...field}
                             />
                           </FormControl>
@@ -472,13 +473,13 @@ const UserProfile = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="currentAddress"
+                      name="familyMedicalHistory"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Current Address</FormLabel>
+                          <FormLabel>Family Medical History</FormLabel>
                           <FormControl>
                             <Textarea
-                              placeholder="Enter your current address"
+                              placeholder="Enter family medical history"
                               {...field}
                             />
                           </FormControl>

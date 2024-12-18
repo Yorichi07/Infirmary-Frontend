@@ -6,6 +6,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 import { Input } from "@/components/ui/input";
 import {
   Select,
@@ -59,6 +62,7 @@ const formSchema = z
 
 const NewDoctor = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -94,11 +98,21 @@ const NewDoctor = () => {
             },
           }
         );
-        alert("Registration successful");
-        navigate("/admin-dashboard");
+        toast({
+          title: "Registration Successfull",
+          description: "New Doctor has been successfully registered.",
+        });
+        setTimeout(() => {
+          navigate("/admin-dashboard");
+        }, 1000);
       } catch (error: any) {
         console.error("Error submitting form: ", error);
-        alert(error?.response?.data?.message || "Registration failed");
+        toast({
+          title: "Registration Failed",
+          description: error?.response?.data?.message || "Registration failed",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
     }
   };
@@ -108,6 +122,7 @@ const NewDoctor = () => {
   };
   return (
     <>
+      <Toaster />
       <div className="min-h-[84svh] p-6 max-lg:min-h-[93svh]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>

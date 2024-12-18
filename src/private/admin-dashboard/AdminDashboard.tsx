@@ -27,8 +27,10 @@ const AdminDashboard = () => {
     <>
       <div className="admin-dashboard">
         <div className="admin-dashboard__left">
-          <div className="flex items-center justify-center p-10 max-lg:p-5">
-            <p className="text-4xl font-bold">{formatTime(time)}</p>
+          <div className="flex items-center justify-center p-5 max-lg:p-5 bg-gray-800 rounded-lg shadow-lg mb-5">
+            <p className="text-4xl font-bold text-white drop-shadow-lg">
+              {formatTime(time)}
+            </p>
           </div>
           <div>
             <Calendar

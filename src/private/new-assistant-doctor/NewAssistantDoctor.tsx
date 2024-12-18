@@ -6,6 +6,9 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { useToast } from "@/hooks/use-toast";
+import { Toaster } from "@/components/ui/toaster";
+import { ToastAction } from "@/components/ui/toast";
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "@/components/ui/button";
@@ -45,6 +48,7 @@ const formSchema = z
 
 const NewAssistantDoctor = () => {
   const navigate = useNavigate();
+  const { toast } = useToast();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
@@ -69,20 +73,26 @@ const NewAssistantDoctor = () => {
           return;
         }
         const payload = { ...data, status: false };
-        await axios.post(
-          "http://localhost:8081/api/admin/AD/signup",
-          payload,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        alert("Registration successful");
-        navigate("/admin-dashboard");
+        await axios.post("http://localhost:8081/api/admin/AD/signup", payload, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        toast({
+          title: "Registration Successfull",
+          description: "New Assistant Doctor has been successfully registered.",
+        });
+        setTimeout(() => {
+          navigate("/admin-dashboard");
+        }, 1000);
       } catch (error: any) {
         console.error("Error submitting form: ", error);
-        alert(error?.response?.data?.message || "Registration failed");
+        toast({
+          title: "Registration Failed",
+          description: error?.response?.data?.message || "Registration failed",
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
     }
   };
@@ -92,6 +102,7 @@ const NewAssistantDoctor = () => {
   };
   return (
     <>
+      <Toaster />
       <div className="min-h-[84svh] p-6 max-lg:min-h-[93svh]">
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)}>
