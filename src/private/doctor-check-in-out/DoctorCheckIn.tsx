@@ -17,7 +17,7 @@ const DoctorCheckIn = () => {
       try {
         const token = localStorage.getItem("token");
         const response = await axios.get(
-          "http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/getAllDoctors",
+          "http://localhost:8081/api/AD/getAllDoctors",
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -64,7 +64,7 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await axios.get(
-        `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -96,7 +96,7 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await fetch(
-        `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {
             Authorization: "Bearer " + token,

@@ -134,7 +134,7 @@ const UserRegister = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: undefined,
-      sapID: "00000000",
+      sapID: "000000000",
       password: undefined,
       confirmPassword: undefined,
       email: undefined,
@@ -159,7 +159,7 @@ const UserRegister = () => {
         };
 
         await axios
-          .post("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/auth/patient/signup", payload)
+          .post("http://localhost:8081/api/auth/patient/signup", payload)
           .then((res) => {
             return res.data;
           });

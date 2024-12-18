@@ -20,6 +20,7 @@ import {
 } from "@/components/ui/select";
 
 interface Stock {
+  id:string,
   location: any;
   batchNumber: number | string;
   medicineName: string;
@@ -62,7 +63,7 @@ const MedicineStock = () => {
 
         if(role === "ad") role = role.toUpperCase();
 
-        const response = await axios.get(`http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/${role}/stock/`, {
+        const response = await axios.get(`http://localhost:8081/api/${role}/stock/`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -78,7 +79,7 @@ const MedicineStock = () => {
 
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/location/");
+        const resp = await axios.get("http://localhost:8081/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
@@ -96,6 +97,7 @@ const MedicineStock = () => {
 
   const handleAddNewRow = () => {
     setNewStock({
+      id:"",
       batchNumber: "",
       medicineName: "",
       composition: "",
@@ -140,7 +142,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
+          `http://localhost:8081/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -167,7 +169,7 @@ const MedicineStock = () => {
 
     for (const batchNumber of selectedStocks) {
       try {
-        await axios.delete(`http://ec2-13-127-221-134.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`, {
+        await axios.delete(`http://localhost:8081/api/${role}/stock/${batchNumber}`, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -259,8 +261,8 @@ const MedicineStock = () => {
                   <TableCell className="border">
                     <input
                       type="checkbox"
-                      checked={selectedStocks.has(stock.batchNumber)}
-                      onChange={() => handleSelectStock(stock.batchNumber)}
+                      checked={selectedStocks.has(stock.id)}
+                      onChange={() => handleSelectStock(stock.id)}
                     />
                   </TableCell>
                   <TableCell className="border">{stock.batchNumber}</TableCell>
