@@ -26,7 +26,7 @@ const PatientDetails = () => {
   const [dietary, setDietary] = useState<string>();
   const [tests, setTests] = useState<string>();
   const [medLst, setMedLst] = useState<Record<number, string>>();
-
+  const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [rows, setRows] = useState([1]);
   const [ndata, setNdata] = useState<{
     name: string;
@@ -98,7 +98,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/prescription/submit",
+        "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/prescription/submit",
         req,
         {
           headers: {
@@ -116,18 +116,34 @@ const PatientDetails = () => {
         variant: "destructive",
         title: "Error",
         description:
-          err.response?.data?.details || "An error occurred. Please try again.",
+          err.response?.data?.message || "An error occurred. Please try again.",
         action: <ToastAction altText="Try again">Try again</ToastAction>,
       });
       console.error(err);
     }
   };
 
+  const toggleRowSelection = (rowIndex: number) => {
+    setSelectedRows((prevSelected) =>
+      prevSelected.includes(rowIndex)
+        ? prevSelected.filter((index) => index !== rowIndex)
+        : [...prevSelected, rowIndex]
+    );
+  };
+
+  const removeSelectedRows = () => {
+    const updatedRows = rows.filter(
+      (_, index) => !selectedRows.includes(index)
+    );
+    setRows(updatedRows);
+    setSelectedRows([]);
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
+          "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -169,22 +185,21 @@ const PatientDetails = () => {
     };
 
     const fetchMed = async () => {
-
       const latitude = localStorage.getItem("latitude");
       const longitude = localStorage.getItem("longitude");
 
-      if(!(latitude || longitude)){
+      if (!(latitude || longitude)) {
         return;
       }
 
       try {
         const resp = await axios.get(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/stock/available`,
+          `http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/stock/available`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
-              "X-Latitude":latitude,
-              "X-Longitude":longitude
+              "X-Latitude": latitude,
+              "X-Longitude": longitude,
             },
           }
         );
@@ -196,7 +211,7 @@ const PatientDetails = () => {
           variant: "destructive",
           title: "Error",
           description:
-            err.response?.data?.details ||
+            err.response?.data?.message ||
             "An error occurred while fetching stock data.",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
@@ -213,7 +228,7 @@ const PatientDetails = () => {
   };
 
   const removeRow = () => {
-    if (rows.length > 1) {
+    if (rows.length > 0) {
       setRows(rows.slice(0, -1));
     }
   };
@@ -234,7 +249,7 @@ const PatientDetails = () => {
   const handleRelease = async () => {
     try {
       const resp = await axios.get(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/releasePatient",
+        "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/releasePatient",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -269,7 +284,7 @@ const PatientDetails = () => {
               className="w-[15%] border-black border-[1.5px] max-lg:w-[50%] max-lg:mb-5"
               src={
                 ndata?.imageUrl != null
-                  ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
+                  ? `http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
                   : "/default-user.jpg"
               }
             />
@@ -441,16 +456,24 @@ const PatientDetails = () => {
                 <table className="medicine-table max-lg:max-w-[95svw]">
                   <thead>
                     <tr>
+                      <th className="whitespace-nowrap">Select</th>
                       <th className="whitespace-nowrap">S. No.</th>
-                      <th>Medicine</th>
-                      <th>Dosage (/day)</th>
+                      <th className="whitespace-nowrap">Medicine</th>
+                      <th className="whitespace-nowrap">Dosage (/day)</th>
                       <th className="whitespace-nowrap">Duration (Days)</th>
-                      <th>Suggestions</th>
+                      <th className="whitespace-nowrap">Suggestions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {rows.map((_, index) => (
                       <tr key={index}>
+                        <td className="text-center">
+                          <input
+                            type="checkbox"
+                            checked={selectedRows.includes(index)}
+                            onChange={() => toggleRowSelection(index)}
+                          />
+                        </td>
                         <td className="text-center">{index + 1}</td>
                         <td className="w-[30%]">
                           <Select
@@ -546,12 +569,19 @@ const PatientDetails = () => {
                     ))}
                   </tbody>
                 </table>
-                <div className="table-actions max-lg:mx-0">
-                  <button className="add-btn" onClick={addRow}>
+                <div className="table-actions max-lg:mx-0 max-lg:gap-3">
+                  <button className="add-btn whitespace-nowrap max-lg:py-1 max-lg:px-1" onClick={addRow}>
                     Add
                   </button>
-                  <button className="remove-btn" onClick={removeRow}>
-                    Remove
+                  <button className="remove-btn whitespace-nowrap max-lg:py-1 max-lg:px-1" onClick={removeRow}>
+                    Remove Last
+                  </button>
+                  <button
+                    className="remove-btn whitespace-nowrap max-lg:py-1 max-lg:px-1"
+                    onClick={removeSelectedRows}
+                    disabled={selectedRows.length === 0}
+                  >
+                    Remove Selected
                   </button>
                 </div>
               </div>

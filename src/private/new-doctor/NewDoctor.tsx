@@ -90,7 +90,7 @@ const NewDoctor = () => {
         }
         const payload = { ...data, status: false };
         await axios.post(
-          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/admin/doctor/signup",
+          "http://http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/admin/doctor/signup",
           payload,
           {
             headers: {
