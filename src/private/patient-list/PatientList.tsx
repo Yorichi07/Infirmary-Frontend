@@ -186,15 +186,7 @@ const PatientList = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!dialogData.temperature || !dialogData.weight) {
-      toast({
-        title: "Missing Information",
-        description: "Please enter both temperature and weight before submitting.",
-        variant: "destructive",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-      return;
-    }
+
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
