@@ -52,6 +52,7 @@ const PatientList = () => {
   const [currentPatientEmail, setCurrentPatientEmail] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredPatient, setFilteredPatient] = useState(patient);
+  const [assignedData, setAssignedData] = useState<Array<{patientName:string, tokenNum:string,doctorName:string}>>([]);
 
   const fetchList = async () => {
     try {
@@ -74,8 +75,8 @@ const PatientList = () => {
 
       const url =
         selectedButton === "Pending"
-          ? "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPatientQueue"
-          : "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getCompletedQueue";
+          ? "http://localhost:8081/api/AD/getPatientQueue"
+          : selectedButton === "Assigned" ? "http://localhost:8081/api/AD/getAssignedPatient" : "http://localhost:8081/api/AD/getCompletedQueue";
 
       const response = await axios.get(url, {
         headers: {
@@ -86,16 +87,26 @@ const PatientList = () => {
       });
 
       const fetchedData = response.data;
-      const formattedData = fetchedData.map((pat: any) => ({
-        email: pat.sapEmail,
-        name: pat.name,
-        reason: pat.reason,
-        aptId: pat.aptId,
-        Id: pat.Id,
-      }));
+      if(selectedButton === "Assigned"){
+        const formattedData = fetchedData.map((pat: any) => ({
+          patientName:pat.PatientName, 
+          tokenNum:pat.PatientToken,
+          doctorName:pat.doctorName
+        }));
 
-      setPatient(formattedData);
-      setFilteredPatient(formattedData);
+        setAssignedData(formattedData);
+      }else{
+        const formattedData = fetchedData.map((pat: any) => ({
+          email: pat.sapEmail,
+          name: pat.name,
+          reason: pat.reason,
+          aptId: pat.aptId,
+          Id: pat.Id,
+        }));
+        setPatient(formattedData);
+        setFilteredPatient(formattedData);
+      }
+        
     } catch (error) {
       handleError(error, "Failed to fetch patient list");
     }
@@ -123,14 +134,13 @@ const PatientList = () => {
     const modifiedEmail = email.replace(/@.*?\./g, (match) =>
       match.replace(/\./g, ",")
     );
-    setCurrentPatientEmail(modifiedEmail);
-
+    setCurrentPatientEmail(email);
     try {
       const token = localStorage.getItem("token");
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${modifiedEmail}`,
+        `http://localhost:8081/api/AD/getAptForm/${modifiedEmail}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -169,7 +179,7 @@ const PatientList = () => {
         return;
       }
       const response = await axios.get(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
+        "http://localhost:8081/api/AD/getAvailableDoctors",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -197,7 +207,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/submitAppointment",
+        "http://localhost:8081/api/AD/submitAppointment",
         {
           weight: dialogData.weight,
           temperature: dialogData.temperature,
@@ -249,7 +259,7 @@ const PatientList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${email}`,
+        `http://localhost:8081/api/AD/rejectAppointment?email=${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -268,7 +278,7 @@ const PatientList = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/completeAppointment/${email}`,
+        `http://localhost:8081/api/AD/completeAppointment/${email}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -309,6 +319,16 @@ const PatientList = () => {
           >
             Appointed
           </button>
+          <button
+            onClick={() => setSelectedButton("Assigned")}
+            className={`shadow-md px-4 py-2 rounded-md w-40 ${
+              selectedButton === "Assigned"
+                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
+                : "bg-gray-300 text-black"
+            }`}
+          >
+            Assigned
+          </button>
         </div>
         <div className="flex space-x-2 items-center">
           {Shared.Search}
@@ -320,7 +340,7 @@ const PatientList = () => {
           />
         </div>
         <div className="h-full overflow-y-scroll">
-          <Table className="bg-white rounded-md">
+          {selectedButton !== "Assigned"?(<Table className="bg-white rounded-md">
             <TableHeader>
               <TableRow className="h-20">
                 <TableHead className="border text-black font-bold text-center">
@@ -481,7 +501,7 @@ const PatientList = () => {
                                           const token =
                                             localStorage.getItem("token");
                                           const response = await axios.get(
-                                            `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${pat.email}`,
+                                            `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
                                             {
                                               headers: {
                                                 Authorization: `Bearer ${token}`,
@@ -513,7 +533,6 @@ const PatientList = () => {
                                     <button
                                       type="submit"
                                       className="submit-button"
-                                      onClick={() => console.log(dialogData)}
                                     >
                                       Submit
                                     </button>
@@ -556,7 +575,45 @@ const PatientList = () => {
                 </TableRow>
               )}
             </TableBody>
-          </Table>
+          </Table>):(<Table className="bg-white rounded-md">
+            <TableHeader>
+              <TableRow className="h-20">
+                <TableHead className="border text-black font-bold text-center">
+                  Doctor Name
+                </TableHead>
+                <TableHead className="border text-black font-bold text-center">
+                  Patient Name
+                </TableHead>
+                <TableHead className="border text-black font-bold text-center whitespace-nowrap">
+                  Token Number
+                </TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {assignedData.length > 0 ? (
+                assignedData.map((pat, index) => (
+                  <TableRow className="text-center" key={index}>
+                    <TableCell className="border">{index + 1}</TableCell>
+                    <TableCell className="border whitespace-nowrap">
+                      {pat.doctorName}
+                    </TableCell>
+                    <TableCell className="border whitespace-nowrap">
+                      {pat.patientName}
+                    </TableCell>
+                    <TableCell className="border">{pat.tokenNum}</TableCell>
+                    <TableCell className="border flex items-center justify-center">
+                    </TableCell>
+                  </TableRow>
+                ))
+              ) : (
+                <TableRow className="text-center">
+                  <TableCell colSpan={5} className="border py-5">
+                    No patient available!
+                  </TableCell>
+                </TableRow>
+              )}
+            </TableBody>
+          </Table>)}
         </div>
       </div>
     </>

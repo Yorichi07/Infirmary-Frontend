@@ -19,7 +19,7 @@ const UserPrescription = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [reports, setReports] = useState<
-    Array<{ reportId: string; date: string; downloadLink: string }>
+    Array<{ reportId: string; date: string; token:string; downloadLink: string }>
   >([]);
 
   useEffect(() => {
@@ -27,14 +27,13 @@ const UserPrescription = () => {
       try {
         let apiUrl = "";
         const role = localStorage.getItem("roles");
-        console.log(role);
 
         if (role !== "patient") {
           const url = window.location.search;
           const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getAppointmentPat/${val}`;
+          apiUrl = `http://localhost:8081/api/doctor/getAppointmentPat/${val}`;
         } else {
-          apiUrl = "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/patient/getAppointment";
+          apiUrl = "http://localhost:8081/api/patient/getAppointment";
         }
 
         const resp = await axios.get(apiUrl, {
@@ -48,7 +47,8 @@ const UserPrescription = () => {
         const formatData = response.map((rept: any) => ({
           reportId: rept.appointmentId,
           date: rept.date,
-          downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+          token:rept.token,
+          downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);
@@ -89,7 +89,7 @@ const UserPrescription = () => {
             <TableCaption>A list of your recent reports</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[33%] text-center">Report Id</TableHead>
+                <TableHead className="w-[33%] text-center">Token Number</TableHead>
                 <TableHead className="w-[33%] text-center">Date</TableHead>
                 <TableHead className="text-center whitespace-nowrap">
                   Download Report
@@ -101,7 +101,7 @@ const UserPrescription = () => {
                 <TableRow key={report.reportId}>
                   {/* Report Id */}
                   <TableCell className="font-medium text-center">
-                    {report.reportId}
+                    {report.token}
                   </TableCell>
 
                   {/* Date */}

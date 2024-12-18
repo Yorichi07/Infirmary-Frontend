@@ -70,7 +70,7 @@ const MedicineStock = () => {
       if (role === "ad") role = role.toUpperCase();
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/`,
+        `http://localhost:8081/api/${role}/stock/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -93,7 +93,7 @@ const MedicineStock = () => {
 
   const fetchLocations = async () => {
     try {
-      const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
+      const resp = await axios.get("http://localhost:8081/api/location/");
       if (resp.status === 200) {
         const data = resp.data;
         setLocations(data);
@@ -167,7 +167,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
+          `http://localhost:8081/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -204,7 +204,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`,
+          `http://localhost:8081/api/${role}/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -213,7 +213,7 @@ const MedicineStock = () => {
         );
 
         setStocks((prevStocks) =>
-          prevStocks.filter((stock) => stock.batchNumber !== batchNumber)
+          prevStocks.filter((stock) => stock.id !== batchNumber)
         );
         toast({
           title: "Deleted",
@@ -305,12 +305,12 @@ const MedicineStock = () => {
               </TableHeader>
               <TableBody>
                 {filteredStocks.map((stock) => (
-                  <TableRow key={stock.batchNumber} className="text-center">
+                  <TableRow key={stock.id} className="text-center">
                     <TableCell className="border">
                       <input
                         type="checkbox"
-                        checked={selectedStocks.has(stock.batchNumber)}
-                        onChange={() => handleSelectStock(stock.batchNumber)}
+                        checked={selectedStocks.has(stock.id)}
+                        onChange={() => handleSelectStock(stock.id)}
                       />
                     </TableCell>
                     <TableCell className="border">

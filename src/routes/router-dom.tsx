@@ -36,6 +36,8 @@ import NewAssistantDoctorLayout from "@/private/new-assistant-doctor/NewAssistan
 import NewAssistantDoctor from "@/private/new-assistant-doctor/NewAssistantDoctor";
 import TokenPageLayout from "@/private/token-page/tokenPageLayout";
 import TokenPage from "@/private/token-page/tokenPage";
+import PatientLogsLayout from "@/private/Patient-Logs/PatientLogsLayout";
+import PatientLogs from "@/private/Patient-Logs/PatientLogs";
 
 const router = createBrowserRouter([
   {
@@ -53,6 +55,14 @@ const router = createBrowserRouter([
         <AdminDashboard></AdminDashboard>
       </AdminDashboardLayout>
     ),
+  },
+  {
+    path: "/patient-logs",
+    element: (
+      <PatientLogsLayout>
+        <PatientLogs></PatientLogs>
+      </PatientLogsLayout>
+    )
   },
   {
     path: "/register-doctor",
