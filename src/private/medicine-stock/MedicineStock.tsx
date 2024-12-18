@@ -183,11 +183,11 @@ const MedicineStock = () => {
         });
         fetchLocations();
         fetchStocks();
-      } catch (error) {
+      } catch (error:any) {
         console.error("Error adding new stock:", error);
         toast({
           title: "Error",
-          description: "Failed to add new stock. Please try again.",
+          description: error.response?.data?.messsage,
           variant: "destructive",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });

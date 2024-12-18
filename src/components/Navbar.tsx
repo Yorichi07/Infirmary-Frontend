@@ -86,7 +86,7 @@ const Navbar = ({
       ) : (
         <Link
           to={`/${props.role}-dashboard`}
-          className="text-base max-lg:text-sm flex items-center justify-end min-lg:w-[100px] max-lg:w-[60px]"
+          className="text-base max-lg:text-sm flex items-center justify-end min-lg:w-[100px]"
         >
           {props.additionalLogo}
         </Link>
