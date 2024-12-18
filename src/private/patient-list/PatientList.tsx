@@ -130,7 +130,7 @@ const PatientList = () => {
         {
           headers: {
             Authorization: `Bearer ${token}`,
-          },
+          },timeout:10000
         }
       );
 
@@ -170,7 +170,7 @@ const PatientList = () => {
             Authorization: `Bearer ${token}`,
             "X-Latitude": localStorage.getItem("latitude"),
             "X-Longitude": localStorage.getItem("longitude"),
-          },timeout:10000
+          }
         }
       );
 
