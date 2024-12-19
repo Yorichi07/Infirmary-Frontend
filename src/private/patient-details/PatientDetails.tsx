@@ -44,6 +44,11 @@ const PatientDetails = () => {
     docName: string;
     height: string;
     weight: string;
+    date: string;
+    time: string;
+    designation: string;
+    temp: number;
+    residenceType: string;
   }>();
   const [stock, setStock] = useState<
     Array<{ id: string; medicineName: string; quantity: number }>
@@ -169,6 +174,11 @@ const PatientDetails = () => {
           docName: response.docName,
           height: response.medicalDetails.height,
           weight: response.medicalDetails.weight,
+          temp: response.temp,
+          designation: response.designation,
+          date: response.date,
+          time: response.time,
+          residenceType: response.medicalDetails.residenceType,
         };
         setNdata(formatData);
       } catch (err: any) {
@@ -288,72 +298,104 @@ const PatientDetails = () => {
                   : "/default-user.jpg"
               }
             />
-            <div className="flex flex-col justify-between max-lg:gap-5 max-lg:mb-5 max-lg:w-full">
-              <div className="input-field">
-                <label>Name:</label>
-                <input type="text" value={ndata?.name} disabled />
-              </div>
-              <div className="input-field">
-                <label>Age:</label>
-                <input type="text" value={ndata?.age} disabled />
-              </div>
-              <div className="input-field">
-                <label>Sex:</label>
-                <input type="text" value={ndata?.sex} disabled />
-              </div>
-              <div className="input-field">
-                <label>SAP Id:</label>
-                <input type="text" value={ndata?.id} disabled />
-              </div>
-              <div className="input-field">
-                <label>School:</label>
-                <input type="text" value={ndata?.course} disabled />
-              </div>
-            </div>
-            <div className="flex flex-col w-[30%] gap-3 max-lg:w-full max-lg:mb-5">
-              <div className="gap-5 flex flex-col">
+            <div className="w-full flex px-4 justify-between lg:gap-4 max-lg:flex-col">
+              <div className="flex flex-col w-[50%] justify-between max-lg:gap-5 max-lg:mb-5 max-lg:w-full">
                 <div className="input-field">
-                  <label>Height (in cm):</label>
-                  <input type="text w-full" value={ndata?.height} disabled />
+                  <label>Name:</label>
+                  <input type="text" value={ndata?.name} disabled />
                 </div>
                 <div className="input-field">
-                  <label>Weight (in kg):</label>
-                  <input type="text" value={ndata?.weight} disabled />
+                  <label>Age:</label>
+                  <input type="text" value={ndata?.age} disabled />
+                </div>
+                <div className="input-field">
+                  <label>Sex:</label>
+                  <input type="text" value={ndata?.sex} disabled />
+                </div>
+                <div className="input-field">
+                  <label>SAP Id:</label>
+                  <input type="text" value={ndata?.id} disabled />
+                </div>
+                <div className="input-field">
+                  <label>School:</label>
+                  <input type="text" value={ndata?.course} disabled />
                 </div>
               </div>
 
-              <label className="font-medium  lg:hidden">Address Type:</label>
-              <textarea
-                className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
-                disabled
-                value={ndata?.medHis}
-              ></textarea>
-              <label className="font-medium  lg:hidden">Medical History:</label>
-              <textarea
-                className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
-                disabled
-                value={ndata?.medHis}
-              ></textarea>
-              <label className="font-medium  lg:hidden">Family History:</label>
-              <textarea
-                className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
-                disabled
-                value={ndata?.famHis}
-              ></textarea>
-              <label className="font-medium  lg:hidden">Allergies:</label>
-              <textarea
-                className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
-                disabled
-                value={ndata?.allergies}
-              ></textarea>
-              <label className="font-medium">Reason for Visit:</label>
-              <textarea
-                className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
-                disabled
-                value={ndata?.reason}
-              ></textarea>
+              <div className="flex flex-col w-[50%] gap-3 max-lg:w-full max-lg:mb-5">
+                <div className="gap-5 flex flex-col">
+                  <div className="flex items-center w-full">
+                    <label className="font-medium w-[60%] max-lg:w-[70%]">
+                      Height (in cm):
+                    </label>
+                    <input
+                      className="w-full p-2 bg-white rounded shadow-md"
+                      type="text"
+                      value={ndata?.height}
+                      disabled
+                    />
+                  </div>
+                  <div className="flex items-center w-full">
+                    <label className="font-medium w-[60%] max-lg:w-[70%]">
+                      Weight (in kg):
+                    </label>
+                    <input
+                      className="w-full p-2 bg-white rounded shadow-md"
+                      type="text"
+                      value={ndata?.weight}
+                      disabled
+                    />
+                  </div>
+                  <div className="flex items-center w-full">
+                    <label className="font-medium w-[60%] max-lg:w-[70%]">
+                      Temperature (in °F):
+                    </label>
+                    <input
+                      className="w-full p-2 bg-white rounded shadow-md"
+                      type="text"
+                      value={ndata?.weight}
+                      disabled
+                    />
+                  </div>
+                </div>
+
+                <label className="font-medium  lg:hidden">Address Type:</label>
+                <textarea
+                  className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
+                  disabled
+                  value={ndata?.residenceType}
+                ></textarea>
+                <label className="font-medium  lg:hidden">
+                  Medical History:
+                </label>
+                <textarea
+                  className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
+                  disabled
+                  value={ndata?.medHis}
+                ></textarea>
+                <label className="font-medium  lg:hidden">
+                  Family History:
+                </label>
+                <textarea
+                  className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
+                  disabled
+                  value={ndata?.famHis}
+                ></textarea>
+                <label className="font-medium  lg:hidden">Allergies:</label>
+                <textarea
+                  className="h-full p-2 bg-white text-black shadow-md rounded-[5px]  lg:hidden"
+                  disabled
+                  value={ndata?.allergies}
+                ></textarea>
+                <label className="font-medium">Reason for Visit:</label>
+                <textarea
+                  className="h-full p-2 bg-white text-black shadow-md rounded-[5px]"
+                  disabled
+                  value={ndata?.reason}
+                ></textarea>
+              </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4 w-[20%] max-lg:w-[100%]">
+            <div className="flex flex-col justify-center items-center gap-4 w-[40%] max-lg:w-[100%]">
               <Popover>
                 <PopoverTrigger className="history-btn max-lg:hidden">
                   Address Type
@@ -399,13 +441,14 @@ const PatientDetails = () => {
             <div className="bg-[#fdfdfd] p-5 min-w-[100%] border-black border max-lg:w-full max-lg:p-2">
               <div className="flex items-center justify-between mb-[10px]">
                 <div className="flex center">
-                  <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
+                  <img src="/upes-logo.jpg" alt="Logo" className="w-[100px]" />
                 </div>
                 <h2 className="font-medium text-center text-[24px]">
                   INFIRMARY
                 </h2>
-                <div className="text-[18px] font-medium ">
-                  {new Date().toLocaleDateString()}
+                <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm ">
+                  <span>{ndata?.time}</span>
+                  <span className="lg:ml-2">{ndata?.date}</span>
                 </div>
               </div>
               <hr className="border border-black my-[10px]" />
@@ -626,6 +669,7 @@ const PatientDetails = () => {
               </div>
               <div className="flex flex-col items-end mt-10">
                 <span className="">{ndata?.docName}</span>
+                <span className="">{ndata?.designation}</span>
                 <div className="signature-text">Doctor Name</div>
               </div>
             </div>
