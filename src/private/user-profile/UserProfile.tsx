@@ -68,7 +68,7 @@ const formSchema = z.object({
     message: "Required",
   }),
 
-  addressType: z
+  residenceType: z
     .enum([
       "Kandoli Campus Hostel",
       "Bidholi Campus Hostel",
@@ -99,7 +99,7 @@ const UserProfile = () => {
       familyMedicalHistory: "",
       allergies: "",
       currentAddress: "",
-      addressType: "",
+      residenceType: "",
     },
   });
   const [img, setImg] = useState<string>("");
@@ -140,7 +140,7 @@ const UserProfile = () => {
         form.setValue("familyMedicalHistory", data.familyMedicalHistory || "");
         form.setValue("allergies", data.allergies || "");
         form.setValue("currentAddress", data.currentAddress || "");
-        form.setValue("addressType", data.addressType || "");
+        form.setValue("residenceType", data.residenceType || "");
 
         setImg(data.imageUrl);
       } catch (error: any) {
@@ -180,7 +180,7 @@ const UserProfile = () => {
             );
             form.setValue("allergies", dataBackup.allergies || "");
             form.setValue("currentAddress", dataBackup.currentAddress || "");
-            form.setValue("addressType", dataBackup.addressType || "");
+            form.setValue("residenceType", dataBackup.residenceType || "");
 
             setImg(dataBackup.imageUrl);
           } catch (backupError) {
@@ -228,7 +228,7 @@ const UserProfile = () => {
             allergies: data.allergies || "",
             height: height,
             weight: weight,
-            addressType: data.addressType || "",
+            residenceType: data.residenceType || "",
           },
           {
             headers: {
@@ -367,17 +367,17 @@ const UserProfile = () => {
                     />
                     <FormField
                       control={form.control}
-                      name="addressType"
+                      name="residenceType"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Address Type</FormLabel>
+                          <FormLabel>Residence Type</FormLabel>
                           <Select
                             onValueChange={field.onChange}
                             defaultValue={field.value}
                           >
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select address type" />
+                                <SelectValue placeholder="Select residence type" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>

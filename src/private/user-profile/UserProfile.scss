@@ -8,6 +8,7 @@
     display: flex;
     gap: 1rem;
     padding: 1.5rem;
+    padding-bottom: 0;
     height: 92%;
 
     .image-container {
@@ -29,6 +30,7 @@
         column-gap: 2rem;
         row-gap: 1rem;
         grid-template-areas: "left right";
+        padding-bottom: 1rem;
       }
 
       &__left {

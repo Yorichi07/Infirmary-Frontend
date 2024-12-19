@@ -322,6 +322,12 @@ const PatientDetails = () => {
                 </div>
               </div>
 
+              <label className="font-medium  lg:hidden">Address Type:</label>
+              <textarea
+                className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
+                disabled
+                value={ndata?.medHis}
+              ></textarea>
               <label className="font-medium  lg:hidden">Medical History:</label>
               <textarea
                 className="h-full p-2 bg-white text-black shadow-md rounded-[5px] lg:hidden"
@@ -350,6 +356,12 @@ const PatientDetails = () => {
             <div className="flex flex-col justify-center items-center gap-4 w-[20%] max-lg:w-[100%]">
               <Popover>
                 <PopoverTrigger className="history-btn max-lg:hidden">
+                  Address Type
+                </PopoverTrigger>
+                <PopoverContent>{ndata?.medHis}</PopoverContent>
+              </Popover>
+              <Popover>
+                <PopoverTrigger className="history-btn max-lg:hidden">
                   Medical History
                 </PopoverTrigger>
                 <PopoverContent>{ndata?.medHis}</PopoverContent>
@@ -361,9 +373,14 @@ const PatientDetails = () => {
                 <PopoverContent>{ndata?.famHis}</PopoverContent>
               </Popover>
               <Popover>
-                <PopoverTrigger className="history-btn max-lg:hidden">
+                <PopoverTrigger
+                  className={`w-full px-4 py-2 rounded cursor-pointer ${
+                    ndata?.allergies === "Yes" ? "bg-red-500" : "bg-[#008080]"
+                  } text-white`}
+                >
                   Allergies
                 </PopoverTrigger>
+
                 <PopoverContent>{ndata?.allergies}</PopoverContent>
               </Popover>
               <Popover>
@@ -570,10 +587,16 @@ const PatientDetails = () => {
                   </tbody>
                 </table>
                 <div className="table-actions max-lg:mx-0 max-lg:gap-3">
-                  <button className="add-btn whitespace-nowrap max-lg:py-1 max-lg:px-1" onClick={addRow}>
+                  <button
+                    className="add-btn whitespace-nowrap max-lg:py-1 max-lg:px-1"
+                    onClick={addRow}
+                  >
                     Add
                   </button>
-                  <button className="remove-btn whitespace-nowrap max-lg:py-1 max-lg:px-1" onClick={removeRow}>
+                  <button
+                    className="remove-btn whitespace-nowrap max-lg:py-1 max-lg:px-1"
+                    onClick={removeRow}
+                  >
                     Remove Last
                   </button>
                   <button
