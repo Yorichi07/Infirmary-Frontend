@@ -4,8 +4,8 @@ import React from "react";
 
 const EmergencyLayout = ({ children }: { children: React.ReactNode }) => {
   const navsetting = {
-    title: "Emergency",
-    titleLogo: Shared.Emergency,
+    title: "Emergency Details",
+    titleLogo: "/siren.png",
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: localStorage.getItem("roles"),

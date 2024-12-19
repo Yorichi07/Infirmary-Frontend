@@ -54,6 +54,10 @@ const formSchema = z
       .refine((value) => value !== undefined, {
         message: "Please select a gender",
       }),
+    designation: z
+      .string()
+      .min(3, "Designation must be at least 3 characters long")
+      .max(50, "Designation must be at most 50 characters long"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -75,11 +79,11 @@ const NewDoctor = () => {
       doctorEmail: undefined,
       gender: undefined,
       status: false,
+      designation: undefined,
     },
   });
 
   const { isValid } = form.formState;
-
   const onSubmit = async (data: any) => {
     if (isValid) {
       try {
@@ -88,7 +92,7 @@ const NewDoctor = () => {
           navigate("/admin-portal");
           return;
         }
-        const payload = { ...data, status: false };
+        const payload = { ...data, status: false }; // `designation` is automatically included from the `data` object
         await axios.post(
           "http://localhost:8081/api/admin/doctor/signup",
           payload,
@@ -99,7 +103,7 @@ const NewDoctor = () => {
           }
         );
         toast({
-          title: "Registration Successfull",
+          title: "Registration Successful",
           description: "New Doctor has been successfully registered.",
         });
         setTimeout(() => {
@@ -116,7 +120,7 @@ const NewDoctor = () => {
       }
     }
   };
-
+  
   const handleCancel = () => {
     navigate("/admin-dashboard");
   };
@@ -214,6 +218,20 @@ const NewDoctor = () => {
                   </FormItem>
                 )}
               />
+              <FormField
+                control={form.control}
+                name="designation"
+                render={({ field }) => (
+                  <FormItem className="mt-3">
+                    <FormLabel>Designation</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter designation" {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
               <FormField
                 control={form.control}
                 name="gender"

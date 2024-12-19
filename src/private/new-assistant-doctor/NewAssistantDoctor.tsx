@@ -40,6 +40,10 @@ const formSchema = z
       ),
     confirmPassword: z.string(),
     email: z.string().email("Invalid email address"),
+    designation: z
+      .string()
+      .min(3, "Designation must be at least 3 characters long")
+      .max(50, "Designation must be at most 50 characters long"),
   })
   .refine((data) => data.password === data.confirmPassword, {
     path: ["confirmPassword"],
@@ -59,6 +63,7 @@ const NewAssistantDoctor = () => {
       password: undefined,
       confirmPassword: undefined,
       email: undefined,
+      designation: undefined,
     },
   });
 
@@ -72,14 +77,14 @@ const NewAssistantDoctor = () => {
           navigate("/admin-portal");
           return;
         }
-        const payload = { ...data, status: false };
+        const payload = { ...data, status: false }; // `designation` is automatically included from the `data` object
         await axios.post("http://localhost:8081/api/admin/AD/signup", payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         toast({
-          title: "Registration Successfull",
+          title: "Registration Successful",
           description: "New Assistant Doctor has been successfully registered.",
         });
         setTimeout(() => {
@@ -189,6 +194,19 @@ const NewAssistantDoctor = () => {
                           {showConfirmPassword ? Shared.Eye : Shared.SlashEye}
                         </button>
                       </div>
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="designation"
+                render={({ field }) => (
+                  <FormItem className="mt-3">
+                    <FormLabel>Designation</FormLabel>
+                    <FormControl>
+                      <Input placeholder="Enter designation" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
