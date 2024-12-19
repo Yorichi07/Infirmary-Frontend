@@ -1,4 +1,12 @@
 import "./UserProfile.scss";
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Image } from "primereact/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -52,13 +60,23 @@ const formSchema = z.object({
     message: "Required",
   }),
 
-  allergies: z.string().refine((value) => value.trim() !== "", {
-    message: "Required",
-  }),
+  allergies: z
+    .enum(["Yes", "No"])
+    .refine((value) => value.trim() !== "", { message: "Required" }),
 
   currentAddress: z.string().refine((value) => value.trim() !== "", {
     message: "Required",
   }),
+
+  addressType: z
+    .enum([
+      "Kandoli Campus Hostel",
+      "Bidholi Campus Hostel",
+      "Guest House",
+      "Day Scholar",
+      "Other",
+    ])
+    .refine((value) => value.trim() !== "", { message: "Required" }),
 });
 
 const UserProfile = () => {
@@ -81,6 +99,7 @@ const UserProfile = () => {
       familyMedicalHistory: "",
       allergies: "",
       currentAddress: "",
+      addressType: "",
     },
   });
   const [img, setImg] = useState<string>("");
@@ -121,6 +140,7 @@ const UserProfile = () => {
         form.setValue("familyMedicalHistory", data.familyMedicalHistory || "");
         form.setValue("allergies", data.allergies || "");
         form.setValue("currentAddress", data.currentAddress || "");
+        form.setValue("addressType", data.addressType || "");
 
         setImg(data.imageUrl);
       } catch (error: any) {
@@ -160,6 +180,7 @@ const UserProfile = () => {
             );
             form.setValue("allergies", dataBackup.allergies || "");
             form.setValue("currentAddress", dataBackup.currentAddress || "");
+            form.setValue("addressType", dataBackup.addressType || "");
 
             setImg(dataBackup.imageUrl);
           } catch (backupError) {
@@ -175,7 +196,7 @@ const UserProfile = () => {
           toast({
             title: "Required!",
             description:
-              "Set Height, Weight, Family History, Medical History, Allergies, and Current Address.",
+              "Set Height, Weight, Family History, Medical History, Allergies, Address Type, and Current Address.",
           });
         } else {
           toast({
@@ -207,6 +228,7 @@ const UserProfile = () => {
             allergies: data.allergies || "",
             height: height,
             weight: weight,
+            addressType: data.addressType || "",
           },
           {
             headers: {
@@ -345,6 +367,43 @@ const UserProfile = () => {
                     />
                     <FormField
                       control={form.control}
+                      name="addressType"
+                      render={({ field }) => (
+                        <FormItem className="mt-3">
+                          <FormLabel>Address Type</FormLabel>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select address type" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectGroup className="overflow-y-scroll">
+                                <SelectItem value="Bidholi Campus Hostel">
+                                  Bidholi Campus Hostel
+                                </SelectItem>
+                                <SelectItem value="Kandoli Campus Hostel">
+                                  Kandoli Campus Hostel
+                                </SelectItem>
+                                <SelectItem value="Day Scholar">
+                                  Day Scholar
+                                </SelectItem>
+                                <SelectItem value="Guest House">
+                                  Guest House
+                                </SelectItem>
+                                <SelectItem value="Other">Other</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
                       name="currentAddress"
                       render={({ field }) => (
                         <FormItem className="mt-3">
@@ -365,12 +424,22 @@ const UserProfile = () => {
                       render={({ field }) => (
                         <FormItem className="mt-3">
                           <FormLabel>Allergies</FormLabel>
-                          <FormControl>
-                            <Textarea
-                              placeholder="Enter allergies"
-                              {...field}
-                            />
-                          </FormControl>
+                          <Select
+                            onValueChange={field.onChange}
+                            defaultValue={field.value}
+                          >
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select allergies status" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectGroup className="overflow-y-scroll">
+                                <SelectItem value="Yes">Yes</SelectItem>
+                                <SelectItem value="No">No</SelectItem>
+                              </SelectGroup>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}

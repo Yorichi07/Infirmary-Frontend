@@ -15,7 +15,7 @@ const PatientLogsLayout = ({
     role: localStorage.getItem("roles"),
   };
   return (
-    <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">
+    <div className="min-h-[100vh] max-lg:min-h-[100svh]">
       <Navbar props={navsetting} />
       {children}
       <div className="flex items-center justify-center w-full border border-black bg-white text-black min-h-[8svh] shadow-md max-lg:hidden">
