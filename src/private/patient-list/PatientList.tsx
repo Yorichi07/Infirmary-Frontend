@@ -310,16 +310,6 @@ const PatientList = () => {
             Pending
           </button>
           <button
-            onClick={() => setSelectedButton("Appointed")}
-            className={`shadow-md px-4 py-2 rounded-md w-40 ${
-              selectedButton === "Appointed"
-                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
-                : "bg-gray-300 text-black"
-            }`}
-          >
-            Appointed
-          </button>
-          <button
             onClick={() => setSelectedButton("Assigned")}
             className={`shadow-md px-4 py-2 rounded-md w-40 ${
               selectedButton === "Assigned"
@@ -329,6 +319,17 @@ const PatientList = () => {
           >
             Assigned
           </button>
+          <button
+            onClick={() => setSelectedButton("Appointed")}
+            className={`shadow-md px-4 py-2 rounded-md w-40 ${
+              selectedButton === "Appointed"
+                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
+                : "bg-gray-300 text-black"
+            }`}
+          >
+            Appointed
+          </button>
+          
         </div>
         <div className="flex space-x-2 items-center">
           {Shared.Search}
