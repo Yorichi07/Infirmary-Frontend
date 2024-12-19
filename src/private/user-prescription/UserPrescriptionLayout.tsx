@@ -4,8 +4,10 @@ import React from "react";
 
 const UserPrescriptionLayout = ({
   children,
+  prevRef
 }: {
   children: React.ReactNode;
+  prevRef: string | null;
 }) => {
   const navsetting = {
     title: "Prescription History",
@@ -13,7 +15,7 @@ const UserPrescriptionLayout = ({
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: localStorage.getItem("roles"),
-    prevRef:null
+    prevRef:prevRef
   };
   return (
     <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">
