@@ -85,7 +85,7 @@ const NewAssistantDoctor = () => {
         });
         toast({
           title: "Registration Successful",
-          description: "New Assistant Doctor has been successfully registered.",
+          description: "New Nursing Assistant has been successfully registered.",
         });
         setTimeout(() => {
           navigate("/admin-dashboard");

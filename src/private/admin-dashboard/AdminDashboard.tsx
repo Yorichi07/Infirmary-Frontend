@@ -55,7 +55,7 @@ const AdminDashboard = () => {
             onClick={() => navigate("/register-assistant-doctor")}
           >
             <p className="text-white font-semibold text-lg text-center flex-1">
-              Add New Assistant Doctor
+              Add New Nursing Assistant
             </p>
           </button>
         </div>

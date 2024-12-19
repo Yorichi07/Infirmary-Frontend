@@ -33,7 +33,7 @@ const DASHBOARD_ROUTES = {
 const ROLES = [
   { value: "doctor", label: "Doctor" },
   { value: "patient", label: "Patient" },
-  { value: "assistant_doctor", label: "Assistant Doctor" },
+  { value: "assistant_doctor", label: "Nursing Assistant" },
 ];
 
 const SignIn = () => {
@@ -280,10 +280,10 @@ const SignIn = () => {
           </div>
         </div>
       </div>
-      <div className="helpline">
+      <div className="flex items-center justify-center w-full border-t border-black bg-white text-black min-h-[8svh] max-lg:hidden">
         <b>Energy Acres, Bidholi : </b>&nbsp;+91-135-2770137, 2776053, 2776054,
         2776091 &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
-        &nbsp;+91-135-2770137, 2776053, 2776054, 2776091
+        &nbsp;+91-8171979021, 7060111775
       </div>
     </>
   );

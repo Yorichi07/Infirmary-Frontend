@@ -7,16 +7,16 @@ const AssistantDoctorDashboardLayout = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [title, setTitle] = useState("assistant doctor dashboard");
+  const [title, setTitle] = useState("nursing assistant dashboard");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1024px)");
     const handleMediaChange = (e: MediaQueryListEvent) => {
-      setTitle(e.matches ? "AD dashboard" : "assistant doctor dashboard");
+      setTitle(e.matches ? "AD dashboard" : "nursing assistant dashboard");
     };
 
     setTitle(
-      mediaQuery.matches ? "AD dashboard" : "assistant doctor dashboard"
+      mediaQuery.matches ? "AD dashboard" : "nursing assistant dashboard"
     );
 
     mediaQuery.addEventListener("change", handleMediaChange);

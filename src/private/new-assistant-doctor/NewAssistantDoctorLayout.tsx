@@ -7,16 +7,16 @@ const NewAssistantDoctorLayout = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const [title, setTitle] = useState("Register New Assistant Doctor");
+  const [title, setTitle] = useState("Register New Nursing Assistant");
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 1024px)");
     const handleMediaChange = (e: MediaQueryListEvent) => {
-      setTitle(e.matches ? "Register New AD" : "Register New Assistant Doctor");
+      setTitle(e.matches ? "Register New AD" : "Register New Nursing Assistant");
     };
 
     setTitle(
-      mediaQuery.matches ? "Register New AD" : "Register New Assistant Doctor"
+      mediaQuery.matches ? "Register New AD" : "Register New Nursing Assistant"
     );
 
     mediaQuery.addEventListener("change", handleMediaChange);

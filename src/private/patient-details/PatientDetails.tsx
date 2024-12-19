@@ -290,14 +290,16 @@ const PatientDetails = () => {
       <div className="min-h-[84svh] p-5 flex flex-col bg-[#f5f5f5] max-lg:min-h-[93svh] max-lg:p-2">
         <div className=" overflow-y-scroll p-5 max-lg:p-0">
           <div className="flex justify-between mb-5 max-lg:flex-col max-lg:items-center">
-            <img
-              className="w-[15%] border-black border-[1.5px] max-lg:w-[50%] max-lg:mb-5"
-              src={
-                ndata?.imageUrl != null
-                  ? `http://localhost:8081/${ndata?.imageUrl}`
-                  : "/default-user.jpg"
-              }
-            />
+            <div className="flex justify-center items-center w-[25%] max-lg:w-[50%] max-lg:mb-5">
+              <img
+                className="border-black border-[1.5px]"
+                src={
+                  ndata?.imageUrl != null
+                    ? `http://localhost:8081/${ndata?.imageUrl}`
+                    : "/default-user.jpg"
+                }
+              />
+            </div>
             <div className="w-full flex px-4 justify-between lg:gap-4 max-lg:flex-col">
               <div className="flex flex-col w-[50%] justify-between max-lg:gap-5 max-lg:mb-5 max-lg:w-full">
                 <div className="input-field">
@@ -395,7 +397,7 @@ const PatientDetails = () => {
                 ></textarea>
               </div>
             </div>
-            <div className="flex flex-col justify-center items-center gap-4 w-[40%] max-lg:w-[100%]">
+            <div className="flex flex-col justify-center items-center gap-4 w-[30%] max-lg:w-[100%]">
               <Popover>
                 <PopoverTrigger className="history-btn max-lg:hidden">
                   Address Type
@@ -652,10 +654,10 @@ const PatientDetails = () => {
                 </div>
               </div>
               <div className="mt-5">
-                <label className="font-medium">Dietary Recommendations:</label>
+                <label className="font-medium">Recommendations:</label>
                 <textarea
                   className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
-                  placeholder="Enter dietary recommendations here..."
+                  placeholder="Enter recommendations here..."
                   onChange={(event: any) => setDietary(event.target.value)}
                 ></textarea>
               </div>

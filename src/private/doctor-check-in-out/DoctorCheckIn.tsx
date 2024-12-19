@@ -12,7 +12,14 @@ const DoctorCheckIn = () => {
   const [time, setTime] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [doctors, setDoctors] = useState<
-    Array<{ id: number; name: string; status: string; email: string }>
+    Array<{
+      id: number;
+      name: string;
+      status: string;
+      email: string;
+      designation: string;
+      location: string;
+    }>
   >([]);
 
   const fetchDoctors = async () => {
@@ -33,6 +40,8 @@ const DoctorCheckIn = () => {
         name: doctor.name,
         status: doctor.status ? "Available" : "Not Available",
         email: doctor.doctorEmail,
+        location: doctor.location.locationName,
+        designation: doctor.designation,
       }));
       setDoctors(formattedDoctors);
     } catch (error: any) {
@@ -190,9 +199,17 @@ const DoctorCheckIn = () => {
                   key={index}
                   className="w-full bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] p-8 rounded-md flex items-center shadow-lg max-lg:p-4"
                 >
-                  <p className="text-white font-semibold text-lg w-2/3">
-                    {doctor.name}
-                  </p>
+                  <div className="flex flex-col w-[60%]">
+                    <p className="text-white font-semibold text-lg">
+                      {doctor.name}
+                    </p>
+                    <p className="text-white font-normal text-base">
+                      {doctor.designation}
+                    </p>
+                    <p className="text-white font-normal text-base">
+                      ({doctor.location})
+                    </p>
+                  </div>
                   <div className="flex w-full max-lg:w-3/5 justify-between max-lg:flex-col max-lg:gap-4">
                     <button
                       data-key={`${doctor.id}`}
@@ -203,13 +220,10 @@ const DoctorCheckIn = () => {
                           : "bg-gradient-to-r from-[#2FC800] to-[#009534] hover:brightness-110"
                       }`}
                       onClick={(event: any) => {
-                        if (doctor.status !== "Available")
-                          handleCheckIn(event);
+                        if (doctor.status !== "Available") handleCheckIn(event);
                       }}
                     >
-                      {doctor.status === "Available"
-                        ? "Available"
-                        : "Check-In"}
+                      {doctor.status === "Available" ? "Available" : "Check-In"}
                     </button>
 
                     <button
