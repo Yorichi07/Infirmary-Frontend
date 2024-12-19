@@ -13,7 +13,7 @@ const Emergency = () => {
       <div className="flex items-center justify-center">
         <img
           src="/emergencyBg.png"
-          className="w-[60%] max-lg:hidden"
+          className="w-[60%]"
           alt="emergency png"
         />
       </div>
@@ -54,7 +54,8 @@ const Emergency = () => {
           </CardHeader>
           <CardContent>
             <p>
-              Behind Kandoli Boys Hostel, Tower-1, UPES, Kandoli, Dehradun, Uttarakhand, 248007
+              Behind Kandoli Boys Hostel, Tower-1, UPES, Kandoli, Dehradun,
+              Uttarakhand, 248007
             </p>
           </CardContent>
           <CardFooter>
@@ -68,7 +69,8 @@ const Emergency = () => {
           </CardHeader>
           <CardContent>
             <p>
-            Behind Kandoli Boys Hostel, Tower-1, UPES, Kandoli, Dehradun, Uttarakhand, 248007
+              Behind Kandoli Boys Hostel, Tower-1, UPES, Kandoli, Dehradun,
+              Uttarakhand, 248007
             </p>
           </CardContent>
           <CardFooter>
