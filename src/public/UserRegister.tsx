@@ -32,6 +32,7 @@ import Shared from "@/Shared";
 
 const schoolOptions = [
   "Guest",
+  "Non_Academics",
   "SOCS",
   "SOB",
   "SOL",
@@ -45,6 +46,7 @@ const schoolOptions = [
 const bloodGroup = ["O+", "O-", "A+", "A-", "B+", "B-", "AB+", "AB-"] as const;
 
 const programOptions = {
+  Non_Academics:["Staff"],
   Guest: ["Guest"],
   SOCS: ["Faculty", "B.Tech", "M.Tech", "B.Sc", "BCA", "MCA"],
   SOB: ["Faculty", "MBA", "BBA", "B.Com(Hons)", "BBA-MBA", "B.Com-MBA(Hons)"],
@@ -73,7 +75,7 @@ const formSchema = z
         /^[a-zA-Z0-9_ ]+$/,
         "Name can only contain letters, numbers, underscores, and spaces"
       ),
-    sapID: z.string().length(9, "Invalid Sap ID"),
+    sapID: z.string().min(8,"Invalid SapID").max(9,"Invalid SapId"),
 
     password: z
       .string()
@@ -136,7 +138,7 @@ const UserRegister = () => {
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: undefined,
-      sapID: "000000000",
+      sapID: "",
       password: undefined,
       confirmPassword: undefined,
       email: undefined,
@@ -547,7 +549,7 @@ const UserRegister = () => {
                         name="emergencyContact"
                         render={({ field }) => (
                           <FormItem className="mt-3">
-                            <FormLabel>Emergency Contact</FormLabel>
+                            <FormLabel>Parent Contact Number</FormLabel>
                             <FormControl>
                               <Input
                                 placeholder="Enter your emergency contact"

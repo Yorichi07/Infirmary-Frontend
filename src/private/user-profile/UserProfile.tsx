@@ -412,7 +412,7 @@ const UserProfile = () => {
                       name="emergencyContact"
                       render={({ field }) => (
                         <FormItem className="mt-3">
-                          <FormLabel>Emergency Contact</FormLabel>
+                          <FormLabel>Parent Contact Number</FormLabel>
                           <FormControl>
                             <Input
                               placeholder="Enter emergency contact"
