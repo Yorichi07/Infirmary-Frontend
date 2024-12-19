@@ -429,7 +429,7 @@ const PatientDetails = () => {
                 <PopoverTrigger
                   className="history-btn"
                   onClick={() =>
-                    navigate(`/patient-prescription?id=${ndata?.email}`)
+                    navigate(`/patient-assigned-prescription?id=${ndata?.email}`)
                   }
                 >
                   Reports

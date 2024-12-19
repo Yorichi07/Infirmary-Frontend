@@ -110,8 +110,10 @@ const UserPrescription = () => {
                   {/* Download Report */}
                   <TableCell className="text-center">
                     <a
-                      onClick={() =>
-                        navigate(`/prescription?id=${report.reportId}`)
+                      onClick={() =>{
+                        if (localStorage.getItem('roles') === "patient")navigate(`/prescription?id=${report.reportId}`)
+                        else navigate(`/doctor-prescription?id=${report.reportId}`)
+                      }
                       }
                       download
                     >
