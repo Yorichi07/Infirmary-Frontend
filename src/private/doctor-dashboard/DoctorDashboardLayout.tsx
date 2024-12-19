@@ -9,6 +9,7 @@ const DoctorDashboardLayout = ({ children }: { children: React.ReactNode }) => {
     additionalLogo: Shared.User,
     menu: true,
     role: "doctor",
+    prevRef:null
   };
   return (
     <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">

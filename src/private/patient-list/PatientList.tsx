@@ -547,7 +547,7 @@ const PatientList = () => {
                         <div className="flex items-center gap-5 text-2xl">
                           <button
                             onClick={() =>
-                              navigate(`/prescription?id=${pat.aptId}`)
+                              navigate(`/appointed-prescription?id=${pat.aptId}`)
                             }
                           >
                             {Shared.Prescription}

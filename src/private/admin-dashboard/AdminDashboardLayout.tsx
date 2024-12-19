@@ -8,6 +8,7 @@ const AdminDashboardLayout = ({ children }: { children: React.ReactNode }) => {
     additionalLogo: Shared.User,
     menu: true,
     role: "admin",
+    prevRef:null
   };
   return (
     <>

@@ -132,7 +132,7 @@ import {
                       <TableCell className="text-center">
                         <a
                           onClick={() =>
-                            navigate(`/prescription?id=${report.reportId}`)
+                            navigate(`/previous-prescription?id=${report.reportId}`)
                           }
                           download
                         >

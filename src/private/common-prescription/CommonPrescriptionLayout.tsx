@@ -4,8 +4,10 @@ import React from "react";
 
 const CommonPrescriptionLayout = ({
   children,
+  prevRef
 }: {
   children: React.ReactNode;
+  prevRef: string | null;
 }) => {
   const navsetting = {
     title: "Prescription",
@@ -13,6 +15,7 @@ const CommonPrescriptionLayout = ({
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: localStorage.getItem("roles"),
+    prevRef:prevRef
   };
   return (
     <div className="min-h-[100svh]">

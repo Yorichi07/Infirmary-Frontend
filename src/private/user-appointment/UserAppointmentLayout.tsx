@@ -9,6 +9,7 @@ const UserAppointmentLayout = ({ children }: { children: React.ReactNode }) => {
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: localStorage.getItem("roles"),
+    prevRef:null
   };
   return (
     <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">

@@ -3,6 +3,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 const Navbar = ({
@@ -14,13 +15,19 @@ const Navbar = ({
     additionalLogo: JSX.Element | undefined;
     menu: boolean | undefined;
     role: string | null;
+    prevRef :string | null;
   };
 }) => {
   const navigate = useNavigate();
-
+  const [navPageBack,setNavPageBack] = useState("");
   const navigateTo = (path: string) => {
     navigate(path);
   };
+
+  useEffect(()=>{
+    if (props.prevRef !== null) setNavPageBack(props.prevRef)
+    else setNavPageBack(`/${props.role}-dashboard`)
+  })
 
   const handleLogout = () => {
     localStorage.clear();
@@ -85,7 +92,7 @@ const Navbar = ({
         </Popover>
       ) : (
         <Link
-          to={`/${props.role}-dashboard`}
+          to={navPageBack}
           className="text-base max-lg:text-sm flex items-center justify-end min-lg:w-[100px] w-[80px]"
         >
           {props.additionalLogo}

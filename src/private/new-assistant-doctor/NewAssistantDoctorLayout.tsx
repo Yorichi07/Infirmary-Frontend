@@ -30,6 +30,7 @@ const NewAssistantDoctorLayout = ({
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: "admin",
+    prevRef:null
   };
 
   return (

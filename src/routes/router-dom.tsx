@@ -185,11 +185,28 @@ const router = createBrowserRouter([
   {
     path: "/prescription",
     element: (
-      <CommonPrescriptionLayout>
+      <CommonPrescriptionLayout prevRef="/patient-prescription">
         <CommonPrescription />
       </CommonPrescriptionLayout>
     ),
   },
+  {
+    path: "/appointed-prescription",
+    element: (
+      <CommonPrescriptionLayout prevRef="/patient-list">
+        <CommonPrescription />
+      </CommonPrescriptionLayout>
+    ),
+  },
+  {
+    path: "/previous-prescription",
+    element: (
+      <CommonPrescriptionLayout prevRef="/patient-logs">
+        <CommonPrescription />
+      </CommonPrescriptionLayout>
+    ),
+  },
+  
   {
     path: "/token-page",
     element: (

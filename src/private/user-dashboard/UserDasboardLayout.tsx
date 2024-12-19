@@ -9,6 +9,7 @@ const UserDasboardLayout = ({ children }: { children: React.ReactNode }) => {
     additionalLogo: Shared.User,
     menu: true,
     role: "user",
+    prevRef:null
   };
   return (
     <div className="min-h-[100svh] overflow-x-hidden">

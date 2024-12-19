@@ -8,6 +8,7 @@ const NewDoctorLayout = ({ children }: { children: React.ReactNode }) => {
     additionalLogo: Shared.ArrowLeft,
     menu: false,
     role: "admin",
+    prevRef:null
   };
   return (
     <>

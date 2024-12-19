@@ -30,6 +30,7 @@ const AssistantDoctorDashboardLayout = ({
     additionalLogo: Shared.User,
     menu: true,
     role: "ad",
+    prevRef:null
   };
   return (
     <div className="h-[100vh] max-lg:min-h-[100svh] overflow-x-hidden">
