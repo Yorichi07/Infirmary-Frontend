@@ -31,7 +31,7 @@ const DoctorCheckIn = () => {
       const formattedDoctors = doctorsData.map((doctor: any) => ({
         id: doctor.doctorId,
         name: doctor.name,
-        status: doctor.status ? "checked-in" : "checked-out",
+        status: doctor.status ? "Available" : "Not Available",
         email: doctor.doctorEmail,
       }));
       setDoctors(formattedDoctors);
@@ -196,37 +196,37 @@ const DoctorCheckIn = () => {
                   <div className="flex w-full max-lg:w-3/5 justify-between max-lg:flex-col max-lg:gap-4">
                     <button
                       data-key={`${doctor.id}`}
-                      disabled={doctor.status === "checked-in"}
+                      disabled={doctor.status === "Available"}
                       className={`shadow-lg px-8 py-2 rounded-md text-white ${
-                        doctor.status === "checked-in"
+                        doctor.status === "Available"
                           ? "bg-[#8F8F8F] cursor-not-allowed"
                           : "bg-gradient-to-r from-[#2FC800] to-[#009534] hover:brightness-110"
                       }`}
                       onClick={(event: any) => {
-                        if (doctor.status !== "checked-in")
+                        if (doctor.status !== "Available")
                           handleCheckIn(event);
                       }}
                     >
-                      {doctor.status === "checked-in"
-                        ? "Checked-In"
+                      {doctor.status === "Available"
+                        ? "Available"
                         : "Check-In"}
                     </button>
 
                     <button
                       data-key={`${doctor.id}`}
-                      disabled={doctor.status === "checked-out"}
+                      disabled={doctor.status === "Not Available"}
                       className={`shadow-lg px-8 py-2 rounded-md text-white ${
-                        doctor.status === "checked-out"
+                        doctor.status === "Not Available"
                           ? "bg-[#8F8F8F] cursor-not-allowed"
                           : "bg-gradient-to-r from-[#E00000] to-[#7E0000] hover:brightness-110"
                       }`}
                       onClick={(event: any) => {
-                        if (doctor.status !== "checked-out")
+                        if (doctor.status !== "Not Available")
                           handleCheckOut(event);
                       }}
                     >
-                      {doctor.status === "checked-out"
-                        ? "Checked-Out"
+                      {doctor.status === "Not Available"
+                        ? "Not Available"
                         : "Check-Out"}
                     </button>
                   </div>

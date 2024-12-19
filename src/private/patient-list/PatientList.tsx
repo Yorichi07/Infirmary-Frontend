@@ -593,7 +593,6 @@ const PatientList = () => {
               {assignedData.length > 0 ? (
                 assignedData.map((pat, index) => (
                   <TableRow className="text-center" key={index}>
-                    <TableCell className="border">{index + 1}</TableCell>
                     <TableCell className="border whitespace-nowrap">
                       {pat.doctorName}
                     </TableCell>
@@ -601,8 +600,6 @@ const PatientList = () => {
                       {pat.patientName}
                     </TableCell>
                     <TableCell className="border">{pat.tokenNum}</TableCell>
-                    <TableCell className="border flex items-center justify-center">
-                    </TableCell>
                   </TableRow>
                 ))
               ) : (
