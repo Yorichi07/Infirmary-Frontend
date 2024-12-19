@@ -223,17 +223,13 @@ const UserAppointment = () => {
             action: <ToastAction altText="Try again">Try again</ToastAction>,
           });
         }
-      } catch (error) {
-        if (axios.isAxiosError(error) && error.response) {
-          //empty
-        } else {
-          toast({
-            title: "Error",
-            description: "Failed to submit appointment",
-            variant: "destructive",
-            action: <ToastAction altText="Try again">Try again</ToastAction>,
-          });
-        }
+      } catch (error:any) {
+        toast({
+          title: "Error",
+          description: error.response?.data?.message,
+          variant: "destructive",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
       }
     } else {
       console.error("Form Validation Errors:", form.formState.errors);

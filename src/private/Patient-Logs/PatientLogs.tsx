@@ -82,7 +82,7 @@ import {
     return (
       <>
         <Toaster />
-        <div className="h-[84svh] flex flex-col items-center max-lg:h-[93svh]">
+        <div className="min-h-[84svh] flex flex-col items-center max-lg:h-[93svh]">
           <div className="w-full p-5 flex justify-between items-center">
             <div className="flex items-center gap-2">
               <label htmlFor="date-picker" className="font-medium">

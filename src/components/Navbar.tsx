@@ -36,7 +36,7 @@ const Navbar = ({
       <img
         src="/upes-logo.jpg"
         alt="UPES Logo"
-        className="w-[100px] h-[45px] max-lg:w-[80px] max-lg:h-[35px]"
+        className="w-[100px] max-lg:w-[80px]"
       />
       <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline">
         {props.titleLogo &&

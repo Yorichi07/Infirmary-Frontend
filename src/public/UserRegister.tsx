@@ -387,7 +387,7 @@ const UserRegister = () => {
                                 <SelectValue placeholder="Select gender" />
                               </SelectTrigger>
                               <SelectContent>
-                                <SelectGroup className="h-[5rem] overflow-y-scroll">
+                                <SelectGroup className="h-[5.5rem] overflow-y-scroll">
                                   <SelectItem value="Male">Male</SelectItem>
                                   <SelectItem value="Female">Female</SelectItem>
                                   <SelectItem value="Other">Other</SelectItem>

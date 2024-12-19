@@ -157,20 +157,30 @@ const AssistantDoctorDashboard = () => {
               </button>
               <button
                 className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
-                onClick={() => navigate("/Ambulance")}
+                onClick={() => navigate("/patient-logs")}
               >
                 <p className="text-white font-semibold text-lg text-center flex-1">
-                  Ambulance Details
+                  Patient Log Book
                 </p>
               </button>
-              <button
-                className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
-                onClick={() => navigate("/Emergency")}
-              >
-                <p className="text-white font-semibold text-lg text-center flex-1">
-                  Emergency Contacts
-                </p>
-              </button>
+              <div className="flex justify-between w-full">
+                <button
+                  className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+                  onClick={() => navigate("/Ambulance")}
+                >
+                  <p className="text-white font-semibold text-lg text-center flex-1">
+                    Ambulance Details
+                  </p>
+                </button>
+                <button
+                  className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
+                  onClick={() => navigate("/Emergency")}
+                >
+                  <p className="text-white font-semibold text-lg text-center flex-1">
+                    Emergency Contacts
+                  </p>
+                </button>
+              </div>
             </div>
           </div>
         </div>
