@@ -21,6 +21,8 @@ import {
   faMagnifyingGlass,
   faEye,
   faEyeSlash,
+  faPenToSquare,
+  faXmark,
 } from "@fortawesome/free-solid-svg-icons";
 import { MdEmergency } from "react-icons/md";
 import { FaAmbulance } from "react-icons/fa";
@@ -49,6 +51,8 @@ const Shared = {
   Search: <FontAwesomeIcon icon={faMagnifyingGlass} />,
   Eye: <FontAwesomeIcon icon={faEye} />,
   SlashEye: <FontAwesomeIcon icon={faEyeSlash} />,
+  Edit: <FontAwesomeIcon icon={faPenToSquare} />,
+  Cancel: <FontAwesomeIcon icon={faXmark} />,
 };
 
 export default Shared;

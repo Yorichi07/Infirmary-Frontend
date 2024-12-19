@@ -552,7 +552,7 @@ const UserRegister = () => {
                             <FormLabel>Parent Contact Number</FormLabel>
                             <FormControl>
                               <Input
-                                placeholder="Enter your emergency contact"
+                                placeholder="Enter your parent contact number"
                                 {...field}
                               />
                             </FormControl>

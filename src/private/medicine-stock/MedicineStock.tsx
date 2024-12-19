@@ -36,6 +36,7 @@ interface Stock {
 
 const MedicineStock = () => {
   const [stocks, setStocks] = useState<Stock[]>([]);
+  const [editStock, setEditStock] = useState<Stock | null>(null);
   const { toast } = useToast();
   const [newStock, setNewStock] = useState<Stock | null>(null);
   const [loading, setLoading] = useState(true);
@@ -53,12 +54,56 @@ const MedicineStock = () => {
     }>
   >([]);
 
+  const handleEdit = (stock: Stock) => {
+    setEditStock(stock);
+  };
+
   const handleLocationChange = (value: string) => {
     const selectedLocation = locations.find(
       (loc) => loc.locationName === value
     );
     if (selectedLocation) {
       setLocation(selectedLocation.locId);
+    }
+  };
+
+  const handleSaveEdit = async () => {
+    if (editStock) {
+      try {
+        const token = localStorage.getItem("token");
+        let role = localStorage.getItem("roles");
+
+        if (role === "ad") role = role.toUpperCase();
+
+        await axios.put(
+          `http://localhost:8081/api/${role}/stock/${editStock.id}`,
+          editStock,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        setStocks((prevStocks) =>
+          prevStocks.map((stock) =>
+            stock.id === editStock.id ? editStock : stock
+          )
+        );
+        toast({
+          title: "Success",
+          description: "Stock updated successfully!",
+        });
+        setEditStock(null);
+      } catch (error: any) {
+        console.error("Error updating stock:", error);
+        toast({
+          title: "Error",
+          description:
+            error.response?.data?.message || "Failed to update stock.",
+          variant: "destructive",
+        });
+      }
     }
   };
 
@@ -235,6 +280,10 @@ const MedicineStock = () => {
     setSelectedStocks(new Set());
   };
 
+  const handleCancelEdit = () => {
+    setEditStock(null);
+  };
+
   const filteredStocks = stocks.filter(
     (stock) =>
       stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -317,21 +366,126 @@ const MedicineStock = () => {
                       {stock.batchNumber}
                     </TableCell>
                     <TableCell className="border">
-                      {stock.medicineName}
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.medicineName}
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              medicineName: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.medicineName
+                      )}
                     </TableCell>
                     <TableCell className="border">
-                      {stock.composition}
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.composition}
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              composition: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.composition
+                      )}
                     </TableCell>
-                    <TableCell className="border">{stock.quantity}</TableCell>
                     <TableCell className="border">
-                      {stock.medicineType}
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.quantity}
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              quantity: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.quantity
+                      )}
                     </TableCell>
                     <TableCell className="border">
-                      {stock.expirationDate}
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.expirationDate}
+                          type="date"
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              expirationDate: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.expirationDate
+                      )}
                     </TableCell>
-                    <TableCell className="border">{stock.company}</TableCell>
                     <TableCell className="border">
-                      {stock.location.locationName}
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.company}
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              company: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.company
+                      )}
+                    </TableCell>
+                    <TableCell className="border">
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.company}
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              company: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.company
+                      )}
+                    </TableCell>
+
+                    <TableCell className="border">
+                      {editStock && editStock.id === stock.id ? (
+                        <Select
+                          value={editStock.location?.locId || ""}
+                          onValueChange={(value) =>
+                            setEditStock({
+                              ...editStock,
+                              location:
+                                locations.find((loc) => loc.locId === value) ||
+                                editStock.location,
+                            })
+                          }
+                        >
+                          <SelectTrigger className="bg-white text-black">
+                            <SelectValue placeholder="Select a location" />
+                          </SelectTrigger>
+                          <SelectContent className="bg-white text-black">
+                            <SelectGroup>
+                              {locations.map((loc) => (
+                                <SelectItem key={loc.locId} value={loc.locId}>
+                                  {loc.locationName}
+                                </SelectItem>
+                              ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      ) : (
+                        stock.location.locationName || "N/A"
+                      )}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -436,24 +590,48 @@ const MedicineStock = () => {
               Delete
               {Shared.TrashCan}
             </button>
-            <button
-              onClick={handleSave}
-              className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
-            >
-              Save
-              {Shared.Save}
-            </button>
+            {selectedStocks.size === 1 && !editStock && (
+              <button
+                onClick={() => {
+                  const selectedStock = stocks.find(
+                    (stock) => stock.id === Array.from(selectedStocks)[0]
+                  );
+                  if (selectedStock) handleEdit(selectedStock);
+                }}
+                className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+              >
+                Edit
+                {Shared.Edit}
+              </button>
+            )}
+            {editStock && (
+              <>
+                <button
+                  onClick={handleSaveEdit}
+                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+                >
+                  Save Edit
+                  {Shared.Save}
+                </button>
+                <button
+                  onClick={handleCancelEdit}
+                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+                >
+                  Cancel
+                  {Shared.Cancel}
+                </button>
+              </>
+            )}
+            {newStock && (
+              <button
+                onClick={handleSave}
+                className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+              >
+                Save
+                {Shared.Save}
+              </button>
+            )}
           </div>
-          {/* <div className="flex items-center space-x-8">
-          <button className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md">
-            Add From Excel
-            <img src="/excel.png" alt="" className="w-6" />
-          </button>
-          <button className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md">
-            Export to Excel
-            <img src="/excel.png" alt="" className="w-6" />
-          </button>
-        </div> */}
         </div>
       </div>
     </>
