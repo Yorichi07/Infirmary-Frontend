@@ -115,7 +115,7 @@ const PatientDetails = () => {
         title: "Success",
         description: resp.data,
       });
-      navigate("/doctor-dashboard");
+      navigate(-1);
     } catch (err: any) {
       toast({
         variant: "destructive",
@@ -140,11 +140,8 @@ const PatientDetails = () => {
     const updatedRows = rows.filter(
       (_, index) => !selectedRows.includes(index)
     );
-
-    const finalRows = updatedRows.map((_,index) => index)
-    setRows(finalRows);
+    setRows(updatedRows);
     setSelectedRows([]);
-    console.log(rows)
   };
 
   useEffect(() => {
@@ -516,7 +513,7 @@ const PatientDetails = () => {
                   onChange={(event: any) => setDiagnosis(event.target.value)}
                 ></textarea>
               </div>
-              <div className="mt-5">
+              <div className="mt-5 max-lg:overflow-scroll">
                 <label className="mb-[10px] font-medium">Medicine:</label>
                 <table className="medicine-table max-lg:max-w-[95svw]">
                   <thead>
@@ -532,13 +529,6 @@ const PatientDetails = () => {
                   <tbody>
                     {rows.map((_, index) => (
                       <tr key={index}>
-                        <td className="text-center">
-                          <input
-                            type="checkbox"
-                            checked={selectedRows.includes(index)}
-                            onChange={() => toggleRowSelection(index)}
-                          />
-                        </td>
                         <td className="text-center">{index + 1}</td>
                         <td className="w-[30%]">
                           <Select
@@ -645,14 +635,7 @@ const PatientDetails = () => {
                     className="remove-btn whitespace-nowrap max-lg:py-1 max-lg:px-1"
                     onClick={removeRow}
                   >
-                    Remove Last
-                  </button>
-                  <button
-                    className="remove-btn whitespace-nowrap max-lg:py-1 max-lg:px-1"
-                    onClick={removeSelectedRows}
-                    disabled={selectedRows.length === 0}
-                  >
-                    Remove Selected
+                    Remove
                   </button>
                 </div>
               </div>
@@ -675,7 +658,7 @@ const PatientDetails = () => {
               <div className="flex flex-col items-end mt-10">
                 <span className="">{ndata?.docName}</span>
                 <span className="">{ndata?.designation}</span>
-                <div className="signature-text">Doctor</div>
+                <div className="signature-text">Doctor Name</div>
               </div>
             </div>
             <div className="flex min-w-[100%] max-lg:w-full">

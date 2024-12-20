@@ -263,7 +263,7 @@ const CommonPrescription = () => {
             />
           </div>
 
-          <div className="mt-5">
+          <div className="mt-5 max-lg:overflow-scroll">
             <label>Medicine:</label>
             <table className="medicine-table">
               <thead>
