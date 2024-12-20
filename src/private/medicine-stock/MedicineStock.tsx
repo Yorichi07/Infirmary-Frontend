@@ -75,12 +75,15 @@ const MedicineStock = () => {
 
         if (role === "ad") role = role.toUpperCase();
 
-        await axios.put(
-          `http://localhost:8081/api/${role}/stock/${editStock.id}`,
+        console.log(editStock);
+        
+        await axios.post(
+          `http://localhost:8081/api/${role}/stock/editStock`,
           editStock,
           {
             headers: {
               Authorization: `Bearer ${token}`,
+              "X-Location":editStock.location.locId
             },
           }
         );
@@ -115,7 +118,7 @@ const MedicineStock = () => {
       if (role === "ad") role = role.toUpperCase();
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/`,
+        `http://localhost:8081/api/${role}/stock/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -138,7 +141,7 @@ const MedicineStock = () => {
 
   const fetchLocations = async () => {
     try {
-      const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
+      const resp = await axios.get("http://localhost:8081/api/location/");
       if (resp.status === 200) {
         const data = resp.data;
         setLocations(data);
@@ -212,7 +215,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
+          `http://localhost:8081/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -249,7 +252,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`,
+          `http://localhost:8081/api/${role}/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -262,7 +265,7 @@ const MedicineStock = () => {
         );
         toast({
           title: "Deleted",
-          description: `Stock with batch number ${batchNumber} deleted successfully!`,
+          description: `Stock deleted successfully!`,
         });
         fetchLocations();
         fetchStocks();
@@ -270,7 +273,7 @@ const MedicineStock = () => {
         console.error("Error deleting stock:", error);
         toast({
           title: "Error",
-          description: `Failed to delete stock with batch number ${batchNumber}.`,
+          description: `Failed to delete stock.`,
           variant: "destructive",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
@@ -362,9 +365,20 @@ const MedicineStock = () => {
                         onChange={() => handleSelectStock(stock.id)}
                       />
                     </TableCell>
-                    <TableCell className="border">
-                      {stock.batchNumber}
-                    </TableCell>
+                    {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.batchNumber}
+                          type="number"
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              batchNumber: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.batchNumber
+                      )}
                     <TableCell className="border">
                       {editStock && editStock.id === stock.id ? (
                         <Input
@@ -399,6 +413,7 @@ const MedicineStock = () => {
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.quantity}
+                          type="number"
                           onChange={(e) =>
                             setEditStock({
                               ...editStock,
@@ -408,6 +423,21 @@ const MedicineStock = () => {
                         />
                       ) : (
                         stock.quantity
+                      )}
+                    </TableCell>
+                    <TableCell className="border">
+                      {editStock && editStock.id === stock.id ? (
+                        <Input
+                          value={editStock.medicineType}
+                          onChange={(e) =>
+                            setEditStock({
+                              ...editStock,
+                              medicineType: e.target.value,
+                            })
+                          }
+                        />
+                      ) : (
+                        stock.medicineType
                       )}
                     </TableCell>
                     <TableCell className="border">
@@ -424,21 +454,6 @@ const MedicineStock = () => {
                         />
                       ) : (
                         stock.expirationDate
-                      )}
-                    </TableCell>
-                    <TableCell className="border">
-                      {editStock && editStock.id === stock.id ? (
-                        <Input
-                          value={editStock.company}
-                          onChange={(e) =>
-                            setEditStock({
-                              ...editStock,
-                              company: e.target.value,
-                            })
-                          }
-                        />
-                      ) : (
-                        stock.company
                       )}
                     </TableCell>
                     <TableCell className="border">
@@ -498,6 +513,7 @@ const MedicineStock = () => {
                     <TableCell className="border">
                       <Input
                         value={newStock.batchNumber}
+                        type="number"
                         onChange={(e) => handleInputChange(e, "batchNumber")}
                         placeholder="Batch no."
                       />
@@ -519,6 +535,7 @@ const MedicineStock = () => {
                     <TableCell className="border">
                       <Input
                         value={newStock.quantity}
+                        type="number"
                         onChange={(e) => handleInputChange(e, "quantity")}
                         placeholder="Quantity"
                       />

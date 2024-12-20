@@ -19,21 +19,21 @@ import "./SignIn.scss";
 import Shared from "@/Shared";
 
 const API_URLS = {
-  patient: "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
-  doctor: "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/doctor/signin",
-  assistant_doctor: "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+  patient: "http://localhost:8081/api/auth/patient/signin",
+  doctor: "http://localhost:8081/api/auth/doctor/signin",
+  nursing_assistant: "http://localhost:8081/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
   patient: "/patient-dashboard",
   doctor: "/doctor-dashboard",
-  assistant_doctor: "/ad-dashboard",
+  nursing_assistant: "/ad-dashboard",
 };
 
 const ROLES = [
   { value: "doctor", label: "Doctor" },
   { value: "patient", label: "Patient" },
-  { value: "assistant_doctor", label: "Nursing Assistant" },
+  { value: "nursing_assistant", label: "Nursing Assistant" },
 ];
 
 const SignIn = () => {
@@ -91,7 +91,7 @@ const SignIn = () => {
 
     try {
       const headers =
-        role === "assistant_doctor"
+        role === "nursing_assistant"
           ? {
               "X-Latitude": location.latitude,
               "X-Longitude": location.longitude,
@@ -137,7 +137,7 @@ const SignIn = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
+        const resp = await axios.get("http://localhost:8081/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
@@ -169,8 +169,8 @@ const SignIn = () => {
         <div className="sign-container__right">
           <div className="sign-container__right-content">
             <img src="/upes-logo.jpg" alt="UPES Logo" />
-            <h1 className="text-2xl font-medium pb-4 whitespace-nowrap">
-              Welcome to UPES Infirmary Portal
+            <h1 className="text-[2.1rem] font-medium pb-4 whitespace-nowrap">
+              Welcome to UHS Portal
             </h1>
             <div className="sign-container__right-header">
               <p className="font-medium pb-1">Login as:</p>
@@ -198,7 +198,7 @@ const SignIn = () => {
                   </label>
                 ))}
               </div>
-              <h1>
+              <h1 className="text-nowrap">
                 <span className="capitalize">{role.replace("_", " ")}</span>{" "}
                 Sign in
               </h1>

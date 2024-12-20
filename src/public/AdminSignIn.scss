@@ -83,6 +83,12 @@
 
     &__right {
         padding:0 0.5rem;
+
+        &-header{
+          h1{
+            font-size: 1.6rem;
+          }
+        }
     }
   }
 }

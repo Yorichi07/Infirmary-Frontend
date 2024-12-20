@@ -40,11 +40,15 @@ const Navbar = ({
 
   return (
     <div className="bg-white shadow-md p-4 flex items-center justify-between h-[8svh] border-b border border-[gray] max-lg:h-[7svh]">
+      <span className="flex items-center justify-center gap-2">
+
       <img
         src="/upes-logo.jpg"
         alt="UPES Logo"
         className="w-[100px] max-lg:w-[80px]"
-      />
+        />
+      <p className="font-medium text-3xl max-lg:text-xl">UHS</p>
+        </span>
       <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline">
         {props.titleLogo &&
           (typeof props.titleLogo === "string" ? (

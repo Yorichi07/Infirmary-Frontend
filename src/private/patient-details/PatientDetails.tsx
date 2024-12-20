@@ -103,7 +103,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/prescription/submit",
+        "http://localhost:8081/api/doctor/prescription/submit",
         req,
         {
           headers: {
@@ -115,7 +115,7 @@ const PatientDetails = () => {
         title: "Success",
         description: resp.data,
       });
-      navigate(-1);
+      navigate("/doctor-dashboard");
     } catch (err: any) {
       toast({
         variant: "destructive",
@@ -140,15 +140,18 @@ const PatientDetails = () => {
     const updatedRows = rows.filter(
       (_, index) => !selectedRows.includes(index)
     );
-    setRows(updatedRows);
+
+    const finalRows = updatedRows.map((_,index) => index)
+    setRows(finalRows);
     setSelectedRows([]);
+    console.log(rows)
   };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
+          "http://localhost:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -204,7 +207,7 @@ const PatientDetails = () => {
 
       try {
         const resp = await axios.get(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/stock/available`,
+          `http://localhost:8081/api/doctor/stock/available`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -259,7 +262,7 @@ const PatientDetails = () => {
   const handleRelease = async () => {
     try {
       const resp = await axios.get(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/releasePatient",
+        "http://localhost:8081/api/doctor/releasePatient",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -295,7 +298,7 @@ const PatientDetails = () => {
                 className="border-black border-[1.5px]"
                 src={
                   ndata?.imageUrl != null
-                    ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
+                    ? `http://localhost:8081/${ndata?.imageUrl}`
                     : "/default-user.jpg"
                 }
               />

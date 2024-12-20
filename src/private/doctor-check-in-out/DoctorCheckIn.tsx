@@ -26,7 +26,7 @@ const DoctorCheckIn = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAllDoctors",
+        "http://localhost:8081/api/AD/getAllDoctors",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -40,7 +40,7 @@ const DoctorCheckIn = () => {
         name: doctor.name,
         status: doctor.status ? "Available" : "Not Available",
         email: doctor.doctorEmail,
-        location: doctor.location.locationName,
+        location: doctor.location ? doctor.location.locationName : "",
         designation: doctor.designation,
       }));
       setDoctors(formattedDoctors);
@@ -77,7 +77,7 @@ const DoctorCheckIn = () => {
         return;
       }
       if (
-        !(localStorage.getItem("latitude") || localStorage.getItem("longigute"))
+        !(localStorage.getItem("latitude") || localStorage.getItem("longitude"))
       ) {
         toast({
           variant: "destructive",
@@ -88,7 +88,7 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=true`,
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -131,7 +131,7 @@ const DoctorCheckIn = () => {
         return;
       }
       const response = await fetch(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
+        `http://localhost:8081/api/AD/setStatus/${event.target.dataset.key}?isDoctorCheckIn=false`,
         {
           headers: {
             Authorization: "Bearer " + token,

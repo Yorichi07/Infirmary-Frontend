@@ -25,7 +25,7 @@ import {
   
     const fetchData = async (date?: string) => {
       try {
-        let apiUrl = "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
+        let apiUrl = "http://localhost:8081/api/AD/getAppointmentByDate";
   
         if (date) {
           apiUrl += `?date=${date}`;
@@ -43,10 +43,16 @@ import {
           reportId: rept.appointmentId,
           patientName: rept.PatientName,
           token: rept.token,
-          downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
         }));
   
         setReports(formatData);
+        if(reports.length == 0){
+          toast({
+            title:"No Appointment Found",
+            description:"No Appointments are found for the current date"
+          })
+        }
       } catch (error: any) {
         if (
           error.response &&
