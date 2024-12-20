@@ -180,7 +180,7 @@ const CommonPrescription = () => {
             <div className="flex center">
               <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
             </div>
-            <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
+            <h2 className="font-medium text-center text-[24px]">UHS</h2>
             <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm ">
               <span>{ndata?.time}</span>
               <span className="lg:ml-2">{ndata?.date}</span>

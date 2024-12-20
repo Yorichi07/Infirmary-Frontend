@@ -434,7 +434,7 @@ const PatientDetails = () => {
                     navigate(`/patient-assigned-prescription?id=${ndata?.email}`)
                   }
                 >
-                  Reports
+                  Consultations
                 </PopoverTrigger>
               </Popover>
             </div>
