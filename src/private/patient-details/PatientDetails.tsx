@@ -26,7 +26,7 @@ const PatientDetails = () => {
   const [dietary, setDietary] = useState<string>();
   const [tests, setTests] = useState<string>();
   const [medLst, setMedLst] = useState<Record<number, string>>();
-  const [selectedRows, setSelectedRows] = useState<number[]>([]);
+  // const [selectedRows, setSelectedRows] = useState<number[]>([]);
   const [rows, setRows] = useState([1]);
   const [ndata, setNdata] = useState<{
     name: string;
@@ -128,21 +128,21 @@ const PatientDetails = () => {
     }
   };
 
-  const toggleRowSelection = (rowIndex: number) => {
-    setSelectedRows((prevSelected) =>
-      prevSelected.includes(rowIndex)
-        ? prevSelected.filter((index) => index !== rowIndex)
-        : [...prevSelected, rowIndex]
-    );
-  };
+  // const toggleRowSelection = (rowIndex: number) => {
+  //   setSelectedRows((prevSelected) =>
+  //     prevSelected.includes(rowIndex)
+  //       ? prevSelected.filter((index) => index !== rowIndex)
+  //       : [...prevSelected, rowIndex]
+  //   );
+  // };
 
-  const removeSelectedRows = () => {
-    const updatedRows = rows.filter(
-      (_, index) => !selectedRows.includes(index)
-    );
-    setRows(updatedRows);
-    setSelectedRows([]);
-  };
+  // const removeSelectedRows = () => {
+  //   const updatedRows = rows.filter(
+  //     (_, index) => !selectedRows.includes(index)
+  //   );
+  //   setRows(updatedRows);
+  //   setSelectedRows([]);
+  // };
 
   useEffect(() => {
     const fetchData = async () => {

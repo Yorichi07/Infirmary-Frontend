@@ -53,14 +53,14 @@ const SignIn = () => {
     Array<{ locationName: string; latitude: string; longitude: string }>
   >([]);
 
-  const getRoleDisplayName = (role: string) => {
-    const roleMapping: { [key: string]: string } = {
-      doctor: "Doctor",
-      patient: "Patient",
-      assistant_doctor: "Nursing Assistant",
-    };
-    return roleMapping[role] || role.replace("_", " ");
-  };
+  // const getRoleDisplayName = (role: string) => {
+  //   const roleMapping: { [key: string]: string } = {
+  //     doctor: "Doctor",
+  //     patient: "Patient",
+  //     assistant_doctor: "Nursing Assistant",
+  //   };
+  //   return roleMapping[role] || role.replace("_", " ");
+  // };
 
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
