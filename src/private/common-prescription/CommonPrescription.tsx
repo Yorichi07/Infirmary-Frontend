@@ -8,7 +8,25 @@ import { ToastAction } from "@/components/ui/toast";
 
 const CommonPrescription = () => {
   const { toast } = useToast();
-  const [ndata, setNdata] = useState({
+  const [ndata, setNdata] = useState<{
+    name: string;
+    id: string;
+    age: number;
+    course: string;
+    date: string;
+    time: string;
+    designation: string;
+    residenceType: string;
+    sex: string;
+    meds: Array<{
+      name: string;
+      dosageMorning: string;
+      dosageAfternoon: string;
+      dosageEvening: string;
+      duration: string;
+      suggestion: string;
+    }>;
+  }>({
     name: "",
     id: "",
     age: 0,
@@ -59,7 +77,7 @@ const CommonPrescription = () => {
         const { prescription } = data;
         const patient = prescription?.patient || {};
 
-        const medsData = prescription.meds.map((med) => ({
+        const medsData = prescription.meds.map((med:any) => ({
           name: med.medicine.medicineName,
           dosageMorning: med.dosageMorning || "0",
           dosageAfternoon: med.dosageAfternoon || "0",
@@ -92,7 +110,7 @@ const CommonPrescription = () => {
           title: "Data Loaded Successfully",
           description: "Prescription details have been fetched.",
         });
-      } catch (error) {
+      } catch (error:any) {
         toast({
           variant: "destructive",
           title: "Error Fetching Data",
