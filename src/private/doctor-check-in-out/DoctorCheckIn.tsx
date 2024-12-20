@@ -164,13 +164,15 @@ const DoctorCheckIn = () => {
     }
   };
 
-  const formatTime = (date: Date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
-    const minutes = date.getMinutes().toString().padStart(2, "0");
-    const seconds = date.getSeconds().toString().padStart(2, "0");
-    const isAM = Number(hours) >= 12 ? "PM" : "AM";
-    return `${hours}:${minutes}:${seconds} ${isAM}`;
-  };
+const formatTime = (date: Date) => {
+  const hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, "0");
+  const seconds = date.getSeconds().toString().padStart(2, "0");
+  const period = hours >= 12 ? "PM" : "AM";
+  const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+  return `${formattedHours}:${minutes}:${seconds} ${period}`;
+};
+
 
   return (
     <>
@@ -192,7 +194,7 @@ const DoctorCheckIn = () => {
               />
             </div>
           </div>
-          <div className="w-full px-14 max-lg:px-0 max-lg:min-w-[98svw]">
+          <div className="w-full px-8 max-lg:px-0 max-lg:min-w-[98svw]">
             <div className="w-full flex flex-col space-y-2 p-4 max-lg:p-1 bg-black rounded-lg bg-opacity-10 shadow-lg">
               {doctors.map((doctor, index) => (
                 <div

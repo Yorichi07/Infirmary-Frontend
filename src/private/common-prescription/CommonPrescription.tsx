@@ -13,6 +13,10 @@ const CommonPrescription = () => {
     id: string;
     age: number;
     course: string;
+    date: string;
+    time: string;
+    designation: string;
+    residenceType: string;
     sex: string;
     meds: Array<{
       name: string;
@@ -28,6 +32,10 @@ const CommonPrescription = () => {
     age: 0,
     course: "",
     sex: "",
+    date: "",
+    designation: "",
+    time: "",
+    residenceType: "",
     meds: [],
   });
 
@@ -38,70 +46,80 @@ const CommonPrescription = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      const token = localStorage.getItem("token");
-      const role = localStorage.getItem("roles");
-
-      const url = window.location.search;
-      const val = url.substring(url.indexOf("?") + 4);
-
-      const apiUrl =
-        role === "doctor"
-          ? `http://localhost:8081/api/doctor/getPrescription/${val}`
-          : role === "ad"
-          ? `http://localhost:8081/api/AD/getPrescription/${val}`
-          : `http://localhost:8081/api/patient/getPrescription/${val}`;
-
-      if (apiUrl) {
-        try {
-          const response = await axios.get(apiUrl, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          });
-
-          const data = response.data.prescription;
-          const patientData = data.patient;
-
-          const medsData = data.meds.map((med: any) => ({
-            name: med.medicine.medicineName,
-            dosageMorning: med.dosageMorning,
-            dosageAfternoon: med.dosageAfternoon,
-            dosageEvening: med.dosageEvening,
-            duration: med.duration,
-            suggestion: med.suggestion,
-          }));
-
-          setNdata({
-            name: patientData.name,
-            id: patientData.sapId || patientData.phoneNumber,
-            age:
-              new Date().getFullYear() -
-              new Date(patientData.dateOfBirth).getFullYear(),
-            course: patientData.program,
-            sex: patientData.gender,
-            meds: medsData,
-          });
-
-          setDoctorName(data.doctor.name);
-          setDiagnosis(data.diagnosis);
-          setDietaryRemarks(data.dietaryRemarks);
-          setTestNeeded(data.testNeeded);
-
-          toast({
-            title: "Data Loaded Successfully",
-            description: "Prescription details have been fetched.",
-          });
-        } catch (error: any) {
+      try {
+        const token = localStorage.getItem("token");
+        if (!token) {
           toast({
             variant: "destructive",
-            title: "Error Fetching Data",
-            description:
-              error.response?.data?.message ||
-              "Error occurred while fetching prescription data.",
-            action: <ToastAction altText="Try again">Try again</ToastAction>,
+            title: "Authentication Error",
+            description: "User token is missing. Please log in again.",
           });
-          console.error("Error fetching prescription data:", error);
+          return;
         }
+
+        const role = localStorage.getItem("roles");
+        const urlParam = new URLSearchParams(window.location.search).get("id");
+        if (!urlParam) return;
+
+        const apiUrl =
+          role === "doctor"
+            ? `http://localhost:8081/api/doctor/getPrescription/${urlParam}`
+            : role === "ad"
+            ? `http://localhost:8081/api/AD/getPrescription/${urlParam}`
+            : `http://localhost:8081/api/patient/getPrescription/${urlParam}`;
+
+        const { data } = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const { prescription } = data;
+        const patient = prescription?.patient || {};
+
+        const medsData = prescription.meds.map((med:any) => ({
+          name: med.medicine.medicineName,
+          dosageMorning: med.dosageMorning || "0",
+          dosageAfternoon: med.dosageAfternoon || "0",
+          dosageEvening: med.dosageEvening || "0",
+          duration: med.duration || "0",
+          suggestion: med.suggestion || "",
+        }));
+
+        setNdata({
+          name: patient.name || "",
+          id: patient.sapId || patient.phoneNumber || "",
+          age:
+            new Date().getFullYear() -
+            new Date(patient.dateOfBirth).getFullYear(),
+          course: patient.program || "",
+          sex: patient.gender || "",
+          date: data.date || "",
+          time: data.time || "",
+          residenceType: data.residenceType || "",
+          designation: data.doctor?.designation || "",
+          meds: medsData,
+        });
+
+        setDoctorName(prescription.doctor?.name || "");
+        setDiagnosis(prescription.diagnosis || "");
+        setDietaryRemarks(prescription.dietaryRemarks || "");
+        setTestNeeded(prescription.testNeeded || "");
+
+        toast({
+          title: "Data Loaded Successfully",
+          description: "Prescription details have been fetched.",
+        });
+      } catch (error:any) {
+        toast({
+          variant: "destructive",
+          title: "Error Fetching Data",
+          description:
+            error.response?.data?.message ||
+            "Error occurred while fetching prescription data.",
+          action: <ToastAction altText="Try again">Try again</ToastAction>,
+        });
+        console.error("Error fetching prescription data:", error);
       }
     };
 
@@ -114,15 +132,9 @@ const CommonPrescription = () => {
 
     try {
       const pdf = new jsPDF("p", "mm", "a4");
-      const pageHeight = pdf.internal.pageSize.height;
-      const pageWidth = pdf.internal.pageSize.width;
-
-      const canvas = await html2canvas(content, {
-        scale: 2,
-      });
-
+      const canvas = await html2canvas(content, { scale: 2 });
       const imgData = canvas.toDataURL("image/png");
-      const imgWidth = pageWidth;
+      const imgWidth = pdf.internal.pageSize.width;
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       let position = 0;
@@ -134,12 +146,10 @@ const CommonPrescription = () => {
           0,
           position > 0 ? 10 : 0,
           imgWidth,
-          imgHeight - position > pageHeight ? pageHeight : imgHeight - position
+          imgHeight
         );
-        position += pageHeight;
-        if (position < imgHeight) {
-          pdf.addPage();
-        }
+        position += pdf.internal.pageSize.height;
+        if (position < imgHeight) pdf.addPage();
       }
 
       pdf.save("prescription.pdf");
@@ -171,7 +181,10 @@ const CommonPrescription = () => {
               <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
             </div>
             <h2 className="font-medium text-center text-[24px]">INFIRMARY</h2>
-            <div className="text-[18px]">{new Date().toLocaleDateString()}</div>
+            <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm ">
+              <span>{ndata?.time}</span>
+              <span className="lg:ml-2">{ndata?.date}</span>
+            </div>
           </div>
 
           <hr className="border border-black my-[10px]" />
@@ -217,12 +230,21 @@ const CommonPrescription = () => {
                   />
                 </div>
               </div>
-              <div>
+              <div className="flex flex-col gap-4">
                 <div className="flex items-center justify-center gap-[10px]">
                   <label className="font-medium mr-auto">Sex:</label>
                   <input
                     type="text"
                     value={ndata?.sex}
+                    className="info-input"
+                    readOnly
+                  />
+                </div>
+                <div className="flex items-center justify-center gap-[10px]">
+                  <label className="font-medium mr-auto">Residence Type:</label>
+                  <input
+                    type="text"
+                    value={ndata?.residenceType}
                     className="info-input"
                     readOnly
                   />
@@ -329,7 +351,7 @@ const CommonPrescription = () => {
           </div>
 
           <div className="mt-5">
-            <label>Dietary Recommendations:</label>
+            <label>Recommendations:</label>
             <textarea
               className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
               value={dietaryRemarks}
@@ -348,7 +370,8 @@ const CommonPrescription = () => {
 
           <div className="flex flex-col items-end mt-10">
             <span className="">{doctorName}</span>
-            <div className="signature-text">Doctor Name</div>
+            <span className="">{ndata?.designation}</span>
+            <div className="signature-text">Doctor</div>
           </div>
         </div>
         <button

@@ -74,11 +74,12 @@ const AssistantDoctorDashboard = () => {
   };
 
   const formatTime = (date: Date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
+    const hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-    const isAM = Number(hours) > 12 ? "PM" : "AM";
-    return `${hours}:${minutes}:${seconds} ${isAM}`;
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+    return `${formattedHours}:${minutes}:${seconds} ${period}`;
   };
 
   useEffect(() => {
@@ -129,8 +130,8 @@ const AssistantDoctorDashboard = () => {
               />
             </div>
           </div>
-          <div className="w-full px-14 max-lg:px-8">
-            <div className="w-full flex flex-col px-10 max-lg:px-0 space-y-10 max-lg:py-2">
+          <div className="w-full pl-14 max-lg:px-8">
+            <div className="w-full flex flex-col max-lg:px-0 space-y-10 max-lg:py-2">
               <button
                 className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
                 onClick={() => navigate("/doctor-check-in-out")}
@@ -163,12 +164,12 @@ const AssistantDoctorDashboard = () => {
                   Patient Log Book
                 </p>
               </button>
-              <div className="flex justify-between w-full">
+              <div className="flex justify-between w-full gap-4 max-lg:flex-col max-lg:space-y-5">
                 <button
                   className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
                   onClick={() => navigate("/Ambulance")}
                 >
-                  <p className="text-white font-semibold text-lg text-center flex-1">
+                  <p className="text-white font-semibold text-lg text-center flex-1 whitespace-nowrap">
                     Ambulance Details
                   </p>
                 </button>
@@ -176,7 +177,7 @@ const AssistantDoctorDashboard = () => {
                   className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
                   onClick={() => navigate("/Emergency")}
                 >
-                  <p className="text-white font-semibold text-lg text-center flex-1">
+                  <p className="text-white font-semibold text-lg text-center flex-1 whitespace-nowrap">
                     Emergency Contacts
                   </p>
                 </button>

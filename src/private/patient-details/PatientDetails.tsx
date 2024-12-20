@@ -675,7 +675,7 @@ const PatientDetails = () => {
               <div className="flex flex-col items-end mt-10">
                 <span className="">{ndata?.docName}</span>
                 <span className="">{ndata?.designation}</span>
-                <div className="signature-text">Doctor Name</div>
+                <div className="signature-text">Doctor</div>
               </div>
             </div>
             <div className="flex min-w-[100%] max-lg:w-full">

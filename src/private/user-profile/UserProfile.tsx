@@ -72,8 +72,8 @@ const formSchema = z.object({
     .enum([
       "Kandoli Campus Hostel",
       "Bidholi Campus Hostel",
-      "Guest House Bidholi",
-      "Guest House Kandoli",
+      "Guest House (Bidholi)",
+      "Guest House (Kandoli)",
       "Day Scholar",
       "Other",
     ])
@@ -373,8 +373,11 @@ const UserProfile = () => {
                         <FormItem className="mt-3">
                           <FormLabel>Residence Type</FormLabel>
                           <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              form.setValue(field.name, value);
+                            }}
                           >
                             <FormControl>
                               <SelectTrigger>
@@ -382,7 +385,7 @@ const UserProfile = () => {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectGroup className="overflow-y-scroll">
+                              <SelectGroup className="h-[8rem] overflow-y-scroll">
                                 <SelectItem value="Bidholi Campus Hostel">
                                   Bidholi Campus Hostel
                                 </SelectItem>
@@ -392,8 +395,11 @@ const UserProfile = () => {
                                 <SelectItem value="Day Scholar">
                                   Day Scholar
                                 </SelectItem>
-                                <SelectItem value="Guest House">
-                                  Guest House
+                                <SelectItem value="Guest House (Bidholi)">
+                                  Guest House (Bidholi)
+                                </SelectItem>
+                                <SelectItem value="Guest House (Kandoli)">
+                                  Guest House (Kandoli)
                                 </SelectItem>
                                 <SelectItem value="Other">Other</SelectItem>
                               </SelectGroup>
@@ -403,6 +409,7 @@ const UserProfile = () => {
                         </FormItem>
                       )}
                     />
+
                     <FormField
                       control={form.control}
                       name="currentAddress"
@@ -426,8 +433,11 @@ const UserProfile = () => {
                         <FormItem className="mt-3">
                           <FormLabel>Allergies</FormLabel>
                           <Select
-                            onValueChange={field.onChange}
-                            defaultValue={field.value}
+                            value={field.value}
+                            onValueChange={(value) => {
+                              field.onChange(value);
+                              form.setValue(field.name, value);
+                            }}
                           >
                             <FormControl>
                               <SelectTrigger>

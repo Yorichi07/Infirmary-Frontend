@@ -14,12 +14,20 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@/components/ui/toast";
+import { Calendar } from "@/components/ui/calendar";
 
 const UserPrescription = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [time, setTime] = useState<Date>(new Date());
+  const [date, setDate] = useState<Date | undefined>(new Date());
   const [reports, setReports] = useState<
-    Array<{ reportId: string; date: string; token:string; downloadLink: string }>
+    Array<{
+      reportId: string;
+      date: string;
+      token: string;
+      downloadLink: string;
+    }>
   >([]);
 
   useEffect(() => {
@@ -47,7 +55,7 @@ const UserPrescription = () => {
         const formatData = response.map((rept: any) => ({
           reportId: rept.appointmentId,
           date: rept.date,
-          token:rept.token,
+          token: rept.token,
           downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
         }));
 
@@ -79,17 +87,52 @@ const UserPrescription = () => {
     fetchData();
   }, []);
 
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  const formatTime = (date: Date) => {
+    const hours = date.getHours();
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    const seconds = date.getSeconds().toString().padStart(2, "0");
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+    return `${formattedHours}:${minutes}:${seconds} ${period}`;
+  };
+
   return (
     <>
       <Toaster />
       <div className="h-[84svh] flex justify-center max-lg:h-[93svh]">
-        <img src="/prescription.jpg" className="w-[55%] max-lg:hidden" />
+        <div className="flex flex-col gap-4 w-3/4 justify-center items-center max-lg:hidden">
+          <div className="flex items-center justify-center p-5 max-lg:p-5 bg-gray-800 rounded-lg shadow-lg my-5">
+            <p className="text-4xl font-bold text-white drop-shadow-lg">
+              {formatTime(time)}
+            </p>
+          </div>
+          <div>
+            <Calendar
+              mode="single"
+              selected={date}
+              onSelect={setDate}
+              className="rounded-md border bg-white shadow-lg max-lg:hidden"
+            />
+          </div>
+        </div>
         <div className="w-[100%] overflow-y-scroll p-5">
           <Table className="border">
             <TableCaption>A list of your recent reports</TableCaption>
             <TableHeader>
               <TableRow>
-                <TableHead className="w-[33%] text-center">Token Number</TableHead>
+                <TableHead className="w-[33%] text-center">
+                  Token Number
+                </TableHead>
                 <TableHead className="w-[33%] text-center">Date</TableHead>
                 <TableHead className="text-center whitespace-nowrap">
                   Download Report
@@ -110,11 +153,14 @@ const UserPrescription = () => {
                   {/* Download Report */}
                   <TableCell className="text-center">
                     <a
-                      onClick={() =>{
-                        if (localStorage.getItem('roles') === "patient")navigate(`/prescription?id=${report.reportId}`)
-                        else navigate(`/doctor-prescription?id=${report.reportId}`)
-                      }
-                      }
+                      onClick={() => {
+                        if (localStorage.getItem("roles") === "patient")
+                          navigate(`/prescription?id=${report.reportId}`);
+                        else
+                          navigate(
+                            `/doctor-prescription?id=${report.reportId}`
+                          );
+                      }}
                       download
                     >
                       {Shared.Download}

@@ -53,6 +53,15 @@ const SignIn = () => {
     Array<{ locationName: string; latitude: string; longitude: string }>
   >([]);
 
+  const getRoleDisplayName = (role: string) => {
+    const roleMapping: { [key: string]: string } = {
+      doctor: "Doctor",
+      patient: "Patient",
+      assistant_doctor: "Nursing Assistant",
+    };
+    return roleMapping[role] || role.replace("_", " ");
+  };
+
   const onInputChange: ChangeEventHandler<HTMLInputElement> = (e) => {
     const { id, value } = e.target;
     setInput((prev) => ({ ...prev, [id]: value }));
@@ -198,7 +207,7 @@ const SignIn = () => {
                   </label>
                 ))}
               </div>
-              <h1 className="text-nowrap">
+              <h1>
                 <span className="capitalize">{role.replace("_", " ")}</span>{" "}
                 Sign in
               </h1>
@@ -281,9 +290,9 @@ const SignIn = () => {
         </div>
       </div>
       <div className="flex items-center justify-center w-full border-t border-black bg-white text-black min-h-[8svh] max-lg:hidden">
-        <b>Energy Acres, Bidholi : </b>&nbsp;+91-135-2770137, 2776053, 2776054,
-        2776091 &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
-        &nbsp;+91-8171979021, 7060111775
+        <b>Energy Acres, Bidholi : </b>&nbsp;+91-7500201816, +91-8171323285
+        &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
+        &nbsp;+91-8171979021, +91-7060111775
       </div>
     </>
   );
