@@ -115,7 +115,7 @@ const PatientDetails = () => {
         title: "Success",
         description: resp.data,
       });
-      navigate(-1);
+      navigate("/doctor-dashboard");
     } catch (err: any) {
       toast({
         variant: "destructive",
