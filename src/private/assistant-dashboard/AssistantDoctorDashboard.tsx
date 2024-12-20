@@ -32,7 +32,7 @@ const AssistantDoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/total-patient-count",
+        "http://localhost:8081/api/AD/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -74,11 +74,12 @@ const AssistantDoctorDashboard = () => {
   };
 
   const formatTime = (date: Date) => {
-    const hours = date.getHours().toString().padStart(2, "0");
+    const hours = date.getHours();
     const minutes = date.getMinutes().toString().padStart(2, "0");
     const seconds = date.getSeconds().toString().padStart(2, "0");
-    const isAM = Number(hours) > 12 ? "PM" : "AM";
-    return `${hours}:${minutes}:${seconds} ${isAM}`;
+    const period = hours >= 12 ? "PM" : "AM";
+    const formattedHours = (hours % 12 || 12).toString().padStart(2, "0");
+    return `${formattedHours}:${minutes}:${seconds} ${period}`;
   };
 
   useEffect(() => {
@@ -163,7 +164,7 @@ const AssistantDoctorDashboard = () => {
                   Patient Log Book
                 </p>
               </button>
-              <div className="flex justify-between w-full gap-4">
+              <div className="flex justify-between w-full gap-4 max-lg:flex-col max-lg:space-y-5">
                 <button
                   className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
                   onClick={() => navigate("/Ambulance")}

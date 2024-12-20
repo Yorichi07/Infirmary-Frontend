@@ -22,7 +22,7 @@ const AdminSignIn = () => {
   };
 
   const handleSignIn = async () => {
-    const apiUrl = "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/admin/signin";
+    const apiUrl = "http://localhost:8081/api/auth/admin/signin";
     const dashboardRoute = "/admin-dashboard";
 
     try {
@@ -119,9 +119,9 @@ const AdminSignIn = () => {
         </div>
       </div>
       <div className="flex items-center justify-center w-full border-t border-black bg-white text-black min-h-[8svh] max-lg:hidden">
-        <b>Energy Acres, Bidholi : </b>&nbsp;+91-135-2770137, 2776053, 2776054,
-        2776091 &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
-        &nbsp;+91-8171979021, 7060111775
+        <b>Energy Acres, Bidholi : </b>&nbsp;+91-7500201816, +91-8171323285
+        &nbsp; | &nbsp; <b>Knowledge Acres, Kandoli : </b>
+        &nbsp;+91-8171979021, +91-7060111775
       </div>
     </>
   );
