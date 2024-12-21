@@ -46,7 +46,7 @@ const formSchema = z.object({
 
   weight: z
     .string()
-    .regex(/^\d*(\.\d+)?$/, "Height must be a numeric value")
+    .regex(/^\d*(\.\d+)?$/, "Weight must be a numeric value")
     .refine((value) => value.trim() !== "", { message: "Required" })
     .refine((value) => parseInt(value) >= 1 && parseInt(value) <= 500, {
       message: "Weight must be between 1 and 500 kg",

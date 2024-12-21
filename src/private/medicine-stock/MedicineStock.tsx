@@ -23,7 +23,7 @@ import {
 } from "@/components/ui/select";
 
 interface Stock {
-  id:string,
+  id: string;
   location: any;
   batchNumber: number | string;
   medicineName: string;
@@ -76,14 +76,14 @@ const MedicineStock = () => {
         if (role === "ad") role = role.toUpperCase();
 
         console.log(editStock);
-        
+
         await axios.post(
           `http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/${role}/stock/editStock`,
           editStock,
           {
             headers: {
               Authorization: `Bearer ${token}`,
-              "X-Location":editStock.location.locId
+              "X-Location": editStock.location.locId,
             },
           }
         );
@@ -170,7 +170,7 @@ const MedicineStock = () => {
 
   const handleAddNewRow = () => {
     setNewStock({
-      id:"",
+      id: "",
       batchNumber: "",
       medicineName: "",
       composition: "",
@@ -194,7 +194,15 @@ const MedicineStock = () => {
     }
   };
 
-  const formatExpirationDate = (dateString: string) => {
+  const formatExpirationDateForDisplay = (dateString: string): string => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, "0");
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const year = date.getFullYear();
+    return `${day}/${month}/${year}`;
+  };
+
+  const formatExpirationDateForSave = (dateString: string) => {
     const month = dateString.split("/");
     return month.join("-");
   };
@@ -209,7 +217,7 @@ const MedicineStock = () => {
 
         const formattedNewStock = {
           ...newStock,
-          expirationDate: formatExpirationDate(
+          expirationDate: formatExpirationDateForSave(
             newStock.expirationDate as string
           ),
         };
@@ -231,11 +239,14 @@ const MedicineStock = () => {
         });
         fetchLocations();
         fetchStocks();
-      } catch (error:any) {
+      } catch (error: any) {
         console.error("Error adding new stock:", error);
         toast({
           title: "Error",
-          description: error.response?.data?.messsage,
+          description:
+            error.response?.data?.messsage ||
+            error.response?.data?.details ||
+            "Error adding new stock",
           variant: "destructive",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
@@ -283,7 +294,8 @@ const MedicineStock = () => {
     setSelectedStocks(new Set());
   };
 
-  const handleCancelEdit = () => {
+  const handleCancel = () => {
+    setNewStock(null);
     setEditStock(null);
   };
 
@@ -326,31 +338,31 @@ const MedicineStock = () => {
             <Table className="bg-white rounded-md">
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[100px] border text-black font-bold text-center">
+                  <TableHead className="w-[5%] border text-black font-bold text-center">
                     Select
                   </TableHead>
-                  <TableHead className="w-[100px] border text-black font-bold text-center whitespace-nowrap">
+                  <TableHead className="w-[8%] border text-black font-bold text-center whitespace-nowrap">
                     Batch no.
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center">
+                  <TableHead className="w-[15%] border text-black font-bold text-center">
                     Medicine
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center">
+                  <TableHead className="w-[15%] border text-black font-bold text-center">
                     Composition
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center">
+                  <TableHead className="w-[8%] border text-black font-bold text-center">
                     Quantity
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center">
+                  <TableHead className="w-[10%] border text-black font-bold text-center">
                     Type
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center whitespace-nowrap">
+                  <TableHead className="w-[10%] border text-black font-bold text-center whitespace-nowrap">
                     Expiration Date
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center">
+                  <TableHead className="w-[14%] border text-black font-bold text-center">
                     Company
                   </TableHead>
-                  <TableHead className="border text-black font-bold text-center">
+                  <TableHead className="w-[15%] border text-black font-bold text-center">
                     Location
                   </TableHead>
                 </TableRow>
@@ -358,7 +370,7 @@ const MedicineStock = () => {
               <TableBody>
                 {filteredStocks.map((stock) => (
                   <TableRow key={stock.id} className="text-center">
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <input
                         type="checkbox"
                         checked={selectedStocks.has(stock.id)}
@@ -366,6 +378,7 @@ const MedicineStock = () => {
                       />
                     </TableCell>
                     {editStock && editStock.id === stock.id ? (
+                      <TableCell className="border whitespace-nowrap">
                         <Input
                           value={editStock.batchNumber}
                           type="number"
@@ -376,10 +389,13 @@ const MedicineStock = () => {
                             })
                           }
                         />
-                      ) : (
-                        stock.batchNumber
-                      )}
-                    <TableCell className="border">
+                      </TableCell>
+                    ) : (
+                      <TableCell className="border whitespace-nowrap">
+                        {stock.batchNumber}
+                      </TableCell>
+                    )}
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.medicineName}
@@ -394,7 +410,7 @@ const MedicineStock = () => {
                         stock.medicineName
                       )}
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.composition}
@@ -409,7 +425,7 @@ const MedicineStock = () => {
                         stock.composition
                       )}
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.quantity}
@@ -425,7 +441,7 @@ const MedicineStock = () => {
                         stock.quantity
                       )}
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.medicineType}
@@ -440,7 +456,7 @@ const MedicineStock = () => {
                         stock.medicineType
                       )}
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.expirationDate}
@@ -453,10 +469,10 @@ const MedicineStock = () => {
                           }
                         />
                       ) : (
-                        stock.expirationDate
+                        formatExpirationDateForDisplay(stock.expirationDate)
                       )}
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Input
                           value={editStock.company}
@@ -472,7 +488,7 @@ const MedicineStock = () => {
                       )}
                     </TableCell>
 
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       {editStock && editStock.id === stock.id ? (
                         <Select
                           value={editStock.location?.locId || ""}
@@ -507,62 +523,55 @@ const MedicineStock = () => {
 
                 {newStock && (
                   <TableRow className="text-center">
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <input type="checkbox" disabled />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         value={newStock.batchNumber}
                         type="number"
                         onChange={(e) => handleInputChange(e, "batchNumber")}
-                        placeholder="Batch no."
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         value={newStock.medicineName}
                         onChange={(e) => handleInputChange(e, "medicineName")}
-                        placeholder="Medicine name"
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         value={newStock.composition}
                         onChange={(e) => handleInputChange(e, "composition")}
-                        placeholder="Composition"
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         value={newStock.quantity}
                         type="number"
                         onChange={(e) => handleInputChange(e, "quantity")}
-                        placeholder="Quantity"
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         value={newStock.medicineType}
                         onChange={(e) => handleInputChange(e, "medicineType")}
-                        placeholder="Type"
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         type="date"
                         value={newStock.expirationDate}
                         onChange={(e) => handleInputChange(e, "expirationDate")}
-                        placeholder="Expiration date"
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Input
                         value={newStock.company}
                         onChange={(e) => handleInputChange(e, "company")}
-                        placeholder="Company"
                       />
                     </TableCell>
-                    <TableCell className="border">
+                    <TableCell className="border whitespace-nowrap">
                       <Select onValueChange={handleLocationChange}>
                         <SelectTrigger className="bg-white text-black">
                           <SelectValue placeholder="Select a location" />
@@ -592,22 +601,26 @@ const MedicineStock = () => {
           )}
         </div>
         <div className="flex items-center max-lg:justify-center">
-          <div className="flex items-center space-x-8">
-            <button
-              onClick={handleAddNewRow}
-              className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
-            >
-              Add
-              {Shared.SquarePlus}
-            </button>
-            <button
-              className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
-              onClick={handleDelete}
-            >
-              Delete
-              {Shared.TrashCan}
-            </button>
-            {selectedStocks.size === 1 && !editStock && (
+          <div className="flex items-center gap-4 max-lg:gap-2">
+            {selectedStocks.size === 0 && !editStock && !newStock && (
+              <button
+                onClick={handleAddNewRow}
+                className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+              >
+                Add
+                {Shared.SquarePlus}
+              </button>
+            )}
+            {selectedStocks.size > 0 && !newStock && !editStock && (
+              <button
+                className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+                onClick={handleDelete}
+              >
+                Delete
+                {Shared.TrashCan}
+              </button>
+            )}
+            {selectedStocks.size === 1 && !editStock && !newStock && (
               <button
                 onClick={() => {
                   const selectedStock = stocks.find(
@@ -627,11 +640,11 @@ const MedicineStock = () => {
                   onClick={handleSaveEdit}
                   className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
                 >
-                  Save Edit
+                  Save
                   {Shared.Save}
                 </button>
                 <button
-                  onClick={handleCancelEdit}
+                  onClick={handleCancel}
                   className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
                 >
                   Cancel
@@ -640,13 +653,22 @@ const MedicineStock = () => {
               </>
             )}
             {newStock && (
-              <button
-                onClick={handleSave}
-                className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
-              >
-                Save
-                {Shared.Save}
-              </button>
+              <>
+                <button
+                  onClick={handleSave}
+                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+                >
+                  Save
+                  {Shared.Save}
+                </button>
+                <button
+                  onClick={handleCancel}
+                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+                >
+                  Cancel
+                  {Shared.Cancel}
+                </button>
+              </>
             )}
           </div>
         </div>

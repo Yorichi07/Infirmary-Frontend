@@ -164,6 +164,14 @@ const AssistantDoctorDashboard = () => {
                   Patient Log Book
                 </p>
               </button>
+              <button
+                className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+                onClick={() => navigate("/adhoc")}
+              >
+                <p className="text-white font-semibold text-lg text-center flex-1">
+                  Ad-Hoc Treatment
+                </p>
+              </button>
               <div className="flex justify-between w-full gap-4 max-lg:flex-col max-lg:space-y-5">
                 <button
                   className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"

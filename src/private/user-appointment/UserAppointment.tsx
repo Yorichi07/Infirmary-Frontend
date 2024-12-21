@@ -38,7 +38,7 @@ const UserAppointment = () => {
   );
 
   const formSchema = z.object({
-    reason: z.string().nonempty("Reason for appointment is required."),
+    reason: z.string(),
     followUp: z.enum(["Yes", "No"]),
     lastAppointmentDate: z.string().optional(),
     preferredDoctor: z.string().optional(),

@@ -11,23 +11,23 @@ const Navbar = ({
 }: {
   props: {
     title: string;
-    titleLogo: JSX.Element | string |false ;
+    titleLogo: JSX.Element | string | false;
     additionalLogo: JSX.Element | undefined;
     menu: boolean | undefined;
     role: string | null;
-    prevRef :string | null;
+    prevRef: string | null;
   };
 }) => {
   const navigate = useNavigate();
-  const [navPageBack,setNavPageBack] = useState("");
+  const [navPageBack, setNavPageBack] = useState("");
   const navigateTo = (path: string) => {
     navigate(path);
   };
 
-  useEffect(()=>{
-    if (props.prevRef !== null) setNavPageBack(props.prevRef)
-    else setNavPageBack(`/${props.role}-dashboard`)
-  })
+  useEffect(() => {
+    if (props.prevRef !== null) setNavPageBack(props.prevRef);
+    else setNavPageBack(`/${props.role}-dashboard`);
+  });
 
   const handleLogout = () => {
     localStorage.clear();
@@ -40,16 +40,15 @@ const Navbar = ({
 
   return (
     <div className="bg-white shadow-md p-4 flex items-center justify-between h-[8svh] border-b border border-[gray] max-lg:h-[7svh]">
-      <span className="flex items-center justify-center gap-2">
-
-      <img
-        src="/upes-logo.jpg"
-        alt="UPES Logo"
-        className="w-[100px] max-lg:w-[80px]"
+      <span className="flex items-center justify-center">
+        <img
+          src="/upes-logo.jpg"
+          alt="UPES Logo"
+          className="w-[100px] max-lg:w-[80px]"
         />
-      <p className="font-medium text-3xl max-lg:text-xl">UHS</p>
-        </span>
-      <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline">
+        <p className="font-mono text-3xl max-lg:text-2xl">|UHS</p>
+      </span>
+      <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline max-lg:hidden">
         {props.titleLogo &&
           (typeof props.titleLogo === "string" ? (
             <img src={props.titleLogo} alt="Title Logo" className="w-8" />
@@ -60,7 +59,7 @@ const Navbar = ({
       </div>
       {props.additionalLogo && props.menu ? (
         <Popover>
-          <PopoverTrigger className="text-2xl max-lg:text-lg min-lg:w-[100px] max-lg:w-[60px] flex items-center justify-end">
+          <PopoverTrigger className="text-2xl max-lg:text-lg lg:w-[165px] flex items-center justify-end">
             {props.additionalLogo}
           </PopoverTrigger>
           <PopoverContent className="space-y-2 p-2 max-lg:p-2">
@@ -97,7 +96,7 @@ const Navbar = ({
       ) : (
         <Link
           to={navPageBack}
-          className="text-base max-lg:text-sm flex items-center justify-end min-lg:w-[100px] w-[32px]"
+          className="text-base max-lg:text-sm flex items-center justify-end lg:w-[165px]"
         >
           {props.additionalLogo}
         </Link>
