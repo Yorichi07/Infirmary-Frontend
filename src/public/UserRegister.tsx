@@ -164,7 +164,7 @@ const UserRegister = () => {
 
         await axios
           .post(
-            "http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/auth/patient/signup",
+            "http://localhost:8081/api/auth/patient/signup",
             payload
           )
           .then((res) => {

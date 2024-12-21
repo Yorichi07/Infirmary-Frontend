@@ -103,7 +103,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/doctor/prescription/submit",
+        "http://localhost:8081/api/doctor/prescription/submit",
         req,
         {
           headers: {
@@ -148,7 +148,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
+          "http://localhost:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -204,7 +204,7 @@ const PatientDetails = () => {
 
       try {
         const resp = await axios.get(
-          `http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/doctor/stock/available`,
+          `http://localhost:8081/api/doctor/stock/available`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -259,7 +259,7 @@ const PatientDetails = () => {
   const handleRelease = async () => {
     try {
       const resp = await axios.get(
-        "http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/doctor/releasePatient",
+        "http://localhost:8081/api/doctor/releasePatient",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -295,7 +295,7 @@ const PatientDetails = () => {
                 className="border-black border-[1.5px]"
                 src={
                   ndata?.imageUrl != null
-                    ? `http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
+                    ? `http://localhost:8081/${ndata?.imageUrl}`
                     : "/default-user.jpg"
                 }
               />
@@ -355,7 +355,7 @@ const PatientDetails = () => {
                     <input
                       className="w-full p-2 bg-white rounded shadow-md"
                       type="text"
-                      value={ndata?.weight}
+                      value={ndata?.temp}
                       disabled
                     />
                   </div>
@@ -431,7 +431,9 @@ const PatientDetails = () => {
                 <PopoverTrigger
                   className="history-btn"
                   onClick={() =>
-                    navigate(`/patient-assigned-prescription?id=${ndata?.email}`)
+                    navigate(`/patient-assigned-prescription?id=${ndata?.email.replace(/@.*?\./g, (match) =>
+                    match.replace(/\./g, ",")
+                  )}`)
                   }
                 >
                   Consultations
@@ -446,7 +448,7 @@ const PatientDetails = () => {
                   <img src="/upes-logo.jpg" alt="Logo" className="w-[100px]" />
                 </div>
                 <h2 className="font-medium text-center text-[24px]">
-                  INFIRMARY
+                  UHS
                 </h2>
                 <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm ">
                   <span>{ndata?.time}</span>
@@ -518,7 +520,6 @@ const PatientDetails = () => {
                 <table className="medicine-table max-lg:max-w-[95svw]">
                   <thead>
                     <tr>
-                      <th className="whitespace-nowrap">Select</th>
                       <th className="whitespace-nowrap">S. No.</th>
                       <th className="whitespace-nowrap">Medicine</th>
                       <th className="whitespace-nowrap">Dosage (/day)</th>
@@ -607,15 +608,15 @@ const PatientDetails = () => {
                                   />
                                 </td>
                               </tr>
-                            </tbody>
-                          </table>
+                          </tbody>
+                        </table>
                         </td>
                         <td className="w-[16%]">
                           <input
                             type="number"
                             className="small-input duration w-full"
                             min={1}
-                          />
+                            />
                         </td>
                         <td>
                           <textarea className="long-input suggestion" />

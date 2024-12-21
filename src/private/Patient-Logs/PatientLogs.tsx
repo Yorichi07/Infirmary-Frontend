@@ -25,7 +25,7 @@ import {
   
     const fetchData = async (date?: string) => {
       try {
-        let apiUrl = "http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
+        let apiUrl = "http://localhost:8081/api/AD/getAppointmentByDate";
   
         if (date) {
           apiUrl += `?date=${date}`;
@@ -43,7 +43,7 @@ import {
           reportId: rept.appointmentId,
           patientName: rept.PatientName,
           token: rept.token,
-          downloadLink: `http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
         }));
   
         setReports(formatData);

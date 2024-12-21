@@ -78,7 +78,7 @@ const NewAssistantDoctor = () => {
           return;
         }
         const payload = { ...data, status: false }; // `designation` is automatically included from the `data` object
-        await axios.post("http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/admin/AD/signup", payload, {
+        await axios.post("http://localhost:8081/api/admin/AD/signup", payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },

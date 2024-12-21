@@ -94,7 +94,7 @@ const NewDoctor = () => {
         }
         const payload = { ...data, status: false }; // `designation` is automatically included from the `data` object
         await axios.post(
-          "http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/api/admin/doctor/signup",
+          "http://localhost:8081/api/admin/doctor/signup",
           payload,
           {
             headers: {
