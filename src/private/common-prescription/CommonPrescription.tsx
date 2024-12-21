@@ -171,7 +171,7 @@ const CommonPrescription = () => {
   return (
     <>
       <Toaster />
-      <div className="bg-[#ECECEC] p-5 flex flex-col justify-center items-center min-h-[84svh] max-lg:p-0 max-lg:min-h-[93svh]">
+      <div className="bg-[#ECECEC] p-4 flex flex-col justify-center items-center min-h-[84svh] max-lg:p-0 max-lg:min-h-[93svh]">
         <div
           id="content"
           className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll max-lg:w-full"

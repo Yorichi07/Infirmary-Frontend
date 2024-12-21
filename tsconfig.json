@@ -14,6 +14,7 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": ["node", "react", "jest", "babel__core", "babel__generator", "react-transition-group"]
   }
 }
