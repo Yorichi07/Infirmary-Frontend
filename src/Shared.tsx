@@ -4,7 +4,6 @@ import {
   faCalendarCheck,
   faUser,
   faHouse,
-  faFileMedical,
   faChevronLeft,
   faDownload,
   faUserDoctor,
@@ -23,6 +22,7 @@ import {
   faEyeSlash,
   faPenToSquare,
   faXmark,
+  faFilePrescription,
 } from "@fortawesome/free-solid-svg-icons";
 import { MdEmergency } from "react-icons/md";
 import { FaAmbulance } from "react-icons/fa";
@@ -32,7 +32,7 @@ const Shared = {
   calendarCheck: <FontAwesomeIcon icon={faCalendarCheck} />,
   User: <FontAwesomeIcon icon={faUser} />,
   HomeUser: <FontAwesomeIcon icon={faHouse} />,
-  Prescription: <FontAwesomeIcon icon={faFileMedical} />,
+  Prescription: <FontAwesomeIcon icon={faFilePrescription} />,
   ArrowLeft: <FontAwesomeIcon icon={faChevronLeft} />,
   Download: <FontAwesomeIcon icon={faDownload} />,
   DoctorHome: <FontAwesomeIcon icon={faUserDoctor} />,

@@ -38,6 +38,8 @@ import TokenPageLayout from "@/private/token-page/tokenPageLayout";
 import TokenPage from "@/private/token-page/tokenPage";
 import PatientLogsLayout from "@/private/Patient-Logs/PatientLogsLayout";
 import PatientLogs from "@/private/Patient-Logs/PatientLogs";
+import AdHocTreatmentLayout from "@/private/Ad-Hoc Treatment/AdHocTreatmentLayout";
+import AdHocTreatment from "@/private/Ad-Hoc Treatment/AdHocTreatment";
 
 const router = createBrowserRouter([
   {
@@ -62,6 +64,14 @@ const router = createBrowserRouter([
       <PatientLogsLayout>
         <PatientLogs></PatientLogs>
       </PatientLogsLayout>
+    )
+  },
+  {
+    path: "/adhoc",
+    element: (
+      <AdHocTreatmentLayout>
+        <AdHocTreatment></AdHocTreatment>
+      </AdHocTreatmentLayout>
     )
   },
   {
