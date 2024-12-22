@@ -293,7 +293,7 @@ const PatientDetails = () => {
               className="border-black border-[1.5px] shadow-lg"
               src={
                 ndata?.imageUrl != null
-                  ? `http://localhost:8081/${ndata?.imageUrl}`
+                  ? `http://ec2-13-126-247-225.ap-south-1.compute.amazonaws.com/${ndata?.imageUrl}`
                   : "/default-user.jpg"
               }
             />

@@ -77,7 +77,7 @@ const CommonPrescription = () => {
         const { prescription } = data;
         const patient = prescription?.patient || {};
 
-        const medsData = prescription.meds.map((med:any) => ({
+        const medsData = prescription.meds.map((med: any) => ({
           name: med.medicine.medicineName,
           dosageMorning: med.dosageMorning || "0",
           dosageAfternoon: med.dosageAfternoon || "0",
@@ -97,7 +97,7 @@ const CommonPrescription = () => {
           date: data.date || "",
           time: data.time || "",
           residenceType: data.residenceType || "",
-          designation: data.doctor?.designation || "",
+          designation: data.prescription.doctor.designation || "",
           meds: medsData,
         });
 
@@ -110,7 +110,7 @@ const CommonPrescription = () => {
           title: "Data Loaded Successfully",
           description: "Prescription details have been fetched.",
         });
-      } catch (error:any) {
+      } catch (error: any) {
         toast({
           variant: "destructive",
           title: "Error Fetching Data",
@@ -174,21 +174,20 @@ const CommonPrescription = () => {
       <div className="bg-[#ECECEC] p-4 flex flex-col justify-center items-center min-h-[84svh] max-lg:p-0 max-lg:min-h-[93svh]">
         <div
           id="content"
-          className="bg-[#fdfdfd] p-5 w-[90%] border-black border overflow-y-scroll max-lg:w-full"
+          className="bg-white p-4 w-full border-black border overflow-y-scroll"
         >
-          <div className="flex items-center justify-between mb-[10px]">
+          <div className="flex items-center justify-between mb-2">
             <div className="flex center">
-              <img src="/upes-logo2.jpg" alt="Logo" className="w-[50px]" />
+              <img src="/upes-logo.jpg" alt="Logo" className="w-[100px]" />
             </div>
-            <h2 className="font-medium text-center text-[24px]">UHS</h2>
+            <h2 className="font-medium text-center text-2xl">UHS</h2>
             <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm ">
               <span>{ndata?.time}</span>
               <span className="lg:ml-2">{ndata?.date}</span>
             </div>
           </div>
-
-          <hr className="border border-black my-[10px]" />
-          <div className="my-[20px]">
+          <hr className="border border-black my-2" />
+          <div className="my-4">
             <div className="flex justify-between max-lg:flex-col max-lg:gap-4">
               <div className="flex flex-col gap-4">
                 <div className="flex items-center gap-[10px]">
@@ -196,16 +195,16 @@ const CommonPrescription = () => {
                   <input
                     type="text"
                     value={ndata?.name}
-                    className="info-input"
+                    className="bg-[#dddce2] p-2 rounded-md"
                     readOnly
                   />
                 </div>
-                <div className="flex items-center gap-[10px]">
+                <div className="flex items-center gap-[10px ]">
                   <label className="mr-auto font-medium">ID:</label>
                   <input
                     type="text"
                     value={ndata?.id}
-                    className="info-input"
+                    className="bg-[#dddce2] p-2 rounded-md"
                     readOnly
                   />
                 </div>
@@ -216,7 +215,7 @@ const CommonPrescription = () => {
                   <input
                     type="text"
                     value={ndata?.age}
-                    className="info-input"
+                    className="bg-[#dddce2] p-2 rounded-md"
                     readOnly
                   />
                 </div>
@@ -225,102 +224,117 @@ const CommonPrescription = () => {
                   <input
                     type="text"
                     value={ndata?.course}
-                    className="info-input"
+                    className="bg-[#dddce2] p-2 rounded-md"
                     readOnly
                   />
                 </div>
               </div>
               <div className="flex flex-col gap-4">
-                <div className="flex items-center justify-center gap-[10px]">
+                <div className="flex items-center gap-[10px]">
                   <label className="font-medium mr-auto">Sex:</label>
                   <input
                     type="text"
                     value={ndata?.sex}
-                    className="info-input"
+                    className="bg-[#dddce2] p-2 rounded-md"
                     readOnly
                   />
                 </div>
-                <div className="flex items-center justify-center gap-[10px]">
+                <div className="flex items-center gap-[10px]">
                   <label className="font-medium mr-auto">Residence Type:</label>
                   <input
                     type="text"
                     value={ndata?.residenceType}
-                    className="info-input"
+                    className="bg-[#dddce2] p-2 rounded-md"
                     readOnly
                   />
                 </div>
               </div>
             </div>
           </div>
-
-          <hr className="border border-black my-[10px]" />
-          <div className="mt-5">
-            <label>Diagnosis:</label>
+          <hr className="border border-black my-2" />
+          <div className="mt-4 gap-2 flex flex-col">
+            <label className="font-medium">Diagnosis:</label>
             <textarea
-              className="w-full h-[150px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none "
+              className="w-full h-[100px] p-4 rounded-md bg-[#dddce2]"
               value={diagnosis}
               readOnly
             />
           </div>
-
-          <div className="mt-5 max-lg:overflow-scroll">
-            <label>Medicine:</label>
-            <table className="medicine-table">
+          <div className="mt-4 max-lg:overflow-scroll flex flex-col gap-2">
+            <label className="font-medium">Medicine:</label>
+            <table className="max-lg:max-w-[95svw]">
               <thead>
                 <tr>
-                  <th className="whitespace-nowrap">S. No.</th>
-                  <th>Medicine</th>
-                  <th>Dosage (/day)</th>
-                  <th className="whitespace-nowrap">Duration (Days)</th>
-                  <th>Suggestions</th>
+                  <th className="whitespace-nowrap font-medium p-2 border">
+                    S. No.
+                  </th>
+                  <th className="whitespace-nowrap font-medium p-2 border">
+                    Medicine
+                  </th>
+                  <th className="whitespace-nowrap font-medium p-2 border">
+                    Dosage (/day)
+                  </th>
+                  <th className="whitespace-nowrap font-medium p-2 border">
+                    Duration (Days)
+                  </th>
+                  <th className="whitespace-nowrap font-medium p-2 border">
+                    Suggestions
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 {ndata.meds.map((med, index) => (
                   <tr key={index} className="text-center">
-                    <td>{index + 1}</td>
-                    <td className="w-[25%]">
+                    <td className="text-center w-[5%] border p-2">
+                      {index + 1}
+                    </td>
+                    <td className="w-[30%] border p-2">
                       <input
-                        className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                        className="w-full p-2 border rounded-md"
                         value={med.name}
                         readOnly
                       />
                     </td>
-                    <td className="w-[15%]">
-                      <table className="nested-dosage-table w-full">
+                    <td className="w-[20%] border p-2">
+                      <table className="w-full">
                         <thead>
                           <tr>
-                            <th>Morning</th>
-                            <th>Afternoon</th>
-                            <th>Evening</th>
+                            <th className="border p-2 font-medium w-[33%]">
+                              Morning
+                            </th>
+                            <th className="border p-2 font-medium w-[33%]">
+                              Afternoon
+                            </th>
+                            <th className="border p-2 font-medium w-[33%]">
+                              Evening
+                            </th>
                           </tr>
                         </thead>
                         <tbody>
                           <tr>
-                            <td>
+                          <td className="border p-2">
                               <input
                                 type="number"
                                 min={0}
-                                className="info-input dosage-morning w-full"
-                                placeholder="0"
+                                className="rounded-md border p-2 bg-[#dddce2] dosage-morning w-full"
                                 value={med.dosageMorning}
                                 readOnly
                               />
                             </td>
-                            <td>
+                            <td className="border p-2">
                               <input
                                 type="number"
                                 min={0}
-                                className="info-input dosage-afternoon w-full"
+                                className="rounded-md border p-2 bg-[#dddce2] dosage-afternoon w-full"
                                 value={med.dosageAfternoon}
                                 readOnly
                               />
                             </td>
-                            <td>
+                            <td className="border p-2">
                               <input
                                 type="number"
                                 min={0}
-                                className="info-input dosage-evening w-full"
+                                className="rounded-md border p-2 bg-[#dddce2] dosage-evening w-full"
                                 value={med.dosageEvening}
                                 readOnly
                               />
@@ -329,17 +343,17 @@ const CommonPrescription = () => {
                         </tbody>
                       </table>
                     </td>
-                    <td className="w-[15%]">
+                    <td className="w-[10%] border p-2">
                       <input
                         type="number"
-                        className="bg-[#d5d4df] rounded-lg p-2 text-center"
+                        className="rounded-md border p-2 bg-[#dddce2] duration w-full"
                         value={med.duration}
                         readOnly
                       />
                     </td>
-                    <td>
+                    <td className="border p-2">
                       <textarea
-                        className="bg-[#d5d4df] rounded-lg p-2 w-full text-center"
+                        className="rounded-md border p-2 bg-[#dddce2] w-full"
                         value={med.suggestion}
                         readOnly
                       />
@@ -350,28 +364,28 @@ const CommonPrescription = () => {
             </table>
           </div>
 
-          <div className="mt-5">
-            <label>Recommendations:</label>
+          <div className="mt-4 flex flex-col gap-2">
+            <label className="font-medium">Recommendations:</label>
             <textarea
-              className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
+              className="w-full h-[100px] p-4 rounded-md bg-[#dddce2]"
               value={dietaryRemarks}
               readOnly
             />
           </div>
 
-          <div className="mt-5">
-            <label>Tests Needed:</label>
+          <div className="mt-4 flex flex-col gap-2">
+            <label className="font-medium">Tests Needed:</label>
             <textarea
-              className="w-full h-[100px] p-4 rounded-[8px] bg-[#d5d4df] mt-1 resize-none"
+              className="w-full h-[100px] p-4 rounded-md bg-[#dddce2]"
               value={testNeeded}
               readOnly
             />
           </div>
 
           <div className="flex flex-col items-end mt-10">
-            <span className="">{doctorName}</span>
-            <span className="">{ndata?.designation}</span>
-            <div className="signature-text">Doctor</div>
+            <span>{doctorName}</span>
+            <span>({ndata?.designation})</span>
+            <div className="font-medium">Doctor</div>
           </div>
         </div>
         <button
