@@ -304,7 +304,7 @@ const PatientList = () => {
             className={`shadow-md px-4 py-2 rounded-md w-40 ${
               selectedButton === "Pending"
                 ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
-                : "bg-gray-200 text-black"
+                : "bg-gray-100 text-black"
             }`}
           >
             Pending
@@ -314,7 +314,7 @@ const PatientList = () => {
             className={`shadow-md px-4 py-2 rounded-md w-40 ${
               selectedButton === "Assigned"
                 ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
-                : "bg-gray-300 text-black"
+                : "bg-gray-100 text-black"
             }`}
           >
             Assigned
@@ -324,7 +324,7 @@ const PatientList = () => {
             className={`shadow-md px-4 py-2 rounded-md w-40 ${
               selectedButton === "Appointed"
                 ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
-                : "bg-gray-300 text-black"
+                : "bg-gray-100 text-black"
             }`}
           >
             Appointed
@@ -351,7 +351,7 @@ const PatientList = () => {
                   Name
                 </TableHead>
                 <TableHead className="border text-black font-bold text-center">
-                  SAP ID
+                  Email Id
                 </TableHead>
                 <TableHead className="border text-black font-bold text-center whitespace-nowrap">
                   Reason for visit

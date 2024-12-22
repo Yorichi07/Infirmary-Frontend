@@ -141,7 +141,9 @@ const MedicineStock = () => {
 
   const fetchLocations = async () => {
     try {
-      const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
+      const resp = await axios.get(
+        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/"
+      );
       if (resp.status === 200) {
         const data = resp.data;
         setLocations(data);
@@ -243,10 +245,7 @@ const MedicineStock = () => {
         console.error("Error adding new stock:", error);
         toast({
           title: "Error",
-          description:
-            error.response?.data?.messsage ||
-            error.response?.data?.details ||
-            "Error adding new stock",
+          description: error.response?.data?.message,
           variant: "destructive",
           action: <ToastAction altText="Try again">Try again</ToastAction>,
         });
@@ -271,15 +270,12 @@ const MedicineStock = () => {
           }
         );
 
-        setStocks((prevStocks) =>
-          prevStocks.filter((stock) => stock.id !== batchNumber)
-        );
         toast({
           title: "Deleted",
           description: `Stock deleted successfully!`,
         });
-        fetchLocations();
-        fetchStocks();
+
+        await fetchStocks();
       } catch (error) {
         console.error("Error deleting stock:", error);
         toast({
@@ -299,11 +295,25 @@ const MedicineStock = () => {
     setEditStock(null);
   };
 
-  const filteredStocks = stocks.filter(
-    (stock) =>
-      stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      stock.composition.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      stock.company.toLowerCase().includes(searchTerm.toLowerCase())
+  const getSortedStocks = (stocks: Stock[]) => {
+    return [...stocks].sort((a, b) => {
+      const qtyA = Number(a.quantity) || 0;
+      const qtyB = Number(b.quantity) || 0;
+
+      if (qtyA === 0 && qtyB !== 0) return 1;
+      if (qtyA !== 0 && qtyB === 0) return -1;
+
+      return 0;
+    });
+  };
+
+  const filteredStocks = getSortedStocks(
+    stocks.filter(
+      (stock) =>
+        stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stock.composition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stock.company.toLowerCase().includes(searchTerm.toLowerCase())
+    )
   );
 
   const handleSelectStock = (batchNumber: number | string) => {
