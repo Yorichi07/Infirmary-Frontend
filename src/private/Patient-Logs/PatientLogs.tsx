@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 const PatientLogs = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [selectedButton, setSelectedButton] = useState("Consultation");
   const [time, setTime] = useState<Date>(new Date());
   const [date, setDate] = useState<Date | undefined>(new Date());
   const [reports, setReports] = useState<
@@ -30,14 +31,26 @@ const PatientLogs = () => {
       downloadLink: string;
     }>
   >([]);
+  const [adHocRep,setAdHocRep] = useState<Array<{
+    patientName:string,
+    medicineName:string,
+    quantity:string,
+    patientEmail:string,
+    adName:string,
+    adEmail:string,
+    date:string,
+    time:string
+  }>>([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
 
   const fetchData = async (date?: string) => {
     try {
-      let apiUrl = "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
+      if(selectedButton === "Consultation"){
 
-      if (date) {
-        apiUrl += `?date=${date}`;
+        let apiUrl = "http://localhost:8081/api/AD/getAppointmentByDate";
+        
+        if (date) {
+          apiUrl += `?date=${date}`;
       }
 
       const resp = await axios.get(apiUrl, {
@@ -52,16 +65,45 @@ const PatientLogs = () => {
         reportId: rept.appointmentId,
         patientName: rept.PatientName,
         token: rept.token,
-        downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+        downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
       }));
-
+      
       setReports(formatData);
-      if (reports.length == 0) {
+      if (formatData.length === 0) {
         toast({
           title: "No Appointment Found",
           description: "No Appointments are found for the current date",
         });
       }
+    }else{
+      let apiUrl = `http://localhost:8081/api/AD/getAdHocByDate?date=${date}`;
+      
+      const resp = await axios.get(apiUrl, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      const response = resp.data;
+
+      const formatData = response.map((rept:any)=>({
+        patientName:rept.PatientName,
+        medicineName:rept.MedicineName,
+        quantity:rept.Quantity,
+        patientEmail:rept.PatientEmail,
+        adEmail:rept.ADEmail,
+        adName:rept.ADName,
+        date:rept.Date,
+        time:rept.Time
+      }));
+      setAdHocRep(formatData);
+      if(formatData.length === 0){
+        toast({
+          title: "No Ad-Hoc Treatments Found",
+          description: "No Ad-Hoc treatments are found for the current date",
+        });
+      }
+    }
     } catch (error: any) {
       if (
         error.response &&
@@ -155,7 +197,29 @@ const PatientLogs = () => {
             </div>
           </div>
           <div className="w-full overflow-y-scroll p-5">
-            <Table className="border">
+          <div className="flex justify-center items-center gap-2 mb-2">
+          <button
+            onClick={() => setSelectedButton("Consultation")}
+            className={`shadow-md px-4 py-2 rounded-md w-40 ${
+              selectedButton === "Consultation"
+                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
+                : "bg-gray-100 text-black"
+            }`}
+          >
+            Consultations
+          </button>
+          <button
+            onClick={() => setSelectedButton("AdHoc")}
+            className={`shadow-md px-4 py-2 rounded-md w-40 whitespace-nowrap ${
+              selectedButton === "AdHoc"
+                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
+                : "bg-gray-100 text-black"
+            }`}
+          >
+            Ad-Hoc Treatments
+          </button>
+        </div>
+            {selectedButton === "Consultation" ? (<Table className="border">
               <TableCaption>A list of your recent reports</TableCaption>
               <TableHeader>
                 <TableRow>
@@ -196,7 +260,75 @@ const PatientLogs = () => {
                   </TableRow>
                 ))}
               </TableBody>
-            </Table>
+            </Table>):(<Table className="border">
+              <TableCaption>A list of your recent reports</TableCaption>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-[12.5%] text-center">
+                    Patient Name
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Patient Email
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Medicine Name
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Quantity
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Nursing Assistant Name
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Nursing Assistant Email
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Date
+                  </TableHead>
+                  <TableHead className="w-[12.5%] text-center">
+                    Time
+                  </TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {adHocRep.map((report,index) => (
+                  <TableRow key={index}>
+                    <TableCell className="font-medium text-center">
+                      {report.patientName}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.patientEmail}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.medicineName}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.quantity}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.adName}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.adEmail}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.date}
+                    </TableCell>
+
+                    <TableCell className="text-center">
+                      {report.time}
+                    </TableCell>
+
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>)}
           </div>
         </div>
       </div>

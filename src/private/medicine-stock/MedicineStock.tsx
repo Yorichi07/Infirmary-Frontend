@@ -78,7 +78,7 @@ const MedicineStock = () => {
         console.log(editStock);
 
         await axios.post(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/editStock`,
+          `http://localhost:8081/api/${role}/stock/editStock`,
           editStock,
           {
             headers: {
@@ -118,7 +118,7 @@ const MedicineStock = () => {
       if (role === "ad") role = role.toUpperCase();
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/`,
+        `http://localhost:8081/api/${role}/stock/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -142,7 +142,7 @@ const MedicineStock = () => {
   const fetchLocations = async () => {
     try {
       const resp = await axios.get(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/"
+        "http://localhost:8081/api/location/"
       );
       if (resp.status === 200) {
         const data = resp.data;
@@ -225,7 +225,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
+          `http://localhost:8081/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -262,7 +262,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`,
+          `http://localhost:8081/api/${role}/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,

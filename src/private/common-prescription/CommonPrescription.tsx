@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import jsPDF from "jspdf";
-import html2canvas from "html2canvas";
 import { useToast } from "@/hooks/use-toast";
 import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@/components/ui/toast";
+import MedicalReportPDF from "@/components/MedicalReportPDF";
+import { PDFDownloadLink } from "@react-pdf/renderer";
 
 const CommonPrescription = () => {
   const { toast } = useToast();
@@ -63,10 +63,10 @@ const CommonPrescription = () => {
 
         const apiUrl =
           role === "doctor"
-            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPrescription/${urlParam}`
+            ? `http://localhost:8081/api/doctor/getPrescription/${urlParam}`
             : role === "ad"
-            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPrescription/${urlParam}`
-            : `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/patient/getPrescription/${urlParam}`;
+            ? `http://localhost:8081/api/AD/getPrescription/${urlParam}`
+            : `http://localhost:8081/api/patient/getPrescription/${urlParam}`;
 
         const { data } = await axios.get(apiUrl, {
           headers: {
@@ -126,47 +126,6 @@ const CommonPrescription = () => {
     fetchData();
   }, []);
 
-  const generatePdf = async () => {
-    const content = document.getElementById("content");
-    if (!content) return;
-
-    try {
-      const pdf = new jsPDF("p", "mm", "a4");
-      const canvas = await html2canvas(content, { scale: 2 });
-      const imgData = canvas.toDataURL("image/png");
-      const imgWidth = pdf.internal.pageSize.width;
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-      let position = 0;
-
-      while (position < imgHeight) {
-        pdf.addImage(
-          imgData,
-          "PNG",
-          0,
-          position > 0 ? 10 : 0,
-          imgWidth,
-          imgHeight
-        );
-        position += pdf.internal.pageSize.height;
-        if (position < imgHeight) pdf.addPage();
-      }
-
-      pdf.save("prescription.pdf");
-      toast({
-        title: "PDF Downloaded",
-        description: "Prescription PDF has been saved successfully.",
-      });
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: "Error Generating PDF",
-        description: "Something went wrong while generating the PDF.",
-        action: <ToastAction altText="Try again">Try again</ToastAction>,
-      });
-      console.error("Error generating PDF:", error);
-    }
-  };
 
   return (
     <>
@@ -388,12 +347,9 @@ const CommonPrescription = () => {
             <div className="font-medium">Doctor</div>
           </div>
         </div>
-        <button
-          onClick={generatePdf}
-          className="mt-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded hover:from-blue-600 hover:to-blue-800 max-lg:my-2"
-        >
-          Download as PDF
-        </button>
+        <PDFDownloadLink className="mt-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded hover:from-blue-600 hover:to-blue-800 max-lg:my-2 whitespace-nowrap min-w-20" document={<MedicalReportPDF ndata={ndata} diagnosis={diagnosis} dietaryRemarks={dietaryRemarks} doctorName={doctorName} testNeeded={testNeeded}   />} fileName="patient_report.pdf">
+        Download PDF
+        </PDFDownloadLink>
       </div>
     </>
   );

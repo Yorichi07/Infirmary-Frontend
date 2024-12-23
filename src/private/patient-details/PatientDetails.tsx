@@ -102,7 +102,7 @@ const PatientDetails = () => {
 
     try {
       const resp = await axios.post(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/prescription/submit",
+        "http://localhost:8081/api/doctor/prescription/submit",
         req,
         {
           headers: {
@@ -147,7 +147,7 @@ const PatientDetails = () => {
     const fetchData = async () => {
       try {
         const resp = await axios.get(
-          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPatient",
+          "http://localhost:8081/api/doctor/getPatient",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -203,7 +203,7 @@ const PatientDetails = () => {
 
       try {
         const resp = await axios.get(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/stock/available`,
+          `http://localhost:8081/api/doctor/stock/available`,
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -258,7 +258,7 @@ const PatientDetails = () => {
   const handleRelease = async () => {
     try {
       const resp = await axios.get(
-        "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/releasePatient",
+        "http://localhost:8081/api/doctor/releasePatient",
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -506,10 +506,10 @@ const PatientDetails = () => {
                     />
                   </div>
                   <div className="flex items-center gap-[10px]">
-                    <label className="font-medium mr-auto">School:</label>
+                    <label className="font-medium mr-auto">Residence Type:</label>
                     <input
                       type="text"
-                      value={ndata?.course}
+                      value={ndata?.residenceType}
                       className="bg-[#dddce2] p-2 rounded-md"
                     />
                   </div>
@@ -648,7 +648,7 @@ const PatientDetails = () => {
                         />
                       </td>
                       <td className="border p-2">
-                        <textarea className="rounded-md border p-2 bg-[#dddce2] w-full" />
+                        <textarea className="rounded-md border p-2 bg-[#dddce2] suggestion w-full" />
                       </td>
                     </tr>
                   ))}
