@@ -7,7 +7,6 @@ import {
   StyleSheet,
   Image,
 } from "@react-pdf/renderer";
-
 interface PatientData {
   name: string;
   id: string;
@@ -48,7 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   logo: {
-    width: 80,
+    width: 60,
     height: "auto",
   },
   title: {

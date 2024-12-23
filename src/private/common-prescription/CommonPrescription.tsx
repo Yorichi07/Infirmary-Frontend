@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ToastAction } from "@/components/ui/toast";
 import MedicalReportPDF from "@/components/MedicalReportPDF";
 import { PDFDownloadLink } from "@react-pdf/renderer";
+import dayjs from "dayjs";
 
 const CommonPrescription = () => {
   const { toast } = useToast();
@@ -94,7 +95,7 @@ const CommonPrescription = () => {
             new Date(patient.dateOfBirth).getFullYear(),
           course: patient.program || "",
           sex: patient.gender || "",
-          date: data.date || "",
+          date: dayjs(data.date).format("DD/MM/YYYY") || "",
           time: data.time || "",
           residenceType: data.residenceType || "",
           designation: data.prescription.doctor.designation || "",

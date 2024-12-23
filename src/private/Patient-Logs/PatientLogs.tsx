@@ -31,79 +31,81 @@ const PatientLogs = () => {
       downloadLink: string;
     }>
   >([]);
-  const [adHocRep,setAdHocRep] = useState<Array<{
-    patientName:string,
-    medicineName:string,
-    quantity:string,
-    patientEmail:string,
-    adName:string,
-    adEmail:string,
-    date:string,
-    time:string
-  }>>([]);
+  const [adHocRep, setAdHocRep] = useState<
+    Array<{
+      patientName: string;
+      medicineName: string;
+      quantity: string;
+      patientEmail: string;
+      adName: string;
+      adEmail: string;
+      date: string;
+      time: string;
+    }>
+  >([]);
   const [selectedDate, setSelectedDate] = useState<string>("");
 
   const fetchData = async (date?: string) => {
     try {
-      if(selectedButton === "Consultation"){
+      if (selectedButton === "Consultation") {
+        let apiUrl =
+          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
 
-        let apiUrl = "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
-        
         if (date) {
           apiUrl += `?date=${date}`;
-      }
+        }
 
-      const resp = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
-
-      const response = resp.data;
-
-      const formatData = response.map((rept: any) => ({
-        reportId: rept.appointmentId,
-        patientName: rept.PatientName,
-        token: rept.token,
-        downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
-      }));
-      
-      setReports(formatData);
-      if (formatData.length === 0) {
-        toast({
-          title: "No Appointment Found",
-          description: "No Appointments are found for the current date",
+        const resp = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
-      }
-    }else{
-      let apiUrl = `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAdHocByDate?date=${date}`;
-      
-      const resp = await axios.get(apiUrl, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-        },
-      });
 
-      const response = resp.data;
+        const response = resp.data;
 
-      const formatData = response.map((rept:any)=>({
-        patientName:rept.PatientName,
-        medicineName:rept.MedicineName,
-        quantity:rept.Quantity,
-        patientEmail:rept.PatientEmail,
-        adEmail:rept.ADEmail,
-        adName:rept.ADName,
-        date:rept.Date,
-        time:rept.Time
-      }));
-      setAdHocRep(formatData);
-      if(formatData.length === 0){
-        toast({
-          title: "No Ad-Hoc Treatments Found",
-          description: "No Ad-Hoc treatments are found for the current date",
+        const formatData = response.map((rept: any) => ({
+          reportId: rept.appointmentId,
+          patientName: rept.PatientName,
+          token: rept.token,
+          downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+        }));
+
+        setReports(formatData);
+        if (formatData.length === 0) {
+          toast({
+            title: "No Appointment Found",
+            description: "No Appointments are found for the current date",
+          });
+        }
+      } else {
+        let apiUrl = `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAdHocByDate?date=${date}`;
+
+        const resp = await axios.get(apiUrl, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
         });
+
+        const response = resp.data;
+
+        const formatData = response.map((rept: any) => ({
+          patientName: rept.PatientName,
+          medicineName: rept.MedicineName,
+          quantity: rept.Quantity,
+          patientEmail: rept.PatientEmail,
+          adEmail: rept.ADEmail,
+          adName: rept.ADName,
+          date: rept.Date,
+          time: rept.Time,
+        }));
+        setAdHocRep(formatData);
+        if (formatData.length === 0) {
+          toast({
+            title: "No Ad-Hoc Treatments Found",
+            description: "No Ad-Hoc treatments are found for the current date",
+          });
+        }
       }
-    }
     } catch (error: any) {
       if (
         error.response &&
@@ -155,6 +157,24 @@ const PatientLogs = () => {
     return `${formattedHours}:${minutes}:${seconds} ${period}`;
   };
 
+  useEffect(() => {
+    const fetchDefaultData = () => {
+      const today = new Date().toISOString().split("T")[0];
+      setSelectedDate(today);
+      fetchData(today);
+    };
+
+    fetchDefaultData();
+
+    const timer = setInterval(() => {
+      setTime(new Date());
+    }, 1000);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
   return (
     <>
       <Toaster />
@@ -196,139 +216,142 @@ const PatientLogs = () => {
               />
             </div>
           </div>
-          <div className="w-full overflow-y-scroll p-5">
-          <div className="flex justify-center items-center gap-2 mb-2">
-          <button
-            onClick={() => setSelectedButton("Consultation")}
-            className={`shadow-md px-4 py-2 rounded-md w-40 ${
-              selectedButton === "Consultation"
-                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
-                : "bg-gray-100 text-black"
-            }`}
-          >
-            Consultations
-          </button>
-          <button
-            onClick={() => setSelectedButton("AdHoc")}
-            className={`shadow-md px-4 py-2 rounded-md w-40 whitespace-nowrap ${
-              selectedButton === "AdHoc"
-                ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
-                : "bg-gray-100 text-black"
-            }`}
-          >
-            Ad-Hoc Treatments
-          </button>
-        </div>
-            {selectedButton === "Consultation" ? (<Table className="border">
-              <TableCaption>A list of your recent reports</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[33%] text-center">
-                    Token Number
-                  </TableHead>
-                  <TableHead className="w-[33%] text-center">
-                    Patient Name
-                  </TableHead>
-                  <TableHead className="text-center whitespace-nowrap">
-                    Download Report
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {reports.map((report) => (
-                  <TableRow key={report.reportId}>
-                    <TableCell className="font-medium text-center">
-                      {report.token}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {report.patientName}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      <a
-                        onClick={() =>
-                          navigate(
-                            `/previous-prescription?id=${report.reportId}`
-                          )
-                        }
-                        download
-                      >
-                        {Shared.Download}
-                      </a>
-                    </TableCell>
+          <div className="w-full overflow-y-scroll p-5 pt-0">
+            <div className="flex justify-center items-center gap-2 mb-4">
+              <button
+                onClick={() => setSelectedButton("Consultation")}
+                className={`shadow-md px-4 py-2 rounded-md w-40 ${
+                  selectedButton === "Consultation"
+                    ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
+                    : "bg-gray-100 text-black"
+                }`}
+              >
+                Consultations
+              </button>
+              <button
+                onClick={() => setSelectedButton("AdHoc")}
+                className={`shadow-md px-4 py-2 rounded-md w-40 whitespace-nowrap ${
+                  selectedButton === "AdHoc"
+                    ? "bg-gradient-to-r from-[#2061f5] to-[#13398f] text-white"
+                    : "bg-gray-100 text-black"
+                }`}
+              >
+                Ad-Hoc Treatments
+              </button>
+            </div>
+            {selectedButton === "Consultation" ? (
+              <Table className="border">
+                <TableCaption>A list of your recent reports</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[33%] text-center">
+                      Token Number
+                    </TableHead>
+                    <TableHead className="w-[33%] text-center">
+                      Patient Name
+                    </TableHead>
+                    <TableHead className="text-center whitespace-nowrap">
+                      Download Report
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>):(<Table className="border">
-              <TableCaption>A list of your recent reports</TableCaption>
-              <TableHeader>
-                <TableRow>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Patient Name
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Patient Email
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Medicine Name
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Quantity
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Nursing Assistant Name
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Nursing Assistant Email
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Date
-                  </TableHead>
-                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
-                    Time
-                  </TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {adHocRep.map((report,index) => (
-                  <TableRow key={index}>
-                    <TableCell className="font-medium text-center">
-                      {report.patientName}
-                    </TableCell>
+                </TableHeader>
+                <TableBody>
+                  {reports.map((report) => (
+                    <TableRow key={report.reportId}>
+                      <TableCell className="font-medium text-center">
+                        {report.token}
+                      </TableCell>
 
-                    <TableCell className="text-center">
-                      {report.patientEmail}
-                    </TableCell>
+                      <TableCell className="text-center">
+                        {report.patientName}
+                      </TableCell>
 
-                    <TableCell className="text-center">
-                      {report.medicineName}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {report.quantity}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {report.adName}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {report.adEmail}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {report.date}
-                    </TableCell>
-
-                    <TableCell className="text-center">
-                      {report.time}
-                    </TableCell>
-
+                      <TableCell className="text-center">
+                        <a
+                          onClick={() =>
+                            navigate(
+                              `/previous-prescription?id=${report.reportId}`
+                            )
+                          }
+                          download
+                        >
+                          {Shared.Download}
+                        </a>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            ) : (
+              <Table className="border">
+                <TableCaption>A list of your recent reports</TableCaption>
+                <TableHeader>
+                  <TableRow>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Patient Name
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Patient Email
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Medicine Name
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Quantity
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Nursing Assistant Name
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Nursing Assistant Email
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Date
+                    </TableHead>
+                    <TableHead className="w-[12.5%] text-center whitespace-nowrap">
+                      Time
+                    </TableHead>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>)}
+                </TableHeader>
+                <TableBody>
+                  {adHocRep.map((report, index) => (
+                    <TableRow key={index}>
+                      <TableCell className="font-medium text-center">
+                        {report.patientName}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.patientEmail}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.medicineName}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.quantity}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.adName}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.adEmail}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.date}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.time}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
           </div>
         </div>
       </div>
