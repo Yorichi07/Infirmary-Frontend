@@ -131,6 +131,7 @@ const UserRegister = () => {
   const [availablePrograms, setAvailablePrograms] = useState<string[]>([]);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [status, setStatus] = useState("Submit");
 
   const navigate = useNavigate();
 
@@ -161,16 +162,17 @@ const UserRegister = () => {
           ...data,
           img: bs64Img,
         };
-
+        setStatus("Loading");
         await axios
           .post(
             "http://localhost:8081/api/auth/patient/signup",
             payload
           )
           .then((res) => {
+            setStatus("Submit");
             return res.data;
           });
-
+          
         toast({
           title: "Registration Successfull",
           description: "You are successfully registered as new patient.",
@@ -179,6 +181,7 @@ const UserRegister = () => {
           navigate("/");
         }, 1000);
       } catch (error: any) {
+        setStatus("Submit");
         console.error("Error submitting form: ", error);
         toast({
           title: "Registration Failed",
@@ -573,8 +576,8 @@ const UserRegister = () => {
                 >
                   Cancel
                 </Button>
-                <Button type="submit" className="save-btn text-white">
-                  Submit
+                <Button type={status === "Submit" ? "submit" : "button"} className="save-btn text-white">
+                  {status}
                 </Button>
               </div>
             </form>
