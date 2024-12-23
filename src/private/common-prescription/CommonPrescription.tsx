@@ -63,10 +63,10 @@ const CommonPrescription = () => {
 
         const apiUrl =
           role === "doctor"
-            ? `http://localhost:8081/api/doctor/getPrescription/${urlParam}`
+            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPrescription/${urlParam}`
             : role === "ad"
-            ? `http://localhost:8081/api/AD/getPrescription/${urlParam}`
-            : `http://localhost:8081/api/patient/getPrescription/${urlParam}`;
+            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPrescription/${urlParam}`
+            : `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/patient/getPrescription/${urlParam}`;
 
         const { data } = await axios.get(apiUrl, {
           headers: {
@@ -140,7 +140,7 @@ const CommonPrescription = () => {
               <img src="/upes-logo.jpg" alt="Logo" className="w-[100px]" />
             </div>
             <h2 className="font-medium text-center text-2xl">UHS</h2>
-            <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm ">
+            <div className="font-medium flex flex-col lg:flex-row items-center max-lg:text-sm">
               <span>{ndata?.time}</span>
               <span className="lg:ml-2">{ndata?.date}</span>
             </div>

@@ -47,7 +47,7 @@ const PatientLogs = () => {
     try {
       if(selectedButton === "Consultation"){
 
-        let apiUrl = "http://localhost:8081/api/AD/getAppointmentByDate";
+        let apiUrl = "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
         
         if (date) {
           apiUrl += `?date=${date}`;
@@ -65,7 +65,7 @@ const PatientLogs = () => {
         reportId: rept.appointmentId,
         patientName: rept.PatientName,
         token: rept.token,
-        downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
+        downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
       }));
       
       setReports(formatData);
@@ -76,7 +76,7 @@ const PatientLogs = () => {
         });
       }
     }else{
-      let apiUrl = `http://localhost:8081/api/AD/getAdHocByDate?date=${date}`;
+      let apiUrl = `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAdHocByDate?date=${date}`;
       
       const resp = await axios.get(apiUrl, {
         headers: {
@@ -181,7 +181,7 @@ const PatientLogs = () => {
           </Button>
         </div>
         <div className="flex justify-center w-full max-lg:h-[80svh]">
-          <div className="flex flex-col gap-4 w-3/4 justify-center items-center max-lg:hidden">
+          <div className="flex flex-col gap-4 w-1/2 justify-center items-center max-lg:hidden">
             <div className="flex items-center justify-center p-5 max-lg:p-5 bg-gray-800 rounded-lg shadow-lg my-5">
               <p className="text-4xl font-bold text-white drop-shadow-lg">
                 {formatTime(time)}
@@ -264,28 +264,28 @@ const PatientLogs = () => {
               <TableCaption>A list of your recent reports</TableCaption>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Patient Name
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Patient Email
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Medicine Name
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Quantity
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Nursing Assistant Name
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Nursing Assistant Email
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Date
                   </TableHead>
-                  <TableHead className="w-[12.5%] text-center">
+                  <TableHead className="w-[12.5%] text-center whitespace-nowrap">
                     Time
                   </TableHead>
                 </TableRow>

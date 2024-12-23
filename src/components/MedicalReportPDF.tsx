@@ -1,14 +1,12 @@
-import React from 'react';
+import React from "react";
 import {
   Document,
   Page,
   Text,
   View,
   StyleSheet,
-  Image
-} from '@react-pdf/renderer';
-
-// Interfaces remain the same
+  Image,
+} from "@react-pdf/renderer";
 
 interface PatientData {
   name: string;
@@ -27,7 +25,7 @@ interface PatientData {
     dosageEvening: string;
     duration: string;
     suggestion: string;
-  }>
+  }>;
 }
 
 interface MedicalReportProps {
@@ -40,174 +38,156 @@ interface MedicalReportProps {
 
 const styles = StyleSheet.create({
   page: {
-    padding: 20,
-    backgroundColor: 'white',
-    fontFamily: 'Helvetica',
+    padding: 16,
+    backgroundColor: "#FFFFFF",
+    fontFamily: "Helvetica",
   },
   header: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 15,
-    paddingBottom: 10,
-    borderBottom: '2 solid #000',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   logo: {
-    width: 70,
-    height: 70,
-    objectFit: 'contain',
+    width: 80,
+    height: "auto",
   },
   title: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#000',
+    fontSize: 24,
+    fontWeight: "medium",
+    textAlign: "center",
   },
   dateTimeContainer: {
-    alignItems: 'flex-end',
+    flexDirection: "column",
+    alignItems: "flex-end",
   },
   dateTime: {
-    fontSize: 11,
-    color: '#000',
-    marginBottom: 2,
+    fontSize: 12,
+    fontWeight: "medium",
   },
-  divider: {
-    borderBottom: '1 solid #000',
-    marginVertical: 10,
+  horizontalLine: {
+    borderBottom: "1 solid black",
+    marginTop: 8,
   },
   infoSection: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginVertical: 10,
-    gap: 15,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    gap: 16,
+    marginTop:8,
   },
   infoColumn: {
     flex: 1,
+    gap: 16,
   },
   infoRow: {
-    flexDirection: 'row',
-    marginVertical: 4,
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 10,
   },
   label: {
-    fontWeight: 'bold',
-    width: '45%',
-    fontSize: 11,
-    color: '#000',
+    fontSize: 12,
+    fontWeight: "medium",
+    width: 60,
+    whiteSpace: "nowrap",
   },
-  value: {
-    width: '55%',
-    backgroundColor: '#f7fafc',
-    padding: '4 6',
+  input: {
+    backgroundColor: "#dddce2",
+    padding: 8,
     borderRadius: 4,
-    fontSize: 11,
-    color: '#000',
-    borderColor: '#000',
-    borderWidth: 1,
+    fontSize: 12,
+    flex: 1,
+    width: 40,
   },
   section: {
-    marginVertical: 8,
+    gap: 8,
   },
-  sectionTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#000',
-    marginBottom: 6,
+  sectionLabel: {
+    marginTop: 16,
+    fontSize: 12,
+    fontWeight: "semibold",
   },
-  textArea: {
-    backgroundColor: '#f7fafc',
-    padding: 8,
-    minHeight: 50,
+  textarea: {
+    backgroundColor: "#dddce2",
+    padding: 16,
     borderRadius: 4,
-    fontSize: 11,
-    lineHeight: 1.4,
-    color: '#000',
-    borderColor: '#000',
-    borderWidth: 1,
+    minHeight: 60,
+    fontSize: 12,
   },
   table: {
-    width: 'auto',
-    marginVertical: 8,
-    borderColor: '#000',
-    borderWidth: 1,
-  },
-  tableRow: {
-    flexDirection: 'row',
-    borderBottomColor: '#000',
-    borderBottomWidth: 1,
+    width: "100%",
   },
   tableHeader: {
-    backgroundColor: '#f8fafc',
+    flexDirection: "row",
+    borderBottom: "1 solid black",
   },
   tableHeaderCell: {
-    padding: '6 4',
-    fontSize: 11,
-    fontWeight: 'bold',
-    color: '#000',
+    padding: 8,
+    fontSize: 12,
+    fontWeight: "medium",
+    borderRight: "1 solid black",
+    borderTop: "1 solid black",
+    backgroundColor: "#FFFFFF",
+    textAlign: "center"
+  },
+  tableRow: {
+    flexDirection: "row",
+    borderBottom: "1 solid black",
   },
   tableCell: {
-    padding: '6 4',
-    fontSize: 10,
-    color: '#000',
-    borderRightColor: '#000',
-    borderRightWidth: 1,
+    padding: 8,
+    fontSize: 12,
+    borderRight: "1 solid black",
+    backgroundColor: "#FFFFFF",
   },
   dosageTable: {
-    width: '100%',
+    width: "100%",
   },
-  dosageRow: {
-    flexDirection: 'row',
-    borderBottomColor: '#000',
-    borderBottomWidth: 1,
+  dosageHeader: {
+    flexDirection: "row",
+    borderBottom: "1 solid black",
   },
   dosageHeaderCell: {
     flex: 1,
-    padding: 4,
-    fontSize: 9,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    backgroundColor: '#f8fafc',
-    color: '#000',
+    padding: 8,
+    fontSize: 11,
+    fontWeight: "medium",
+    textAlign: "center",
+    borderRight: "1 solid black",
+  },
+  dosageRow: {
+    flexDirection: "row",
   },
   dosageCell: {
     flex: 1,
-    padding: 4,
-    fontSize: 9,
-    textAlign: 'center',
-    color: '#000',
+    padding: 8,
+    fontSize: 11,
+    textAlign: "center",
+    borderRight: "1 solid black",
   },
   signature: {
-    marginTop: 30,
-    alignItems: 'flex-end',
-    paddingRight: 10,
+    marginTop: 20,
+    alignItems: "flex-end",
   },
   signatureName: {
     fontSize: 12,
-    fontWeight: 'bold',
-    color: '#000',
+  },
+  signatureDesignation: {
+    fontSize: 12,
   },
   signatureTitle: {
-    fontSize: 11,
-    color: '#000',
-    marginTop: 2,
+    fontSize: 12,
+    fontWeight: "bold",
   },
-  signatureDivider: {
-    width: 200,
-    borderBottom: '1 solid #000',
-    marginBottom: 5,
-  }
 });
 
-// Component remains the same
 const MedicalReportPDF: React.FC<MedicalReportProps> = ({
   ndata,
   diagnosis,
   dietaryRemarks,
   testNeeded,
-  doctorName
+  doctorName,
 }) => (
   <Document>
     <Page size="A4" style={styles.page}>
-      {/* Header */}
       <View style={styles.header}>
         <Image src="/upes-logo.jpg" style={styles.logo} />
         <Text style={styles.title}>UHS</Text>
@@ -217,104 +197,135 @@ const MedicalReportPDF: React.FC<MedicalReportProps> = ({
         </View>
       </View>
 
-      {/* Patient Information */}
+      <View style={styles.horizontalLine} />
+
       <View style={styles.infoSection}>
         <View style={styles.infoColumn}>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Name:</Text>
-            <Text style={styles.value}>{ndata?.name}</Text>
+            <Text style={styles.input}>{ndata?.name}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>ID:</Text>
-            <Text style={styles.value}>{ndata?.id}</Text>
+            <Text style={styles.input}>{ndata?.id}</Text>
           </View>
         </View>
 
         <View style={styles.infoColumn}>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Age:</Text>
-            <Text style={styles.value}>{ndata?.age}</Text>
+            <Text style={styles.input}>{ndata?.age}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>School:</Text>
-            <Text style={styles.value}>{ndata?.course}</Text>
+            <Text style={styles.input}>{ndata?.course}</Text>
           </View>
         </View>
 
         <View style={styles.infoColumn}>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Sex:</Text>
-            <Text style={styles.value}>{ndata?.sex}</Text>
+            <Text style={styles.input}>{ndata?.sex}</Text>
           </View>
           <View style={styles.infoRow}>
             <Text style={styles.label}>Residence Type:</Text>
-            <Text style={styles.value}>{ndata?.residenceType}</Text>
+            <Text style={styles.input}>{ndata?.residenceType}</Text>
           </View>
         </View>
       </View>
 
-      <View style={styles.divider} />
+      <View style={styles.horizontalLine} />
 
-      {/* Diagnosis */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Diagnosis</Text>
-        <Text style={styles.textArea}>{diagnosis}</Text>
+        <Text style={styles.sectionLabel}>Diagnosis:</Text>
+        <Text style={styles.textarea}>{diagnosis}</Text>
       </View>
 
-      {/* Medicine Table */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Medicine</Text>
+        <Text style={styles.sectionLabel}>Medicine:</Text>
         <View style={styles.table}>
-          <View style={[styles.tableRow, styles.tableHeader]}>
-            <Text style={[styles.tableHeaderCell, { width: '5%' }]}>No.</Text>
-            <Text style={[styles.tableHeaderCell, { width: '25%' }]}>Medicine</Text>
-            <Text style={[styles.tableHeaderCell, { width: '30%' }]}>Dosage (/day)</Text>
-            <Text style={[styles.tableHeaderCell, { width: '10%' }]}>Duration</Text>
-            <Text style={[styles.tableHeaderCell, { width: '30%' }]}>Suggestions</Text>
+          <View style={styles.tableHeader}>
+            <Text style={[styles.tableHeaderCell, { width: "9%", borderLeft: "1 solid black" }]}>
+              S. No.
+            </Text>
+            <Text style={[styles.tableHeaderCell, { width: "24%" }]}>
+              Medicine
+            </Text>
+            <Text style={[styles.tableHeaderCell, { width: "35%" }]}>
+              Dosage (/day)
+            </Text>
+            <Text style={[styles.tableHeaderCell, { width: "12%" }]}>
+              Duration
+            </Text>
+            <Text
+              style={[styles.tableHeaderCell, { width: "20%"}]}
+            >
+              Suggestions
+            </Text>
           </View>
 
           {ndata.meds.map((med, index) => (
             <View key={index} style={styles.tableRow}>
-              <Text style={[styles.tableCell, { width: '5%' }]}>{index + 1}</Text>
-              <Text style={[styles.tableCell, { width: '25%' }]}>{med.name}</Text>
-              <View style={[styles.tableCell, { width: '30%', padding: 0 }]}>
+              <Text
+                style={[styles.tableCell, { width: "9%", textAlign: "center", borderLeft: "1 solid black" }]}
+              >
+                {index + 1}
+              </Text>
+              <Text style={[styles.tableCell, { width: "24%" }]}>
+                {med.name}
+              </Text>
+              <View style={[styles.tableCell, { width: "35%", padding: 0 }]}>
                 <View style={styles.dosageTable}>
-                  <View style={styles.dosageRow}>
+                  <View style={styles.dosageHeader}>
                     <Text style={styles.dosageHeaderCell}>Morning</Text>
                     <Text style={styles.dosageHeaderCell}>Afternoon</Text>
-                    <Text style={styles.dosageHeaderCell}>Evening</Text>
+                    <Text style={[styles.dosageHeaderCell, { borderRight: 0 }]}>
+                      Evening
+                    </Text>
                   </View>
                   <View style={styles.dosageRow}>
                     <Text style={styles.dosageCell}>{med.dosageMorning}</Text>
                     <Text style={styles.dosageCell}>{med.dosageAfternoon}</Text>
-                    <Text style={styles.dosageCell}>{med.dosageEvening}</Text>
+                    <Text style={[styles.dosageCell, { borderRight: 0 }]}>
+                      {med.dosageEvening}
+                    </Text>
                   </View>
                 </View>
               </View>
-              <Text style={[styles.tableCell, { width: '10%' }]}>{med.duration}</Text>
-              <Text style={[styles.tableCell, { width: '30%', borderRightWidth: 0 }]}>{med.suggestion}</Text>
+              <Text
+                style={[
+                  styles.tableCell,
+                  { width: "12%", textAlign: "center" },
+                ]}
+              >
+                {med.duration}
+              </Text>
+              <Text
+                style={[
+                  styles.tableCell,
+                  { width: "20%" },
+                ]}
+              >
+                {med.suggestion}
+              </Text>
             </View>
           ))}
         </View>
       </View>
 
-      {/* Recommendations */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Recommendations</Text>
-        <Text style={styles.textArea}>{dietaryRemarks}</Text>
+        <Text style={styles.sectionLabel}>Recommendations:</Text>
+        <Text style={styles.textarea}>{dietaryRemarks}</Text>
       </View>
 
-      {/* Tests Needed */}
       <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Tests Needed</Text>
-        <Text style={styles.textArea}>{testNeeded}</Text>
+        <Text style={styles.sectionLabel}>Tests Needed:</Text>
+        <Text style={styles.textarea}>{testNeeded}</Text>
       </View>
 
-      {/* Signature */}
       <View style={styles.signature}>
-        <View style={styles.signatureDivider} />
         <Text style={styles.signatureName}>{doctorName}</Text>
-        <Text style={styles.signatureTitle}>{ndata?.designation}</Text>
+        <Text style={styles.signatureDesignation}>({ndata?.designation})</Text>
         <Text style={styles.signatureTitle}>Doctor</Text>
       </View>
     </Page>
