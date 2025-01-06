@@ -40,6 +40,7 @@ import PatientLogsLayout from "@/private/Patient-Logs/PatientLogsLayout";
 import PatientLogs from "@/private/Patient-Logs/PatientLogs";
 import AdHocTreatmentLayout from "@/private/Ad-Hoc Treatment/AdHocTreatmentLayout";
 import AdHocTreatment from "@/private/Ad-Hoc Treatment/AdHocTreatment";
+import PassChange from "@/public/PassChange";
 
 const router = createBrowserRouter([
   {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
   {
     path: "/admin-portal",
     element: <AdminSignIn />,
+  },
+  {
+    path:"/pass-change",
+    element:<PassChange />
   },
   {
     path: "/admin-dashboard",
