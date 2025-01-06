@@ -49,7 +49,7 @@ const PatientLogs = () => {
     try {
       if (selectedButton === "Consultation") {
         let apiUrl =
-          "http://localhost:8081/api/AD/getAppointmentByDate";
+          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
 
         if (date) {
           apiUrl += `?date=${date}`;
@@ -67,7 +67,7 @@ const PatientLogs = () => {
           reportId: rept.appointmentId,
           patientName: rept.PatientName,
           token: rept.token,
-          downloadLink: `http://localhost:8081/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);
@@ -78,7 +78,7 @@ const PatientLogs = () => {
           });
         }
       } else {
-        let apiUrl = `http://localhost:8081/api/AD/getAdHocByDate?date=${date}`;
+        let apiUrl = `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getAdHocByDate?date=${date}`;
 
         const resp = await axios.get(apiUrl, {
           headers: {
