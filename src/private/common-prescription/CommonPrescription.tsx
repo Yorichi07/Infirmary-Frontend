@@ -89,7 +89,7 @@ const CommonPrescription = () => {
 
         setNdata({
           name: patient.name || "",
-          id: patient.sapId || patient.phoneNumber || "",
+          id: patient.sapID || "",
           age:
             new Date().getFullYear() -
             new Date(patient.dateOfBirth).getFullYear(),

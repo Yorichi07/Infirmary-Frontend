@@ -28,7 +28,9 @@ const PatientLogs = () => {
       reportId: string;
       patientName: string;
       token: string;
-      downloadLink: string;
+      date:string;
+      time:string;
+      location:string;
     }>
   >([]);
   const [adHocRep, setAdHocRep] = useState<
@@ -67,7 +69,9 @@ const PatientLogs = () => {
           reportId: rept.appointmentId,
           patientName: rept.PatientName,
           token: rept.token,
-          downloadLink: `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
+          date: rept.date,
+          time: rept.time,
+          location: rept.location
         }));
 
         setReports(formatData);
@@ -244,11 +248,20 @@ const PatientLogs = () => {
                 <TableCaption>A list of your recent reports</TableCaption>
                 <TableHeader>
                   <TableRow>
-                    <TableHead className="w-[33%] text-center">
+                    <TableHead className="w-[16.6%] text-center">
                       Token Number
                     </TableHead>
-                    <TableHead className="w-[33%] text-center">
+                    <TableHead className="w-[16.6%] text-center">
                       Patient Name
+                    </TableHead>
+                    <TableHead className="w-[16.6%] text-center">
+                      Date                     
+                    </TableHead>
+                    <TableHead className="w-[16.6%] text-center">
+                      Time
+                    </TableHead>
+                    <TableHead className="w-[16.6%] text-center">
+                      Location
                     </TableHead>
                     <TableHead className="text-center whitespace-nowrap">
                       Download Report
@@ -264,6 +277,18 @@ const PatientLogs = () => {
 
                       <TableCell className="text-center">
                         {report.patientName}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.date}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.time}
+                      </TableCell>
+
+                      <TableCell className="text-center">
+                        {report.location}
                       </TableCell>
 
                       <TableCell className="text-center">

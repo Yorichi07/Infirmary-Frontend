@@ -81,11 +81,11 @@ const PatientDetails = () => {
     for (const meds in medLst) {
       medAry.push({
         medicine: medLst[parseInt(meds)],
-        dosageMorning: (dosgM[parseInt(meds)] as HTMLInputElement).value,
-        dosageAfternoon: (dosgA[parseInt(meds)] as HTMLInputElement).value,
-        dosageEvening: (dosgE[parseInt(meds)] as HTMLInputElement).value,
-        duration: (dur[parseInt(meds)] as HTMLInputElement).value,
-        suggestion: (sugs[parseInt(meds)] as HTMLInputElement).value,
+        dosageMorning: (dosgM[parseInt(meds)] as HTMLInputElement).value || 0,
+        dosageAfternoon: (dosgA[parseInt(meds)] as HTMLInputElement).value || 0,
+        dosageEvening: (dosgE[parseInt(meds)] as HTMLInputElement).value || 0,
+        duration: (dur[parseInt(meds)] as HTMLInputElement).value || 0,
+        suggestion: (sugs[parseInt(meds)] as HTMLInputElement).value || "",
       });
     }
     const req: {

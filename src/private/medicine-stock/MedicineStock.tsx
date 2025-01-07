@@ -170,6 +170,49 @@ const MedicineStock = () => {
     fetchStocks();
   }, []);
 
+  const handleDownloadExcel = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      let role = localStorage.getItem("roles");
+
+      if (role === "ad") role = role.toUpperCase();
+
+      const response = await axios.get(`http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/export`,{
+        headers:{
+          "Authorization":`Bearer ${token}`,
+        },
+        responseType:'blob'
+      });
+
+      const url = window.URL.createObjectURL(new Blob([response.data],{
+        type: response.headers['Content-Type']?.toString()
+      }));
+
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'medicine_stocks.xlsx';
+      document.body.appendChild(a);
+      a.click();
+
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+
+      toast({
+        variant:"default",
+        title:"Success",
+        description:"Excel downloaded Successdully"
+      })
+
+  }catch(err:any){
+    return toast({
+      title: "Error",
+      description: err.response?.data?.message,
+      variant: "destructive",
+      action: <ToastAction altText="Try again">Try again</ToastAction>,
+    });
+  }
+}
+
   const handleAddNewRow = () => {
     setNewStock({
       id: "",
@@ -680,6 +723,13 @@ const MedicineStock = () => {
                 </button>
               </>
             )}
+            <button
+                  onClick={handleDownloadExcel}
+                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+                >
+                Download Excel
+                {Shared.Save}
+            </button>
           </div>
         </div>
       </div>

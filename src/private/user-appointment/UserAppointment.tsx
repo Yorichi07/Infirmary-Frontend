@@ -56,6 +56,19 @@ const UserAppointment = () => {
     },
   });
 
+  const [userDetails, setUserDetails] = useState({
+    email: "",
+    name: "",
+    school: "",
+    dateOfBirth: "",
+    program: "",
+    phoneNumber: "",
+    emergencyContact: "",
+    bloodGroup: "",
+    imageUrl: "",
+    password: "",
+  });
+
   useEffect(() => {
     const fetchDoctors = async () => {
       try {
@@ -110,7 +123,48 @@ const UserAppointment = () => {
       }
     };
 
+    const getUser = async () => {
+      const token = localStorage.getItem("token");
+      if (!token) {
+        navigate("/");
+        return;
+      }
+      try {
+        const res = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/patient/", {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        });
+
+        const data = await res.data;
+        setUserDetails(data);
+      } catch (error: any) {
+        console.log(error);
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          toast({
+            title: "Error",
+            description: error.response.data.message,
+            variant: "destructive",
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
+        } else {
+          toast({
+            title: "Error",
+            description:
+              "Error fetching patient details, please try again later.",
+            variant: "destructive",
+            action: <ToastAction altText="Try again">Try again</ToastAction>,
+          });
+        }
+      }
+    };
+
     fetchDoctors();
+    getUser();
   }, []);
 
   const fetchLastAppointmentDate = async () => {
@@ -249,11 +303,35 @@ const UserAppointment = () => {
   return (
     <>
       <Toaster />
-      <div className="min-h-[84svh] w-full flex gap-8 max-lg:min-h-[93svh]">
-        <img
+      <div className="min-h-[84svh] w-full flex gap-8 max-lg:min-h-[93svh] px-2">
+        {/* <img
           src="/appointment.jpg"
           className="w-[55%] max-lg:hidden border-r border-black shadow-md"
-        />
+        /> */}
+        <div className="w-[55%] max-lg:hidden flex justify-center items-center">
+          <div className="w-full bg-[#000000] space-y-4 p-8 bg-opacity-10 rounded-lg flex items-center justify-center flex-col shadow-xl">
+            <div className="bg-white border rounded-md shadow-xl">
+              <img
+                src={
+                  userDetails.imageUrl != null
+                    ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/${userDetails.imageUrl}`
+                    : "/default-user.jpg"
+                }
+                className="w-63 h-64 object-cover border-2 border-black"
+              />
+            </div>
+            <div className="text-center  space-y-2 text-[#545555] font-semibold">
+              <p>{userDetails.name}</p>
+              <p>{userDetails.email}</p>
+              <p>
+                DOB -{" "}
+                {new Date(userDetails.dateOfBirth).toLocaleDateString("en-GB")}
+              </p>
+              <p>Contact - {userDetails.phoneNumber}</p>
+              <p>Blood Group - {userDetails.bloodGroup}</p>
+            </div>
+          </div>
+        </div>
 
         <div className="appointment-container justify-between flex flex-col py-5 px-3">
           <div className="appointment-container__content">

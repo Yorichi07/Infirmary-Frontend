@@ -453,7 +453,7 @@ const PatientList = () => {
                                         htmlFor="temperature"
                                         className="whitespace-nowrap"
                                       >
-                                        Current Temperature (in °F)
+                                        Current Temperature* (in °F)
                                       </label>
                                       <input
                                         type="number"
@@ -473,7 +473,7 @@ const PatientList = () => {
                                     </div>
                                     <div className="form-group">
                                       <label htmlFor="weight">
-                                        Current Weight (in Kg)
+                                        Current Weight* (in Kg)
                                       </label>
                                       <input
                                         type="number"
