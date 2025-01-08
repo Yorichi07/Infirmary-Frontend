@@ -92,9 +92,9 @@ const NewDoctor = () => {
           navigate("/admin-portal");
           return;
         }
-        const payload = { ...data, status: false }; // `designation` is automatically included from the `data` object
+        const payload = { ...data, status: false };
         await axios.post(
-          "http://localhost:8081/api/admin/doctor/signup",
+          "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/admin/doctor/signup",
           payload,
           {
             headers: {
@@ -104,7 +104,7 @@ const NewDoctor = () => {
         );
         toast({
           title: "Registration Successful",
-          description: "New Doctor has been successfully registered.",
+          description: "A verification email has been sent to your email.",
         });
         setTimeout(() => {
           navigate("/admin-dashboard");

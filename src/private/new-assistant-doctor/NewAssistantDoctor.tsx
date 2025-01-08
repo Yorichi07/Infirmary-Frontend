@@ -77,15 +77,15 @@ const NewAssistantDoctor = () => {
           navigate("/admin-portal");
           return;
         }
-        const payload = { ...data, status: false }; // `designation` is automatically included from the `data` object
-        await axios.post("http://localhost:8081/api/admin/AD/signup", payload, {
+        const payload = { ...data, status: false };
+        await axios.post("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/admin/AD/signup", payload, {
           headers: {
             Authorization: `Bearer ${token}`,
           },
         });
         toast({
           title: "Registration Successful",
-          description: "New Nursing Assistant has been successfully registered.",
+          description: "A verification email has been sent to your email.",
         });
         setTimeout(() => {
           navigate("/admin-dashboard");

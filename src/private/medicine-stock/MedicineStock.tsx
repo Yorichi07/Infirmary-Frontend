@@ -53,6 +53,8 @@ const MedicineStock = () => {
       longitude: string;
     }>
   >([]);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [sortColumn, setSortColumn] = useState<string>("quantity");
 
   const handleEdit = (stock: Stock) => {
     setEditStock(stock);
@@ -78,7 +80,7 @@ const MedicineStock = () => {
         console.log(editStock);
 
         await axios.post(
-          `http://localhost:8081/api/${role}/stock/editStock`,
+          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/editStock`,
           editStock,
           {
             headers: {
@@ -118,7 +120,7 @@ const MedicineStock = () => {
       if (role === "ad") role = role.toUpperCase();
 
       const response = await axios.get(
-        `http://localhost:8081/api/${role}/stock/`,
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -141,9 +143,7 @@ const MedicineStock = () => {
 
   const fetchLocations = async () => {
     try {
-      const resp = await axios.get(
-        "http://localhost:8081/api/location/"
-      );
+      const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
       if (resp.status === 200) {
         const data = resp.data;
         setLocations(data);
@@ -177,20 +177,25 @@ const MedicineStock = () => {
 
       if (role === "ad") role = role.toUpperCase();
 
-      const response = await axios.get(`http://localhost:8081/api/${role}/export`,{
-        headers:{
-          "Authorization":`Bearer ${token}`,
-        },
-        responseType:'blob'
-      });
+      const response = await axios.get(
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/export`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        }
+      );
 
-      const url = window.URL.createObjectURL(new Blob([response.data],{
-        type: response.headers['Content-Type']?.toString()
-      }));
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: response.headers["Content-Type"]?.toString(),
+        })
+      );
 
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'medicine_stocks.xlsx';
+      a.download = "medicine_stocks.xlsx";
       document.body.appendChild(a);
       a.click();
 
@@ -198,20 +203,19 @@ const MedicineStock = () => {
       window.URL.revokeObjectURL(url);
 
       toast({
-        variant:"default",
-        title:"Success",
-        description:"Excel downloaded Successdully"
-      })
-
-  }catch(err:any){
-    return toast({
-      title: "Error",
-      description: err.response?.data?.message,
-      variant: "destructive",
-      action: <ToastAction altText="Try again">Try again</ToastAction>,
-    });
-  }
-}
+        variant: "default",
+        title: "Success",
+        description: "Excel downloaded Successdully",
+      });
+    } catch (err: any) {
+      return toast({
+        title: "Error",
+        description: err.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
+  };
 
   const handleAddNewRow = () => {
     setNewStock({
@@ -268,7 +272,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://localhost:8081/api/${role}/stock/addStock`,
+          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -305,7 +309,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://localhost:8081/api/${role}/stock/${batchNumber}`,
+          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -340,14 +344,37 @@ const MedicineStock = () => {
 
   const getSortedStocks = (stocks: Stock[]) => {
     return [...stocks].sort((a, b) => {
-      const qtyA = Number(a.quantity) || 0;
-      const qtyB = Number(b.quantity) || 0;
+      if (sortColumn === "quantity") {
+        const qtyA = Number(a.quantity) || 0;
+        const qtyB = Number(b.quantity) || 0;
 
-      if (qtyA === 0 && qtyB !== 0) return 1;
-      if (qtyA !== 0 && qtyB === 0) return -1;
+        if (sortDirection === "asc") {
+          return qtyA - qtyB;
+        } else {
+          return qtyB - qtyA;
+        }
+      }
+      if (sortColumn === "expirationDate") {
+        const dateA = new Date(a.expirationDate).getTime();
+        const dateB = new Date(b.expirationDate).getTime();
 
+        if (sortDirection === "asc") {
+          return dateA - dateB;
+        } else {
+          return dateB - dateA;
+        }
+      }
       return 0;
     });
+  };
+
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("desc");
+    }
   };
 
   const filteredStocks = getSortedStocks(
@@ -403,14 +430,24 @@ const MedicineStock = () => {
                   <TableHead className="w-[15%] border text-black font-bold text-center">
                     Composition
                   </TableHead>
-                  <TableHead className="w-[8%] border text-black font-bold text-center">
-                    Quantity
+                  <TableHead
+                    className="w-[8%] border text-black font-bold text-center cursor-pointer"
+                    onClick={() => handleSort("quantity")}
+                  >
+                    Quantity{" "}
+                    {sortColumn === "quantity" &&
+                      (sortDirection === "asc" ? "↑" : "↓")}
                   </TableHead>
                   <TableHead className="w-[10%] border text-black font-bold text-center">
                     Type
                   </TableHead>
-                  <TableHead className="w-[10%] border text-black font-bold text-center whitespace-nowrap">
-                    Expiration Date
+                  <TableHead
+                    className="w-[10%] border text-black font-bold text-center cursor-pointer whitespace-nowrap"
+                    onClick={() => handleSort("expirationDate")}
+                  >
+                    Expiration Date{" "}
+                    {sortColumn === "expirationDate" &&
+                      (sortDirection === "asc" ? "↑" : "↓")}
                   </TableHead>
                   <TableHead className="w-[14%] border text-black font-bold text-center">
                     Company
@@ -724,11 +761,11 @@ const MedicineStock = () => {
               </>
             )}
             <button
-                  onClick={handleDownloadExcel}
-                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
-                >
-                Download Excel
-                {Shared.Save}
+              onClick={handleDownloadExcel}
+              className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+            >
+              Download Excel
+              {Shared.Save}
             </button>
           </div>
         </div>

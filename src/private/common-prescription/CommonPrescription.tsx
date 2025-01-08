@@ -62,12 +62,18 @@ const CommonPrescription = () => {
         const urlParam = new URLSearchParams(window.location.search).get("id");
         if (!urlParam) return;
 
+        const age = (dob: string) => {
+          const diff_ms = Date.now() - new Date(dob).getTime();
+          const age_dt = new Date(diff_ms);
+          return Math.abs(age_dt.getUTCFullYear() - 1970);
+        };
+
         const apiUrl =
           role === "doctor"
-            ? `http://localhost:8081/api/doctor/getPrescription/${urlParam}`
+            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPrescription/${urlParam}`
             : role === "ad"
-            ? `http://localhost:8081/api/AD/getPrescription/${urlParam}`
-            : `http://localhost:8081/api/patient/getPrescription/${urlParam}`;
+            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPrescription/${urlParam}`
+            : `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/patient/getPrescription/${urlParam}`;
 
         const { data } = await axios.get(apiUrl, {
           headers: {
@@ -90,9 +96,7 @@ const CommonPrescription = () => {
         setNdata({
           name: patient.name || "",
           id: patient.sapID || "",
-          age:
-            new Date().getFullYear() -
-            new Date(patient.dateOfBirth).getFullYear(),
+          age: age(patient.dateOfBirth),
           course: patient.program || "",
           sex: patient.gender || "",
           date: dayjs(data.date).format("DD/MM/YYYY") || "",
@@ -126,7 +130,6 @@ const CommonPrescription = () => {
 
     fetchData();
   }, []);
-
 
   return (
     <>
@@ -272,7 +275,7 @@ const CommonPrescription = () => {
                         </thead>
                         <tbody>
                           <tr>
-                          <td className="border p-2">
+                            <td className="border p-2">
                               <input
                                 type="number"
                                 min={0}
@@ -348,8 +351,20 @@ const CommonPrescription = () => {
             <div className="font-medium">Doctor</div>
           </div>
         </div>
-        <PDFDownloadLink className="mt-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded hover:from-blue-600 hover:to-blue-800 max-lg:my-2 whitespace-nowrap min-w-20" document={<MedicalReportPDF ndata={ndata} diagnosis={diagnosis} dietaryRemarks={dietaryRemarks} doctorName={doctorName} testNeeded={testNeeded}   />} fileName="patient_report.pdf">
-        Download PDF
+        <PDFDownloadLink
+          className="mt-4 bg-gradient-to-r from-blue-500 to-blue-700 text-white py-2 px-4 rounded hover:from-blue-600 hover:to-blue-800 max-lg:my-2 whitespace-nowrap min-w-20"
+          document={
+            <MedicalReportPDF
+              ndata={ndata}
+              diagnosis={diagnosis}
+              dietaryRemarks={dietaryRemarks}
+              doctorName={doctorName}
+              testNeeded={testNeeded}
+            />
+          }
+          fileName="patient_report.pdf"
+        >
+          Download PDF
         </PDFDownloadLink>
       </div>
     </>

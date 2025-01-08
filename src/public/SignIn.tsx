@@ -18,12 +18,17 @@ import { Link, useNavigate } from "react-router-dom";
 import "./SignIn.scss";
 import Shared from "@/Shared";
 import { Dialog } from "@radix-ui/react-dialog";
-import { DialogContent, DialogDescription, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import {
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const API_URLS = {
-  patient: "http://localhost:8081/api/auth/patient/signin",
-  doctor: "http://localhost:8081/api/auth/doctor/signin",
-  nursing_assistant: "http://localhost:8081/api/auth/ad/signin",
+  patient: "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
+  doctor: "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/doctor/signin",
+  nursing_assistant: "http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -55,7 +60,7 @@ const SignIn = () => {
     Array<{ locationName: string; latitude: string; longitude: string }>
   >([]);
   const [passRole, setPassRole] = useState<string>("patient");
-  const [process,setProcess] = useState<string>("Submit");
+  const [process, setProcess] = useState<string>("Submit");
 
   // const getRoleDisplayName = (role: string) => {
   //   const roleMapping: { [key: string]: string } = {
@@ -71,8 +76,9 @@ const SignIn = () => {
     setInput((prev) => ({ ...prev, [id]: value }));
   };
 
-
-  const handleRoleChangePass: ChangeEventHandler<HTMLInputElement> = async (e) => {
+  const handleRoleChangePass: ChangeEventHandler<HTMLInputElement> = async (
+    e
+  ) => {
     const selectedRole = e.target.value;
     setPassRole(selectedRole);
   };
@@ -94,43 +100,45 @@ const SignIn = () => {
     }
   };
 
-  const handlePassChange = async (data:any) => {
+  const handlePassChange = async (data: any) => {
     data.preventDefault();
 
     setProcess("Loading...");
-    const email = data.target.email.value
-    const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replaceAll(".",",");
-    try{
+    const email = data.target.email.value;
+    const emailSent =
+      email.substring(0, email.indexOf("@")) +
+      email.substring(email.indexOf("@")).replaceAll(".", ",");
+    try {
+      const response = await axios.get(
+        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/auth/passwordChangeRequest?email=${emailSent}&role=${passRole}`
+      );
 
-      const response = await axios.get(`http://localhost:8081/api/auth/passwordChangeRequest?email=${emailSent}&role=${passRole}`)
-      
-      
-      if(response.status === 200){
+      if (response.status === 200) {
         setProcess("Submit");
         return toast({
-          variant:"default",
-          title:"Request Successfull",
-          description:response.data
-        })
-      }else{
+          variant: "default",
+          title: "Request Successfull",
+          description: response.data,
+        });
+      } else {
         setProcess("Submit");
         return toast({
-          variant:"destructive",
-          title:"Request Unsuccessfull",
-          description:response.data.message,
+          variant: "destructive",
+          title: "Request Unsuccessfull",
+          description: response.data.message,
           action: <ToastAction altText="Try again">Try again</ToastAction>,
-        })
+        });
       }
-    }catch(err:any){
+    } catch (err: any) {
       setProcess("Submit");
-        return toast({
-          variant:"destructive",
-          title:"Request Unsuccessfull",
-          description:err.response.data.message,
-          action: <ToastAction altText="Try again">Try again</ToastAction>,
-        })
+      return toast({
+        variant: "destructive",
+        title: "Request Unsuccessfull",
+        description: err.response.data.message,
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
     }
-  }
+  };
 
   const handleSignIn = async () => {
     if (location.latitude === "-1" || location.longitude === "-1") {
@@ -194,7 +202,7 @@ const SignIn = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://localhost:8081/api/location/");
+        const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);
@@ -330,59 +338,63 @@ const SignIn = () => {
                         Register
                       </Link>
                     </span>
-                  </div>  
+                  </div>
                 </div>
               )}
               <Dialog>
-                    <DialogTrigger>
-                      <span className="text-blue-500">
-                        Forgot Password?
-                      </span>
-                    </DialogTrigger>
-                    <DialogContent>
-                      <DialogTitle className="font-medium text-center pb-3">
-                        Forgot Password
-                      </DialogTitle>
-                      <DialogDescription>
-                      <label>You are:</label>
-                      <div className="flex w-full pb-4">
-                        {ROLES.map(({ value, label }) => (
-                          <label
-                            key={value}
-                            className={`flex items-center whitespace-nowrap ${
-                              value === "doctor"
-                                ? "justify-start"
-                                : value === "nursing_assistant"
-                                ? "justify-end"
-                                : "justify-center"
-                            } w-full`}
-                          >
-                            <input
-                              type="radio"
-                              name="passRole"
-                              value={value}
-                              checked={passRole === value}
-                              onChange={handleRoleChangePass}
-                              className="mr-2"
-                            />
-                            {label}
-                          </label>
-                        ))}
+                <DialogTrigger>
+                  <span className="text-blue-500">Forgot Password?</span>
+                </DialogTrigger>
+                <DialogContent>
+                  <DialogTitle className="font-medium text-center">
+                    Forgot Password
+                  </DialogTitle>
+                  <DialogDescription>
+                    <label className="font-medium text-black">You are:</label>
+                    <div className="flex w-full pb-4">
+                      {ROLES.map(({ value, label }) => (
+                        <label
+                          key={value}
+                          className={`flex items-center text-black whitespace-nowrap ${
+                            value === "doctor"
+                              ? "justify-start"
+                              : value === "nursing_assistant"
+                              ? "justify-end"
+                              : "justify-center"
+                          } w-full`}
+                        >
+                          <input
+                            type="radio"
+                            name="passRole"
+                            value={value}
+                            checked={passRole === value}
+                            onChange={handleRoleChangePass}
+                            className="mr-2"
+                          />
+                          {label}
+                        </label>
+                      ))}
+                    </div>
+                    <form onSubmit={handlePassChange}>
+                      <div className="form-group">
+                        <label
+                          htmlFor="Forgot Email"
+                          className="text-black font-medium"
+                        >
+                          Enter your email ID:
+                        </label>
+                        <input name="email" type="email" />
                       </div>
-                        <form onSubmit={handlePassChange}>
-                          <div className="form-group">
-                            <label htmlFor="Forgot Email">
-                              Enter your email ID:
-                            </label>
-                            <input name="email" type="email"/>
-                          </div>
-                          <button type={process === "Submit"?'submit':'button'} className="submit-button">
-                            {process}
-                          </button>
-                        </form>
-                      </DialogDescription>
-                    </DialogContent>
-                  </Dialog>
+                      <button
+                        type={process === "Submit" ? "submit" : "button"}
+                        className="submit-button"
+                      >
+                        {process}
+                      </button>
+                    </form>
+                  </DialogDescription>
+                </DialogContent>
+              </Dialog>
             </div>
           </div>
         </div>
