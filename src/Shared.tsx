@@ -23,6 +23,7 @@ import {
   faPenToSquare,
   faXmark,
   faFilePrescription,
+  faChartLine,
 } from "@fortawesome/free-solid-svg-icons";
 import { MdEmergency } from "react-icons/md";
 import { FaAmbulance } from "react-icons/fa";
@@ -53,6 +54,7 @@ const Shared = {
   SlashEye: <FontAwesomeIcon icon={faEyeSlash} />,
   Edit: <FontAwesomeIcon icon={faPenToSquare} />,
   Cancel: <FontAwesomeIcon icon={faXmark} />,
+  Anaytics: <FontAwesomeIcon icon={faChartLine} />,
 };
 
 export default Shared;

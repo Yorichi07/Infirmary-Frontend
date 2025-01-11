@@ -55,6 +55,8 @@ const MedicineStock = () => {
   >([]);
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
   const [sortColumn, setSortColumn] = useState<string>("quantity");
+  const [selectedLocationFilter, setSelectedLocationFilter] =
+    useState<string>("all");
 
   const handleEdit = (stock: Stock) => {
     setEditStock(stock);
@@ -80,7 +82,7 @@ const MedicineStock = () => {
         console.log(editStock);
 
         await axios.post(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/editStock`,
+          `http://localhost:8081/api/${role}/stock/editStock`,
           editStock,
           {
             headers: {
@@ -120,7 +122,7 @@ const MedicineStock = () => {
       if (role === "ad") role = role.toUpperCase();
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/`,
+        `http://localhost:8081/api/${role}/stock/`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -143,7 +145,7 @@ const MedicineStock = () => {
 
   const fetchLocations = async () => {
     try {
-      const resp = await axios.get("http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/location/");
+      const resp = await axios.get("http://localhost:8081/api/location/");
       if (resp.status === 200) {
         const data = resp.data;
         setLocations(data);
@@ -178,7 +180,7 @@ const MedicineStock = () => {
       if (role === "ad") role = role.toUpperCase();
 
       const response = await axios.get(
-        `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/export`,
+        `http://localhost:8081/api/${role}/export`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -272,7 +274,7 @@ const MedicineStock = () => {
         };
 
         await axios.post(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/addStock`,
+          `http://localhost:8081/api/${role}/stock/addStock`,
           formattedNewStock,
           {
             headers: {
@@ -309,7 +311,7 @@ const MedicineStock = () => {
     for (const batchNumber of selectedStocks) {
       try {
         await axios.delete(
-          `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/${role}/stock/${batchNumber}`,
+          `http://localhost:8081/api/${role}/stock/${batchNumber}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -342,27 +344,34 @@ const MedicineStock = () => {
     setEditStock(null);
   };
 
-  const getSortedStocks = (stocks: Stock[]) => {
-    return [...stocks].sort((a, b) => {
+  const getSortedAndFilteredStocks = (stocks: Stock[]) => {
+    // First filter by location if a specific location is selected
+    let filteredByLocation = stocks;
+    if (selectedLocationFilter !== "all") {
+      filteredByLocation = stocks.filter(
+        (stock) => stock.location.locationName === selectedLocationFilter
+      );
+    }
+
+    // Then filter by search term
+    const filteredBySearch = filteredByLocation.filter(
+      (stock) =>
+        stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stock.composition.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        stock.company.toLowerCase().includes(searchTerm.toLowerCase())
+    );
+
+    // Finally sort
+    return [...filteredBySearch].sort((a, b) => {
       if (sortColumn === "quantity") {
         const qtyA = Number(a.quantity) || 0;
         const qtyB = Number(b.quantity) || 0;
-
-        if (sortDirection === "asc") {
-          return qtyA - qtyB;
-        } else {
-          return qtyB - qtyA;
-        }
+        return sortDirection === "asc" ? qtyA - qtyB : qtyB - qtyA;
       }
       if (sortColumn === "expirationDate") {
         const dateA = new Date(a.expirationDate).getTime();
         const dateB = new Date(b.expirationDate).getTime();
-
-        if (sortDirection === "asc") {
-          return dateA - dateB;
-        } else {
-          return dateB - dateA;
-        }
+        return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
       }
       return 0;
     });
@@ -377,14 +386,7 @@ const MedicineStock = () => {
     }
   };
 
-  const filteredStocks = getSortedStocks(
-    stocks.filter(
-      (stock) =>
-        stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stock.composition.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        stock.company.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredStocks = getSortedAndFilteredStocks(stocks);
 
   const handleSelectStock = (batchNumber: number | string) => {
     const updatedSelection = new Set(selectedStocks);
@@ -404,14 +406,37 @@ const MedicineStock = () => {
     <>
       <Toaster />
       <div className="bg-[#ECECEC] min-h-[84svh] p-8 space-y-8 flex flex-col max-lg:h-[93svh] max-lg:p-4">
-        <div className="flex space-x-2 items-center">
-          {Shared.Search}
-          <Input
-            className="bg-white"
-            placeholder="Search Medicine"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="flex gap-4">
+          <div className="flex w-full space-x-2 items-center">
+            {Shared.Search}
+            <Input
+              className="bg-white"
+              placeholder="Search Medicine"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="w-64">
+            <Select
+              value={selectedLocationFilter}
+              onValueChange={setSelectedLocationFilter}
+            >
+              <SelectTrigger className="bg-white text-black">
+                <SelectValue placeholder="Filter by Location" />
+              </SelectTrigger>
+              <SelectContent className="bg-white text-black">
+                <SelectGroup>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  <SelectItem value="UPES Bidholi Campus">
+                    UPES Bidholi Campus
+                  </SelectItem>
+                  <SelectItem value="UPES Kandoli Campus">
+                    UPES Kandoli Campus
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <div className="h-full overflow-y-scroll">
           {stocks.length > 0 || newStock ? (

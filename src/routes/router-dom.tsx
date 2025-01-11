@@ -41,6 +41,8 @@ import PatientLogs from "@/private/Patient-Logs/PatientLogs";
 import AdHocTreatmentLayout from "@/private/Ad-Hoc Treatment/AdHocTreatmentLayout";
 import AdHocTreatment from "@/private/Ad-Hoc Treatment/AdHocTreatment";
 import PassChange from "@/public/PassChange";
+import AnalyticsDashboardLayout from "@/private/Analytics-Dashboard/AnalyticsDashboardLayout";
+import AnalyticsDashboard from "@/private/Analytics-Dashboard/AnalyticsDashboard";
 
 const router = createBrowserRouter([
   {
@@ -52,8 +54,8 @@ const router = createBrowserRouter([
     element: <AdminSignIn />,
   },
   {
-    path:"/pass-change",
-    element:<PassChange />
+    path: "/pass-change",
+    element: <PassChange />,
   },
   {
     path: "/admin-dashboard",
@@ -69,7 +71,7 @@ const router = createBrowserRouter([
       <PatientLogsLayout>
         <PatientLogs></PatientLogs>
       </PatientLogsLayout>
-    )
+    ),
   },
   {
     path: "/adhoc",
@@ -77,7 +79,7 @@ const router = createBrowserRouter([
       <AdHocTreatmentLayout>
         <AdHocTreatment></AdHocTreatment>
       </AdHocTreatmentLayout>
-    )
+    ),
   },
   {
     path: "/register-doctor",
@@ -153,6 +155,14 @@ const router = createBrowserRouter([
       <AssistantDoctorDashboardLayout>
         <AssistantDoctorDashboard />
       </AssistantDoctorDashboardLayout>
+    ),
+  },
+  {
+    path: "/analytics-dashboard",
+    element: (
+      <AnalyticsDashboardLayout>
+        <AnalyticsDashboard />
+      </AnalyticsDashboardLayout>
     ),
   },
   {

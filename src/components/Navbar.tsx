@@ -39,8 +39,22 @@ const Navbar = ({
   };
 
   return (
-    <div className="bg-white shadow-md p-4 flex items-center justify-between h-[8svh] border-b border border-[gray] max-lg:h-[7svh]">
-      <span className="flex items-center justify-center">
+    <div className="bg-white shadow-md p-4 flex items-center justify-between h-[8svh] border-b border border-[gray] max-lg:h-[7svh] relative">
+      {/* Title and Title Logo */}
+      <div className="text-xl gap-2 absolute inset-0 flex items-center justify-center z-0 pointer-events-none max-lg:hidden">
+        {props.titleLogo &&
+          (typeof props.titleLogo === "string" ? (
+            <img src={props.titleLogo} alt="Title Logo"/>
+          ) : (
+            props.titleLogo
+          ))}
+        <span className="capitalize font-semibold text-2xl max-lg:text-xl">
+          {props.title}
+        </span>
+      </div>
+
+      {/* Left Section */}
+      <span className="flex items-center justify-center z-10">
         <img
           src="/upes-logo.jpg"
           alt="UPES Logo"
@@ -48,21 +62,14 @@ const Navbar = ({
         />
         <p className="font-mono text-3xl max-lg:text-2xl">|UHS</p>
       </span>
-      <div className="capitalize font-semibold text-2xl max-lg:text-xl flex gap-2 items-baseline max-lg:hidden">
-        {props.titleLogo &&
-          (typeof props.titleLogo === "string" ? (
-            <img src={props.titleLogo} alt="Title Logo" className="w-8" />
-          ) : (
-            props.titleLogo
-          ))}
-        {props.title}
-      </div>
+
+      {/* Right Section */}
       {props.additionalLogo && props.menu ? (
         <Popover>
-          <PopoverTrigger className="text-2xl max-lg:text-lg lg:w-[165px] flex items-center justify-end">
+          <PopoverTrigger className="text-2xl max-lg:text-lg flex items-center justify-end z-10">
             {props.additionalLogo}
           </PopoverTrigger>
-          <PopoverContent className="space-y-2 p-2 max-lg:p-2">
+          <PopoverContent className="space-y-2 p-2 max-lg:p-2 z-10">
             {props.role !== "doctor" &&
             props.role !== "ad" &&
             props.role !== "admin" ? (
@@ -96,7 +103,7 @@ const Navbar = ({
       ) : (
         <Link
           to={navPageBack}
-          className="text-base max-lg:text-sm flex items-center justify-end lg:w-[165px]"
+          className="text-base max-lg:text-sm flex items-center justify-end z-10"
         >
           {props.additionalLogo}
         </Link>
