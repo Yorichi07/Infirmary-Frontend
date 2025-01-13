@@ -258,8 +258,9 @@ const PatientList = () => {
   const handleRejectAppointment = async (email: string) => {
     try {
       const token = localStorage.getItem("token");
+      const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
       const response = await axios.get(
-        `http://localhost:8081/api/AD/rejectAppointment?email=${email}`,
+        `http://localhost:8081/api/AD/rejectAppointment?email=${emailSent}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -277,8 +278,9 @@ const PatientList = () => {
   const handleCompleteAppointment = async (email: string) => {
     try {
       const token = localStorage.getItem("token");
+      const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
       const response = await axios.get(
-        `http://localhost:8081/api/AD/completeAppointment/${email}`,
+        `http://localhost:8081/api/AD/completeAppointment/${emailSent}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -499,10 +501,11 @@ const PatientList = () => {
                                       className="reject-button"
                                       onClick={async () => {
                                         try {
-                                          const token =
-                                            localStorage.getItem("token");
+                                          const token = localStorage.getItem("token");
+                                          const email = pat.email
+                                          const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
                                           const response = await axios.get(
-                                            `http://localhost:8081/api/AD/rejectAppointment?email=${pat.email}`,
+                                            `http://localhost:8081/api/AD/rejectAppointment?email=${emailSent}`,
                                             {
                                               headers: {
                                                 Authorization: `Bearer ${token}`,

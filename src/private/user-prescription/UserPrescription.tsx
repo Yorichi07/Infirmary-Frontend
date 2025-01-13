@@ -38,8 +38,9 @@ const UserPrescription = () => {
 
         if (role !== "patient") {
           const url = window.location.search;
-          const val = url.substring(url.indexOf("?") + 4);
-          apiUrl = `http://localhost:8081/api/doctor/getAppointmentPat/${val}`;
+          const email = url.substring(url.indexOf("?") + 4);
+          const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
+          apiUrl = `http://localhost:8081/api/doctor/getAppointmentPat/${emailSent}`;
         } else {
           apiUrl = "http://localhost:8081/api/patient/getAppointment";
         }
