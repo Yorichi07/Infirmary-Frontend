@@ -175,7 +175,7 @@ const UserRegister = () => {
           
         toast({
           title: "Registration Successfull",
-          description: "You are successfully registered as new patient.",
+          description: "A verification email has been sent to your mail id.",
         });
         setTimeout(() => {
           navigate("/");

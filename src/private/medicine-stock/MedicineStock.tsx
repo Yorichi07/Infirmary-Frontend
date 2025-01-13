@@ -53,6 +53,10 @@ const MedicineStock = () => {
       longitude: string;
     }>
   >([]);
+  const [sortDirection, setSortDirection] = useState<"asc" | "desc">("asc");
+  const [sortColumn, setSortColumn] = useState<string>("quantity");
+  const [selectedLocationFilter, setSelectedLocationFilter] =
+    useState<string>("all");
 
   const handleEdit = (stock: Stock) => {
     setEditStock(stock);
@@ -141,9 +145,7 @@ const MedicineStock = () => {
 
   const fetchLocations = async () => {
     try {
-      const resp = await axios.get(
-        "http://localhost:8081/api/location/"
-      );
+      const resp = await axios.get("http://localhost:8081/api/location/");
       if (resp.status === 200) {
         const data = resp.data;
         setLocations(data);
@@ -177,20 +179,25 @@ const MedicineStock = () => {
 
       if (role === "ad") role = role.toUpperCase();
 
-      const response = await axios.get(`http://localhost:8081/api/${role}/export`,{
-        headers:{
-          "Authorization":`Bearer ${token}`,
-        },
-        responseType:'blob'
-      });
+      const response = await axios.get(
+        `http://localhost:8081/api/${role}/export`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          responseType: "blob",
+        }
+      );
 
-      const url = window.URL.createObjectURL(new Blob([response.data],{
-        type: response.headers['Content-Type']?.toString()
-      }));
+      const url = window.URL.createObjectURL(
+        new Blob([response.data], {
+          type: response.headers["Content-Type"]?.toString(),
+        })
+      );
 
-      const a = document.createElement('a');
+      const a = document.createElement("a");
       a.href = url;
-      a.download = 'medicine_stocks.xlsx';
+      a.download = "medicine_stocks.xlsx";
       document.body.appendChild(a);
       a.click();
 
@@ -198,20 +205,19 @@ const MedicineStock = () => {
       window.URL.revokeObjectURL(url);
 
       toast({
-        variant:"default",
-        title:"Success",
-        description:"Excel downloaded Successdully"
-      })
-
-  }catch(err:any){
-    return toast({
-      title: "Error",
-      description: err.response?.data?.message,
-      variant: "destructive",
-      action: <ToastAction altText="Try again">Try again</ToastAction>,
-    });
-  }
-}
+        variant: "default",
+        title: "Success",
+        description: "Excel downloaded Successdully",
+      });
+    } catch (err: any) {
+      return toast({
+        title: "Error",
+        description: err.response?.data?.message,
+        variant: "destructive",
+        action: <ToastAction altText="Try again">Try again</ToastAction>,
+      });
+    }
+  };
 
   const handleAddNewRow = () => {
     setNewStock({
@@ -338,26 +344,49 @@ const MedicineStock = () => {
     setEditStock(null);
   };
 
-  const getSortedStocks = (stocks: Stock[]) => {
-    return [...stocks].sort((a, b) => {
-      const qtyA = Number(a.quantity) || 0;
-      const qtyB = Number(b.quantity) || 0;
+  const getSortedAndFilteredStocks = (stocks: Stock[]) => {
+    // First filter by location if a specific location is selected
+    let filteredByLocation = stocks;
+    if (selectedLocationFilter !== "all") {
+      filteredByLocation = stocks.filter(
+        (stock) => stock.location.locationName === selectedLocationFilter
+      );
+    }
 
-      if (qtyA === 0 && qtyB !== 0) return 1;
-      if (qtyA !== 0 && qtyB === 0) return -1;
-
-      return 0;
-    });
-  };
-
-  const filteredStocks = getSortedStocks(
-    stocks.filter(
+    // Then filter by search term
+    const filteredBySearch = filteredByLocation.filter(
       (stock) =>
         stock.medicineName.toLowerCase().includes(searchTerm.toLowerCase()) ||
         stock.composition.toLowerCase().includes(searchTerm.toLowerCase()) ||
         stock.company.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+    );
+
+    // Finally sort
+    return [...filteredBySearch].sort((a, b) => {
+      if (sortColumn === "quantity") {
+        const qtyA = Number(a.quantity) || 0;
+        const qtyB = Number(b.quantity) || 0;
+        return sortDirection === "asc" ? qtyA - qtyB : qtyB - qtyA;
+      }
+      if (sortColumn === "expirationDate") {
+        const dateA = new Date(a.expirationDate).getTime();
+        const dateB = new Date(b.expirationDate).getTime();
+        return sortDirection === "asc" ? dateA - dateB : dateB - dateA;
+      }
+      return 0;
+    });
+  };
+
+  const handleSort = (column: string) => {
+    if (sortColumn === column) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortColumn(column);
+      setSortDirection("desc");
+    }
+  };
+
+  const filteredStocks = getSortedAndFilteredStocks(stocks);
 
   const handleSelectStock = (batchNumber: number | string) => {
     const updatedSelection = new Set(selectedStocks);
@@ -377,14 +406,37 @@ const MedicineStock = () => {
     <>
       <Toaster />
       <div className="bg-[#ECECEC] min-h-[84svh] p-8 space-y-8 flex flex-col max-lg:h-[93svh] max-lg:p-4">
-        <div className="flex space-x-2 items-center">
-          {Shared.Search}
-          <Input
-            className="bg-white"
-            placeholder="Search Medicine"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+        <div className="flex gap-4">
+          <div className="flex w-full space-x-2 items-center">
+            {Shared.Search}
+            <Input
+              className="bg-white"
+              placeholder="Search Medicine"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+          </div>
+          <div className="w-64">
+            <Select
+              value={selectedLocationFilter}
+              onValueChange={setSelectedLocationFilter}
+            >
+              <SelectTrigger className="bg-white text-black">
+                <SelectValue placeholder="Filter by Location" />
+              </SelectTrigger>
+              <SelectContent className="bg-white text-black">
+                <SelectGroup>
+                  <SelectItem value="all">All Locations</SelectItem>
+                  <SelectItem value="UPES Bidholi Campus">
+                    UPES Bidholi Campus
+                  </SelectItem>
+                  <SelectItem value="UPES Kandoli Campus">
+                    UPES Kandoli Campus
+                  </SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
+          </div>
         </div>
         <div className="h-full overflow-y-scroll">
           {stocks.length > 0 || newStock ? (
@@ -403,14 +455,24 @@ const MedicineStock = () => {
                   <TableHead className="w-[15%] border text-black font-bold text-center">
                     Composition
                   </TableHead>
-                  <TableHead className="w-[8%] border text-black font-bold text-center">
-                    Quantity
+                  <TableHead
+                    className="w-[8%] border text-black font-bold text-center cursor-pointer"
+                    onClick={() => handleSort("quantity")}
+                  >
+                    Quantity{" "}
+                    {sortColumn === "quantity" &&
+                      (sortDirection === "asc" ? "↑" : "↓")}
                   </TableHead>
                   <TableHead className="w-[10%] border text-black font-bold text-center">
                     Type
                   </TableHead>
-                  <TableHead className="w-[10%] border text-black font-bold text-center whitespace-nowrap">
-                    Expiration Date
+                  <TableHead
+                    className="w-[10%] border text-black font-bold text-center cursor-pointer whitespace-nowrap"
+                    onClick={() => handleSort("expirationDate")}
+                  >
+                    Expiration Date{" "}
+                    {sortColumn === "expirationDate" &&
+                      (sortDirection === "asc" ? "↑" : "↓")}
                   </TableHead>
                   <TableHead className="w-[14%] border text-black font-bold text-center">
                     Company
@@ -724,11 +786,11 @@ const MedicineStock = () => {
               </>
             )}
             <button
-                  onClick={handleDownloadExcel}
-                  className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
-                >
-                Download Excel
-                {Shared.Save}
+              onClick={handleDownloadExcel}
+              className="bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] text-white font-semibold flex items-center px-8 py-2 rounded-md max-lg:px-4"
+            >
+              Download Excel
+              {Shared.Save}
             </button>
           </div>
         </div>

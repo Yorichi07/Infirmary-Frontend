@@ -301,7 +301,9 @@ const PatientDetails = () => {
           <div className="w-full flex px-4 justify-between lg:gap-4 max-lg:flex-col">
             <div className="flex flex-col w-[50%] justify-between max-lg:gap-5 max-lg:mb-5 max-lg:w-full">
               <div className="flex items-center w-full">
-                <label className="w-[20%] font-medium max-lg:w-[70%]">Name:</label>
+                <label className="w-[20%] font-medium max-lg:w-[70%]">
+                  Name:
+                </label>
                 <input
                   className="rounded-md bg-white p-2 shadow-md w-full"
                   type="text"
@@ -310,7 +312,9 @@ const PatientDetails = () => {
                 />
               </div>
               <div className="flex items-center w-full">
-                <label className="w-[20%] font-medium max-lg:w-[70%]">Age:</label>
+                <label className="w-[20%] font-medium max-lg:w-[70%]">
+                  Age:
+                </label>
                 <input
                   className="rounded-md bg-white p-2 shadow-md w-full"
                   type="text"
@@ -319,7 +323,9 @@ const PatientDetails = () => {
                 />
               </div>
               <div className="flex items-center w-full">
-                <label className="w-[20%] font-medium max-lg:w-[70%]">Sex:</label>
+                <label className="w-[20%] font-medium max-lg:w-[70%]">
+                  Sex:
+                </label>
                 <input
                   className="rounded-md bg-white p-2 shadow-md w-full"
                   type="text"
@@ -328,7 +334,9 @@ const PatientDetails = () => {
                 />
               </div>
               <div className="flex items-center w-full">
-                <label className="w-[20%] font-medium max-lg:w-[70%]">SAP Id:</label>
+                <label className="w-[20%] font-medium max-lg:w-[70%]">
+                  SAP Id:
+                </label>
                 <input
                   className="rounded-md bg-white p-2 shadow-md w-full"
                   type="text"
@@ -337,7 +345,9 @@ const PatientDetails = () => {
                 />
               </div>
               <div className="flex items-center w-full">
-                <label className="w-[20%] font-medium max-lg:w-[70%]">School:</label>
+                <label className="w-[20%] font-medium max-lg:w-[70%]">
+                  School:
+                </label>
                 <input
                   className="rounded-md bg-white p-2 shadow-md w-full"
                   type="text"
@@ -506,20 +516,30 @@ const PatientDetails = () => {
                     />
                   </div>
                   <div className="flex items-center gap-[10px]">
-                    <label className="font-medium mr-auto">Residence Type:</label>
+                    <label className="font-medium mr-auto">School:</label>
                     <input
                       type="text"
-                      value={ndata?.residenceType}
+                      value={ndata?.course}
                       className="bg-[#dddce2] p-2 rounded-md"
                     />
                   </div>
                 </div>
-                <div>
+                <div className="flex flex-col gap-4">
                   <div className="flex items-center justify-center gap-[10px]">
                     <label className="font-medium mr-auto">Sex:</label>
                     <input
                       type="text"
                       value={ndata?.sex}
+                      className="bg-[#dddce2] p-2 rounded-md"
+                    />
+                  </div>
+                  <div className="flex items-center gap-[10px]">
+                    <label className="font-medium mr-auto">
+                      Residence Type:
+                    </label>
+                    <input
+                      type="text"
+                      value={ndata?.residenceType}
                       className="bg-[#dddce2] p-2 rounded-md"
                     />
                   </div>
@@ -560,7 +580,9 @@ const PatientDetails = () => {
                 <tbody>
                   {rows.map((_, index) => (
                     <tr key={index}>
-                      <td className="text-center w-[5%] border p-2">{index + 1}</td>
+                      <td className="text-center w-[5%] border p-2">
+                        {index + 1}
+                      </td>
                       <td className="w-[30%] border p-2">
                         <Select
                           onValueChange={(value) =>
@@ -604,9 +626,15 @@ const PatientDetails = () => {
                         <table className="w-full">
                           <thead>
                             <tr>
-                              <th className="border p-2 font-medium w-[33%]">Morning</th>
-                              <th className="border p-2 font-medium w-[33%]">Afternoon</th>
-                              <th className="border p-2 font-medium w-[33%]">Evening</th>
+                              <th className="border p-2 font-medium w-[33%]">
+                                Morning
+                              </th>
+                              <th className="border p-2 font-medium w-[33%]">
+                                Afternoon
+                              </th>
+                              <th className="border p-2 font-medium w-[33%]">
+                                Evening
+                              </th>
                             </tr>
                           </thead>
                           <tbody>

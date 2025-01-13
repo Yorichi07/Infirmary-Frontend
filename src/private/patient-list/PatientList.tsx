@@ -423,7 +423,7 @@ const PatientList = () => {
                                   </div>
                                   <div className="form-group">
                                     <label htmlFor="appointment">
-                                      Doctor Assigned
+                                      Doctor Assigned*
                                     </label>
                                     <select
                                       id="appointment"

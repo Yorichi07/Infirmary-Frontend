@@ -132,28 +132,30 @@ const AssistantDoctorDashboard = () => {
           </div>
           <div className="w-full pl-14 max-lg:px-8">
             <div className="w-full flex flex-col max-lg:px-0 space-y-10 max-lg:py-2">
-              <button
-                className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
-                onClick={() => navigate("/doctor-check-in-out")}
-              >
-                <p className="text-white font-semibold text-lg text-center flex-1">
-                  Doctors Availability
-                </p>
-              </button>
+              <div className="flex justify-between w-full gap-4 max-lg:flex-col max-lg:space-y-5">
+                <button
+                  className="lg:w-1/2 shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+                  onClick={() => navigate("/doctor-check-in-out")}
+                >
+                  <p className="text-white font-semibold text-lg text-center flex-1 whitespace-nowrap">
+                    Doctors Availability
+                  </p>
+                </button>
+                <button
+                  className="lg:w-1/2 shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+                  onClick={() => navigate("/medicine-stock")}
+                >
+                  <p className="text-white font-semibold text-lg text-center flex-1 whitespace-nowrap">
+                    Medical Stock
+                  </p>
+                </button>
+              </div>
               <button
                 className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
                 onClick={() => navigate("/patient-list")}
               >
                 <p className="text-white font-semibold text-lg text-center flex-1">
                   Patient Queue
-                </p>
-              </button>
-              <button
-                className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
-                onClick={() => navigate("/medicine-stock")}
-              >
-                <p className="text-white font-semibold text-lg text-center flex-1">
-                  Medical Stock
                 </p>
               </button>
               <button
@@ -172,9 +174,17 @@ const AssistantDoctorDashboard = () => {
                   Ad-Hoc Treatment
                 </p>
               </button>
+              <button
+                className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+                onClick={() => navigate("/analytics-dashboard")}
+              >
+                <p className="text-white font-semibold text-lg text-center flex-1">
+                  Analytics Dashboard
+                </p>
+              </button>
               <div className="flex justify-between w-full gap-4 max-lg:flex-col max-lg:space-y-5">
                 <button
-                  className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
+                  className="lg:w-1/2 shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#1F60C0] gap-2 to-[#0D4493] py-3 rounded-md"
                   onClick={() => navigate("/Ambulance")}
                 >
                   <p className="text-white font-semibold text-lg text-center flex-1 whitespace-nowrap">
@@ -182,7 +192,7 @@ const AssistantDoctorDashboard = () => {
                   </p>
                 </button>
                 <button
-                  className="shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
+                  className="lg:w-1/2 shadow-xl flex hover:-translate-y-1 transition ease-in duration-200 px-10 justify-between items-center bg-gradient-to-r from-[#FF0004] gap-2 to-[#0D4493] py-3 rounded-md"
                   onClick={() => navigate("/Emergency")}
                 >
                   <p className="text-white font-semibold text-lg text-center flex-1 whitespace-nowrap">
