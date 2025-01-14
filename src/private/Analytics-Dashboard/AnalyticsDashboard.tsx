@@ -136,7 +136,14 @@ const schoolData: SchoolData[] = [
   { name: "SOLSM", count: 130 },
 ];
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042", "#8884d8"];
+const COLORS = [
+  "#0088FE", // Light Blue
+  "#00C49F", // Green
+  "#FFBB28", // Yellow
+  "#FF8042", // Orange
+  "#E74C3C", // Red
+  "#1ABC9C", // Cyan
+];
 
 const chartConfig = {
   bidholi: {
@@ -338,29 +345,33 @@ const AnalyticsDashboard = () => {
       >
         <>
           <h2 className="text-lg font-semibold mb-4">
-            Doctor-wise Patient Count
+            Doctor-wise Patient Distribution
           </h2>
           <div className="w-full h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={doctorData}
-                margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="name"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                />
-                <YAxis />
-                <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.05)" }} />
-                <Bar
-                  dataKey="patientCount"
+              <PieChart>
+                <Pie
+                  data={doctorData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value, percent }) =>
+                    `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
+                  }
+                  outerRadius={100}
                   fill="#8884d8"
-                  radius={[4, 4, 0, 0]}
-                />
-              </BarChart>
+                  dataKey="patientCount"
+                  nameKey="name"
+                >
+                  {doctorData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </>
@@ -417,24 +428,29 @@ const AnalyticsDashboard = () => {
           </h2>
           <div className="w-full h-[300px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart
-                data={residenceData}
-                margin={{ top: 20, right: 30, left: 40, bottom: 60 }}
-              >
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis
-                  dataKey="type"
-                  tickLine={false}
-                  tickMargin={10}
-                  axisLine={false}
-                  angle={-45}
-                  textAnchor="end"
-                  height={60}
-                />
-                <YAxis />
-                <Tooltip cursor={{ fill: "rgba(0, 0, 0, 0.05)" }} />
-                <Bar dataKey="count" fill="#00C49F" radius={[4, 4, 0, 0]} />
-              </BarChart>
+              <PieChart>
+                <Pie
+                  data={residenceData}
+                  cx="50%"
+                  cy="50%"
+                  labelLine={false}
+                  label={({ name, value, percent }) =>
+                    `${name}: ${value} (${(percent * 100).toFixed(0)}%)`
+                  }
+                  outerRadius={100}
+                  fill="#8884d8"
+                  dataKey="count"
+                  nameKey="type"
+                >
+                  {residenceData.map((entry, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={COLORS[index % COLORS.length]}
+                    />
+                  ))}
+                </Pie>
+                <Tooltip />
+              </PieChart>
             </ResponsiveContainer>
           </div>
         </>
