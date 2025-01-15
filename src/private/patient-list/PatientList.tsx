@@ -37,6 +37,10 @@ const PatientList = () => {
     }[]
   >([]);
   const [selectedButton, setSelectedButton] = useState("Pending");
+  const [reassignPat,setReassignPat] = useState({
+    doctorEmail:"",
+    patientEmail:""
+  });
   const [dialogData, setDialogData] = useState({
     pref_doc: "",
     reason: "",
@@ -295,6 +299,41 @@ const PatientList = () => {
       handleError(err, "Failed to complete appointment");
     }
   };
+
+  const handleReassign = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    try {
+      const token = localStorage.getItem("token");
+      if (!token) throw new Error("No authentication token found");
+
+      const response = await axios.post(
+        "http://localhost:8081/api/AD/reassign",
+        {
+          patientEmail:reassignPat.patientEmail,
+          doctorEmail:reassignPat.doctorEmail
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.status === 200) {
+        toast({
+          title: "Success",
+          description: "Appointment details submitted successfully.",
+        });
+        window.location.reload();
+      } else {
+        throw new Error("Failed to submit appointment details.");
+      }
+    } catch (error) {
+      handleError(error, "Failed to submit appointment details");
+    }
+  }
+
 
   return (
     <>
@@ -566,6 +605,68 @@ const PatientList = () => {
                           >
                             {Shared.SquareCross}
                           </button>
+                          <Dialog
+                          onOpenChange={(open) => {
+                            if (open) {
+                              fetchAvailableDoctors();
+                              setReassignPat({
+                                ...reassignPat,
+                                patientEmail:pat.email
+                              })
+                            }
+                          }}
+                        >
+                          <DialogTrigger className="text-2xl">
+                            {Shared.Report}
+                          </DialogTrigger>
+                          <DialogContent>
+                            <DialogHeader>
+                              <DialogTitle className="font-medium text-center pb-3">
+                                Reassign Patient
+                              </DialogTitle>
+                              <DialogDescription>
+                                <form onSubmit={handleReassign}>
+                                  <div className="form-group">
+                                    <label htmlFor="appointment">
+                                      Doctor Assigned*
+                                    </label>
+                                    <select
+                                      id="appointment"
+                                      name="appointment"
+                                      className="form-input"
+                                      value={reassignPat.doctorEmail}
+                                      onChange={(e) =>
+                                        setReassignPat({
+                                          ...reassignPat,
+                                          doctorEmail: e.target.value,
+                                        })
+                                      }
+                                    >
+                                      <option value="">Select a doctor</option>
+                                      {doctors.map((doctor) => (
+                                        <option
+                                          key={doctor.id}
+                                          value={doctor.id}
+                                        >
+                                          {doctor.name}
+                                        </option>
+                                      ))}
+                                    </select>
+                                  </div>
+                                  <div className="flex justify-between">
+                                    
+                                    <button
+                                      type="submit"
+                                      className="submit-button"
+                                    >
+                                      Submit
+                                    </button>
+                                  </div>
+                                </form>
+                              </DialogDescription>
+                            </DialogHeader>
+                          </DialogContent>
+                        </Dialog>
                         </div>
                       )}
                     </TableCell>

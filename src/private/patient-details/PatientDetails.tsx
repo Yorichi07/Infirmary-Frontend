@@ -36,7 +36,6 @@ const PatientDetails = () => {
     medHis: string;
     famHis: string;
     allergies: string;
-    reports: [];
     reason: string;
     email: string;
     imageUrl: string;
@@ -166,7 +165,6 @@ const PatientDetails = () => {
           medHis: response.medicalDetails.medicalHistory,
           famHis: response.medicalDetails.familyMedicalHistory,
           allergies: response.medicalDetails.allergies,
-          reports: response.prescriptions,
           reason: response.reason,
           email: response.patient.email,
           imageUrl: response.patient.imageUrl,
