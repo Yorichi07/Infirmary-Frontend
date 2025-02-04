@@ -70,10 +70,10 @@ const CommonPrescription = () => {
 
         const apiUrl =
           role === "doctor"
-            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/doctor/getPrescription/${urlParam}`
+            ? `http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/doctor/getPrescription/${urlParam}`
             : role === "ad"
-            ? `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/AD/getPrescription/${urlParam}`
-            : `http://ec2-3-110-204-139.ap-south-1.compute.amazonaws.com/api/patient/getPrescription/${urlParam}`;
+            ? `http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/AD/getPrescription/${urlParam}`
+            : `http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/patient/getPrescription/${urlParam}`;
 
         const { data } = await axios.get(apiUrl, {
           headers: {
