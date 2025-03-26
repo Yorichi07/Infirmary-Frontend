@@ -27,7 +27,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/doctor/total-patient-count",
+        "http://localhost:8080/api/doctor/total-patient-count",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -82,7 +82,7 @@ const DoctorDashboard = () => {
       }
 
       const response = await axios.get(
-        "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/doctor/setStatus?isDoctorCheckIn=true",
+        "http://localhost:8080/api/doctor/setStatus?isDoctorCheckIn=true",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -127,7 +127,7 @@ const DoctorDashboard = () => {
         return;
       }
       const response = await fetch(
-        "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/doctor/setStatus?isDoctorCheckIn=false",
+        "http://localhost:8080/api/doctor/setStatus?isDoctorCheckIn=false",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -170,7 +170,7 @@ const DoctorDashboard = () => {
     }
 
     const response = await axios.get(
-      "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/doctor/getCurrentToken",
+      "http://localhost:8080/api/doctor/getCurrentToken",
       {
         headers: {
           Authorization: `Bearer ${token}`,
@@ -199,7 +199,7 @@ const DoctorDashboard = () => {
     }
 
     const response = await axios.get(
-      "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/doctor/getStatus",
+      "http://localhost:8080/api/doctor/getStatus",
       {
         headers: {
           Authorization: `Bearer ${token}`,

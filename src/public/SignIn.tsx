@@ -26,9 +26,9 @@ import {
 } from "@/components/ui/dialog";
 
 const API_URLS = {
-  patient: "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/auth/patient/signin",
-  doctor: "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/auth/doctor/signin",
-  nursing_assistant: "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/auth/ad/signin",
+  patient: "http://localhost:8080/api/auth/patient/signin",
+  doctor: "http://localhost:8080/api/auth/doctor/signin",
+  nursing_assistant: "http://localhost:8080/api/auth/ad/signin",
 };
 
 const DASHBOARD_ROUTES = {
@@ -110,7 +110,7 @@ const SignIn = () => {
       email.substring(email.indexOf("@")).replaceAll(".", ",");
     try {
       const response = await axios.get(
-        `http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/auth/passwordChangeRequest?email=${emailSent}&role=${passRole}`
+        `http://localhost:8080/api/auth/passwordChangeRequest?email=${emailSent}&role=${passRole}`
       );
 
       if (response.status === 200) {
@@ -202,7 +202,7 @@ const SignIn = () => {
   useEffect(() => {
     const fetchLocations = async () => {
       try {
-        const resp = await axios.get("http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/location/");
+        const resp = await axios.get("http://localhost:8080/api/location/");
         if (resp.status === 200) {
           const data = resp.data;
           setLocations(data);

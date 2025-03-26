@@ -22,7 +22,7 @@ const AdminSignIn = () => {
   };
 
   const handleSignIn = async () => {
-    const apiUrl = "http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/auth/admin/signin";
+    const apiUrl = "http://localhost:8080/api/auth/admin/signin";
     const dashboardRoute = "/admin-dashboard";
 
     try {

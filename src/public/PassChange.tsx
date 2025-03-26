@@ -33,7 +33,7 @@ const PassChange = () => {
         
         try{
 
-            const response = await axios.post(`http://ec2-13-201-227-93.ap-south-1.compute.amazonaws.com/api/auth/passwordChange?code=${code}&role=${role}`,input)
+            const response = await axios.post(`http://localhost:8080/api/auth/passwordChange?code=${code}&role=${role}`,input)
             console.log(response.status)
             if(response.status === 200){
                 toast({
