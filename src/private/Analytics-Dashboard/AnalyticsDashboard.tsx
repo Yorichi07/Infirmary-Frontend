@@ -226,7 +226,7 @@ const AnalyticsDashboard = () => {
       // Get Total Patient
       try{
 
-        const responseAllPatient = await axios.get("http://localhost:8080/api/analytics/geTotalPatient",{
+        const responseAllPatient = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/geTotalPatient",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -256,7 +256,7 @@ const AnalyticsDashboard = () => {
 
       // Get School wise data
       try{
-        const responseSchoolWise = await axios.get("http://localhost:8080/api/analytics/getSchoolWise",{
+        const responseSchoolWise = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getSchoolWise",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -294,7 +294,7 @@ const AnalyticsDashboard = () => {
 
       //Get Top 10 medicine
       try{
-        const responseTopMedsPres = await axios.get("http://localhost:8080/api/analytics/getTopMeds",{
+        const responseTopMedsPres = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getTopMeds",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -328,7 +328,7 @@ const AnalyticsDashboard = () => {
 
       //Get Data By Residence Type
       try{
-        const responseByResType = await axios.get("http://localhost:8080/api/analytics/getByResidenceType",{
+        const responseByResType = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getByResidenceType",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -365,7 +365,7 @@ const AnalyticsDashboard = () => {
 
       //Get Doctor-Wise Distribution
       try{
-        const responseDoctorWise = await axios.get("http://localhost:8080/api/analytics/getByDoctorName",{
+        const responseDoctorWise = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getByDoctorName",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -397,7 +397,7 @@ const AnalyticsDashboard = () => {
       
       //Get Patient Visits Monthly
       try{
-        const responseMonthlyData = await axios.get("http://localhost:8080/api/analytics/getMonthlyData",{
+        const responseMonthlyData = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getMonthlyData",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -429,7 +429,7 @@ const AnalyticsDashboard = () => {
 
       //Get Patient Visits Yearlys
       try{
-        const responseYearlyData = await axios.get("http://localhost:8080/api/analytics/getYearlyData",{
+        const responseYearlyData = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getYearlyData",{
           headers:{
             Authorization:`Bearer ${token}`
           }
@@ -461,7 +461,7 @@ const AnalyticsDashboard = () => {
 
       //Get Daily Data
       try{
-        const responseDailyData = await axios.get("http://localhost:8080/api/analytics/getDailyData",{
+        const responseDailyData = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/analytics/getDailyData",{
           headers:{
             Authorization:`Bearer ${token}`
           }

@@ -51,7 +51,7 @@ const PatientLogs = () => {
     try {
       if (selectedButton === "Consultation") {
         let apiUrl =
-          "http://localhost:8080/api/AD/getAppointmentByDate";
+          "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getAppointmentByDate";
 
         if (date) {
           apiUrl += `?date=${date}`;
@@ -82,7 +82,7 @@ const PatientLogs = () => {
           });
         }
       } else {
-        let apiUrl = `http://localhost:8080/api/AD/getAdHocByDate?date=${date}`;
+        let apiUrl = `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getAdHocByDate?date=${date}`;
 
         const resp = await axios.get(apiUrl, {
           headers: {

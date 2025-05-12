@@ -74,7 +74,7 @@ const AdHocTreatment = () => {
     const fetchMedicineStock = async () => {
       try {
         const response = await axios.get(
-          "http://localhost:8080/api/AD/stock/available",
+          "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/stock/available",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
@@ -133,7 +133,7 @@ const AdHocTreatment = () => {
       }
 
       const response = await axios.post(
-        "http://localhost:8080/api/AD/submit/adHoc",
+        "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/submit/adHoc",
         submitData,
         {
           headers: {

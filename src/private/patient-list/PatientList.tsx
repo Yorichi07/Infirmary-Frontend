@@ -79,8 +79,8 @@ const PatientList = () => {
 
       const url =
         selectedButton === "Pending"
-          ? "http://localhost:8080/api/AD/getPatientQueue"
-          : selectedButton === "Assigned" ? "http://localhost:8080/api/AD/getAssignedPatient" : "http://localhost:8080/api/AD/getCompletedQueue";
+          ? "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getPatientQueue"
+          : selectedButton === "Assigned" ? "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getAssignedPatient" : "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getCompletedQueue";
 
       const response = await axios.get(url, {
         headers: {
@@ -144,7 +144,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.get(
-        `http://localhost:8080/api/AD/getAptForm/${modifiedEmail}`,
+        `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getAptForm/${modifiedEmail}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -183,7 +183,7 @@ const PatientList = () => {
         return;
       }
       const response = await axios.get(
-        "http://localhost:8080/api/AD/getAvailableDoctors",
+        "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getAvailableDoctors",
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -211,7 +211,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://localhost:8080/api/AD/submitAppointment",
+        "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/submitAppointment",
         {
           weight: dialogData.weight,
           temperature: dialogData.temperature,
@@ -264,7 +264,7 @@ const PatientList = () => {
       const token = localStorage.getItem("token");
       const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
       const response = await axios.get(
-        `http://localhost:8080/api/AD/rejectAppointment?email=${emailSent}`,
+        `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${emailSent}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -284,7 +284,7 @@ const PatientList = () => {
       const token = localStorage.getItem("token");
       const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
       const response = await axios.get(
-        `http://localhost:8080/api/AD/completeAppointment/${emailSent}`,
+        `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/completeAppointment/${emailSent}`,
         {
           headers: { Authorization: `Bearer ${token}` },
         }
@@ -308,7 +308,7 @@ const PatientList = () => {
       if (!token) throw new Error("No authentication token found");
 
       const response = await axios.post(
-        "http://localhost:8080/api/AD/reassign",
+        "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/reassign",
         {
           patientEmail:reassignPat.patientEmail,
           doctorEmail:reassignPat.doctorEmail
@@ -544,7 +544,7 @@ const PatientList = () => {
                                           const email = pat.email
                                           const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
                                           const response = await axios.get(
-                                            `http://localhost:8080/api/AD/rejectAppointment?email=${emailSent}`,
+                                            `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/rejectAppointment?email=${emailSent}`,
                                             {
                                               headers: {
                                                 Authorization: `Bearer ${token}`,

@@ -40,9 +40,9 @@ const UserPrescription = () => {
           const url = window.location.search;
           const email = url.substring(url.indexOf("?") + 4);
           const emailSent = email.substring(0,email.indexOf("@"))+email.substring(email.indexOf("@")).replace(".",",");
-          apiUrl = `http://localhost:8080/api/doctor/getAppointmentPat/${emailSent}`;
+          apiUrl = `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/doctor/getAppointmentPat/${emailSent}`;
         } else {
-          apiUrl = "http://localhost:8080/api/patient/getAppointment";
+          apiUrl = "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/patient/getAppointment";
         }
 
         const resp = await axios.get(apiUrl, {
@@ -57,7 +57,7 @@ const UserPrescription = () => {
           reportId: rept.appointmentId,
           date: rept.date,
           token: rept.token,
-          downloadLink: `http://localhost:8080/prescription?id=${rept.appointmentId}`,
+          downloadLink: `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/prescription?id=${rept.appointmentId}`,
         }));
 
         setReports(formatData);

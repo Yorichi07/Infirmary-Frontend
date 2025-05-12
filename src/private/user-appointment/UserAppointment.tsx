@@ -94,7 +94,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.get(
-          "http://localhost:8080/api/patient/getAvailableDoctors",
+          "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/patient/getAvailableDoctors",
           {
             headers: {
               Authorization: "Bearer " + token,
@@ -130,7 +130,7 @@ const UserAppointment = () => {
         return;
       }
       try {
-        const res = await axios.get("http://localhost:8080/api/patient/", {
+        const res = await axios.get("http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/patient/", {
           headers: {
             Authorization: "Bearer " + token,
           },
@@ -171,7 +171,7 @@ const UserAppointment = () => {
     try {
       const token = localStorage.getItem("token");
       const response = await axios.get(
-        "http://localhost:8080/api/patient/lastAppointmentDate",
+        "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/patient/lastAppointmentDate",
         {
           headers: {
             Authorization: "Bearer " + token,
@@ -249,7 +249,7 @@ const UserAppointment = () => {
         }
 
         const response = await axios.post(
-          "http://localhost:8080/api/patient/submitAppointment",
+          "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/patient/submitAppointment",
           appointmentData,
           {
             headers: {
@@ -314,7 +314,7 @@ const UserAppointment = () => {
               <img
                 src={
                   userDetails.imageUrl != null
-                    ? `http://localhost:8080/${userDetails.imageUrl}`
+                    ? `http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/${userDetails.imageUrl}`
                     : "/default-user.jpg"
                 }
                 className="w-63 h-64 object-cover border-2 border-black"
