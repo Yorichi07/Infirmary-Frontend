@@ -165,7 +165,7 @@ const UserRegister = () => {
         setStatus("Loading...");
         await axios
           .post(
-            "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/auth/patient/signup",
+            "http://ec2-3-111-57-33.ap-south-1.compute.amazonaws.com:8080/api/auth/patient/signup",
             payload
           )
           .then((res) => {

@@ -29,7 +29,7 @@ const TokenPage = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          "http://ec2-13-201-191-145.ap-south-1.compute.amazonaws.com/api/AD/getTokenData",
+          "http://ec2-3-111-57-33.ap-south-1.compute.amazonaws.com:8080/api/AD/getTokenData",
           {
             headers: {
               Authorization: `Bearer ${localStorage.getItem("token")}`,
